@@ -1,31 +1,34 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import HomePageAppBar from '../../HomePageAppBar/HomePageAppBar';
-import { useHistory } from 'react-router-dom';
-import { ButtonBase } from '@mui/material';
+import * as React from "react";
+import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import HomePageAppBar from "../../HomePageAppBar/HomePageAppBar";
+import { useHistory } from "react-router-dom";
+import { ButtonBase } from "@mui/material";
+import RegisterPageInputs from "./RegisterPageInputs";
 const theme = createTheme();
 
 export default function RegisterPage() {
   const history = useHistory();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [consultantCheck, setConsultantCheck] = useState(false);
 
   const handleSubmit = (event) => {
     // TODO: dispatch(register)
   };
 
   const handleSignInOnClick = () => {
-    history.push('/login');
+    history.push("/login");
   };
 
   return (
@@ -36,12 +39,12 @@ export default function RegisterPage() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -53,58 +56,18 @@ export default function RegisterPage() {
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="Consultant?"
-                />
-              </Grid>
-            </Grid>
+            <RegisterPageInputs
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              consultantCheck={consultantCheck}
+              setConsultantCheck={setConsultantCheck}
+            />
             <Button
               type="submit"
               fullWidth
@@ -116,7 +79,7 @@ export default function RegisterPage() {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <ButtonBase onClick={handleSignInOnClick}>
-                  <Typography variant="body2" color={'primary.main'}>
+                  <Typography variant="body2" color={"primary.main"}>
                     Already have an account? Login here
                   </Typography>
                 </ButtonBase>

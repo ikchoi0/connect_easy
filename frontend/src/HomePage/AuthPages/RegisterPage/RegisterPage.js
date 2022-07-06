@@ -13,9 +13,13 @@ import HomePageAppBar from "../../HomePageAppBar/HomePageAppBar";
 import { useHistory } from "react-router-dom";
 import { ButtonBase } from "@mui/material";
 import RegisterPageInputs from "./RegisterPageInputs";
+import { useDispatch } from "react-redux";
+import { register } from "../../../store/reducers/authReducer";
+
 const theme = createTheme();
 
 export default function RegisterPage() {
+  const dispatch = useDispatch();
   const history = useHistory();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,6 +29,14 @@ export default function RegisterPage() {
 
   const handleSubmit = (event) => {
     // TODO: dispatch(register)
+    const userDetails = {
+      firstName,
+      lastName,
+      email,
+      password,
+      consultantCheck,
+    };
+    dispatch(register({ userDetails, history }));
   };
 
   const handleSignInOnClick = () => {
@@ -69,8 +81,7 @@ export default function RegisterPage() {
               setConsultantCheck={setConsultantCheck}
             />
             <Button
-              type="submit"
-              fullWidth
+              onClick={(e) => handleSubmit(e)}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >

@@ -49,18 +49,18 @@ function HomePageHeroLayout(props) {
             }}
           >
             <Typography
-              component="h1"
+              component="h3"
               variant="h3"
               color="inherit"
               gutterBottom
             >
-              <h3>hihi</h3>
+              hihi
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-              <h3>hihi</h3>
+              hihi
             </Typography>
             <Link variant="subtitle1" href="#">
-              <h3>hihi</h3>
+              hihi
             </Link>
           </Box>
         </Grid>

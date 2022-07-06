@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-
+import { useHistory } from 'react-router-dom';
 import Logo from './Logo';
 
 const pages = ['Categories'];
@@ -42,12 +42,26 @@ const lgLogoIconStyle = { display: { xs: 'none', md: 'flex' }, mr: 1 };
 const HomePageAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
+  const history = useHistory();
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleRegisterOnClick = () => {
+    history.push('/register');
+  };
+
+  const handleLoginOnClick = () => {
+    history.push('/login');
+  };
+
+  const handleLogoOnClick = () => {
+    history.push('/');
   };
 
   return (
@@ -58,6 +72,7 @@ const HomePageAppBar = () => {
             name={companyName}
             logoStyle={lgLogoStyle}
             iconStyle={lgLogoIconStyle}
+            handleLogoOnClick={handleLogoOnClick}
           />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -117,7 +132,12 @@ const HomePageAppBar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             {/* TODO: AUTH, SEPARATE COMPONENT */}
-            <Button sx={{ color: 'white' }}>Login/Logout</Button>
+            <Button sx={{ color: 'white' }} onClick={handleRegisterOnClick}>
+              Register
+            </Button>
+            <Button sx={{ color: 'white' }} onClick={handleLoginOnClick}>
+              Login/Logout
+            </Button>
           </Box>
         </Toolbar>
       </Container>

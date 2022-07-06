@@ -41,9 +41,4 @@ function HomePageFooter(props) {
   );
 }
 
-HomePageFooter.propTypes = {
-  description: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-};
-
 export default HomePageFooter;

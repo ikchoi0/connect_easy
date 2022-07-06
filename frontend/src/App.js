@@ -8,6 +8,7 @@ import HomePage from './HomePage/HomePage';
 import RegisterPage from './HomePage/AuthPages/RegisterPage/RegisterPage';
 import LoginPage from './HomePage/AuthPages/LoginPage/LoginPage';
 import './App.css';
+import Scheduler from './Scheduler/Scheduler';
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route exact path="/login">
             <LoginPage />
+          </Route>
+          <Route exact path="/calendar">
+            <Scheduler />
           </Route>
           <Route path="/">
             <Redirect to="/dashboard" />

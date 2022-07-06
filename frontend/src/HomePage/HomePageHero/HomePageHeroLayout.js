@@ -5,8 +5,6 @@ import Box from '@mui/material/Box';
 import { Typography, Button, Stack, Grid, Paper, Link } from '@mui/material';
 
 function HomePageHeroLayout(props) {
-  // const { sxBackground, children } = props;
-
   return (
     <Paper
       sx={{

@@ -1,10 +1,10 @@
-const express = require('express');
-const http = require('http');
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const socketServer = require('./socketServer');
+// const socketServer = require('./socketServer');
 
 // const authRoutes = require('./routes/authRoutes');
 // const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
@@ -19,10 +19,10 @@ app.use(cors());
 // app.use('/api/auth', authRoutes);
 // app.use('/api/friend-invitation', friendInvitationRoutes);
 
-console.log('Starting the server...');
+console.log("Starting the server...");
 
 const server = http.createServer(app);
-socketServer.registerSocketServer(server);
+// socketServer.registerSocketServer(server);
 
 mongoose
   .connect(process.env.MONGO_URI)

@@ -10,8 +10,6 @@ const authState = {
 export const login = createAsyncThunk(
   'auth/login',
   async (userDetails, thunkApi) => {
-    // {Email, password}
-
     try {
       const response = await axios.post(
         'http://localhost:5002/api/auth/login',

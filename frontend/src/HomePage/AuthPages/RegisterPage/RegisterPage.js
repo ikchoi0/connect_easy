@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -15,10 +14,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import HomePageAppBar from '../../HomePageAppBar/HomePageAppBar';
 import { useHistory } from 'react-router-dom';
 import { ButtonBase } from '@mui/material';
+import { useState } from 'react';
 const theme = createTheme();
 
 export default function RegisterPage() {
   const history = useHistory();
+
+  const [firstName, setFirstName] = useState('');
 
   const handleSubmit = (event) => {
     // TODO: dispatch(register)
@@ -63,6 +65,10 @@ export default function RegisterPage() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={firstName}
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>

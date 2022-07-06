@@ -4,7 +4,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-
+import HomePage from './HomePage/HomePage';
 import './App.css';
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
-            {}
+            <HomePage />
           </Route>
           <Route path="/">
             <Redirect to="/dashboard" />

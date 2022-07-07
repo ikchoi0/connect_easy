@@ -227,7 +227,7 @@ const CategorySeedDB = (userData) => [
     name: 'Sales',
     description: 'Sales description',
     pictureUrl: 'https://tinyurl.com/2s4jrbwh',
-    users: [userData[0]._id],
+    users: [userData[0]._id, userData[0]._id, userData[0]._id],
   },
   {
     name: 'Therapists',

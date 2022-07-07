@@ -66,3 +66,15 @@ export const getCategories = async () => {
     };
   }
 };
+
+// queries consultants list within a especific category
+export const getConsultantsWithinCategory = async (categoryName) => {
+  try {
+    return await apiClient.get(`/category/${categoryName}`);
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};

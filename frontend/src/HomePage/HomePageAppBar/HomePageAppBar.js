@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import { ButtonBase } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { useHistory } from 'react-router-dom';
 import Logo from './Logo';
@@ -59,6 +60,9 @@ const HomePageAppBar = () => {
   const handleLoginOnClick = () => {
     history.push('/login');
   };
+  const handleCategoryOnClick = () => {
+    history.push('/category');
+  };
 
   const handleLogoOnClick = () => {
     history.push('/');
@@ -75,7 +79,7 @@ const HomePageAppBar = () => {
             handleLogoOnClick={handleLogoOnClick}
           />
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -90,23 +94,25 @@ const HomePageAppBar = () => {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <ButtonBase onClick={handleCategoryOnClick}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </ButtonBase>
                 </MenuItem>
               ))}
             </Menu>
@@ -118,12 +124,12 @@ const HomePageAppBar = () => {
             iconStyle={smLogoIconStyle}
           />
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                onClick={handleCategoryOnClick}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
@@ -132,10 +138,10 @@ const HomePageAppBar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             {/* TODO: AUTH, SEPARATE COMPONENT */}
-            <Button sx={{ color: 'white' }} onClick={handleRegisterOnClick}>
+            <Button sx={{ color: "white" }} onClick={handleRegisterOnClick}>
               Register
             </Button>
-            <Button sx={{ color: 'white' }} onClick={handleLoginOnClick}>
+            <Button sx={{ color: "white" }} onClick={handleLoginOnClick}>
               Login/Logout
             </Button>
           </Box>

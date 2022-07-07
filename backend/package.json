@@ -17,6 +17,7 @@
     "express": "^4.18.1",
     "express-joi-validation": "^5.0.1",
     "joi": "^17.6.0",
+    "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.3",
     "morgan": "^1.10.0",

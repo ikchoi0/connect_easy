@@ -2,10 +2,11 @@ import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
-import "./Scheduler.css";
-import { Container, Box } from "@mui/material";
-import TimeSlots from "./TimeSlots";
-import HomePageAppBar from "../HomePage/HomePageAppBar/HomePageAppBar";
+import './Scheduler.css';
+import { Container, Box } from '@mui/material';
+import TimeSlots from './TimeSlots';
+import HomePageAppBar from '../HomePage/HomePageAppBar/HomePageAppBar';
+import OpenAppointment from '../OpenAppointment/OpenAppointment';
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -57,6 +58,11 @@ export default function Scheduler() {
   };
   return (
     <>
+<<<<<<< HEAD
+=======
+      <HomePageAppBar />
+      <OpenAppointment />
+>>>>>>> 67d8deec610b0c5839aedb62f7db2a6336ba8795
       <Container
         sx={{
           marginTop: 8,

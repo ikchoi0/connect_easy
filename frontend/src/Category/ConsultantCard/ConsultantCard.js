@@ -56,7 +56,7 @@ export default function CategoryCard({
             color="text.secondary"
             component="div"
           >
-            Price per hour: {price / 100}
+            Price per hour: {price}
           </Typography>
         </Box>
       </Box>

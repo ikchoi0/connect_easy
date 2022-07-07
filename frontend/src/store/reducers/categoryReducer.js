@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import { getCategories } from "../../api";
+import { getCategories, getConsultantsWithinCategory } from "../../api";
 // import { getCategory } from "../../api/categoryAPI";
 const categoryState = {
   categoryList: null,
+  usersWithinCategory: [],
   isLoading: true,
   selectedCategory: null,
 };
@@ -16,6 +16,16 @@ export const category = createAsyncThunk(
     if (response.error) return thunkApi.rejectWithValue(response.message);
     // console.log(response.data.categoryList);
     return response.data.categoryList;
+  }
+);
+
+export const getUsersWithinCategory = createAsyncThunk(
+  "category/getUsersWithinCategory",
+  async (categoryName, thunkApi) => {
+    const response = await getConsultantsWithinCategory(categoryName);
+    console.log(response);
+    if (response.error) return thunkApi.rejectWithValue(response.message);
+    return response.data.data;
   }
 );
 
@@ -38,6 +48,10 @@ const categorySlice = createSlice({
     },
     [category.pending]: (state, _) => {
       // handle rejected
+      state.isLoading = true;
+    },
+    [getUsersWithinCategory.fulfilled]: (state, action) => {
+      state.usersWithinCategory = action.payload;
       state.isLoading = true;
     },
   },

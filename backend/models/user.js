@@ -16,7 +16,7 @@ const userSchema = new Schema(
       description: { type: String },
       price: { type: Number },
       rating: { type: Number },
-      image: { type: String },
+      profilePicture: { type: String },
       city: { type: String },
       state: { type: String },
       zip: { type: String },

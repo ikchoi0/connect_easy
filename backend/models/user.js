@@ -19,11 +19,11 @@ const userSchema = new Schema(
       profilePicture: { type: String },
       city: { type: String },
       state: { type: String },
+      country: { type: String },
       zip: { type: String },
       address: { type: String },
       phone: { type: String },
       website: { type: String },
-      country: { type: String },
 
       available: { type: Boolean },
       schedules: [{ type: Schema.Types.ObjectId, ref: 'Schedule' }],

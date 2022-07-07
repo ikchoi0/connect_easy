@@ -65,7 +65,7 @@ export default function Scheduler() {
           marginTop: 8,
           height: "780px",
           display: "flex",
-          justifyContent: "space-btween",
+          justifyContent: "space-between",
         }}
       >
         <Box sx={{ width: "100%" }}>

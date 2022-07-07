@@ -78,3 +78,15 @@ export const getConsultantsWithinCategory = async (categoryName) => {
     };
   }
 };
+
+// create open appointments
+export const setOpenAppointments = async (openAppointmentsList) => {
+  try {
+    return await apiClient.post('/appointment', openAppointmentsList)
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+}

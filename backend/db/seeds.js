@@ -9,15 +9,17 @@ const ConsultantSeedDB = [
     province: "British Columbia",
     city: "Vancouver",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1500,
+      rating: 5,
+      description: "I offer web development services",
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "DonLimited",
     phoneNumber: "1111111111",
     license: "license test",
     verified: true,
-    price: 1500,
-    description: "I offer web development services",
-    rating: 5,
   },
   {
     roles: "consultant",
@@ -29,15 +31,17 @@ const ConsultantSeedDB = [
     province: "Ontario",
     city: "Toronto",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1400,
+      description: "I offer therapy sessions for web developers",
+      rating: 4,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "IkLimited",
     phoneNumber: "2222222222",
     license: "license test",
     verified: true,
-    price: 1400,
-    description: "I offer therapy sessions for web developers",
-    rating: 4,
   },
   {
     roles: "consultant",
@@ -49,15 +53,17 @@ const ConsultantSeedDB = [
     province: "Columbia",
     city: "Vancouver",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1300,
+      description: "I offer web development services",
+      rating: 4,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "RafLimited",
     phoneNumber: "3333333333",
     license: "license test",
     verified: true,
-    price: 1300,
-    description: "I offer web development services",
-    rating: 4,
   },
   {
     roles: "consultant",
@@ -69,15 +75,17 @@ const ConsultantSeedDB = [
     province: "British Columbia",
     city: "Vancouver",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1500,
+      description: "I offer web development services",
+      rating: 5,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "DonLimited",
     phoneNumber: "1111111111",
     license: "license test",
     verified: true,
-    price: 1500,
-    description: "I offer web development services",
-    rating: 5,
   },
   {
     roles: "consultant",
@@ -89,15 +97,17 @@ const ConsultantSeedDB = [
     province: "Ontario",
     city: "Toronto",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1400,
+      description: "I offer therapy sessions for web developers",
+      rating: 4,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "IkLimited",
     phoneNumber: "2222222222",
     license: "license test",
     verified: true,
-    price: 1400,
-    description: "I offer therapy sessions for web developers",
-    rating: 4,
   },
   {
     roles: "consultant",
@@ -109,15 +119,17 @@ const ConsultantSeedDB = [
     province: "Columbia",
     city: "Vancouver",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1300,
+      description: "I offer web development services",
+      rating: 4,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "RafLimited",
     phoneNumber: "3333333333",
     license: "license test",
     verified: true,
-    price: 1300,
-    description: "I offer web development services",
-    rating: 4,
   },
   {
     roles: "consultant",
@@ -129,15 +141,17 @@ const ConsultantSeedDB = [
     province: "British Columbia",
     city: "Vancouver",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1500,
+      description: "I offer web development services",
+      rating: 5,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "DonLimited",
     phoneNumber: "1111111111",
     license: "license test",
     verified: true,
-    price: 1500,
-    description: "I offer web development services",
-    rating: 5,
   },
   {
     roles: "consultant",
@@ -149,15 +163,17 @@ const ConsultantSeedDB = [
     province: "Ontario",
     city: "Toronto",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1400,
+      description: "I offer therapy sessions for web developers",
+      rating: 4,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "IkLimited",
     phoneNumber: "2222222222",
     license: "license test",
     verified: true,
-    price: 1400,
-    description: "I offer therapy sessions for web developers",
-    rating: 4,
   },
   {
     roles: "consultant",
@@ -169,15 +185,17 @@ const ConsultantSeedDB = [
     province: "Columbia",
     city: "Vancouver",
     postalCode: "ABC123",
-    profilePicture:
-      "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    options: {
+      price: 1300,
+      description: "I offer web development services",
+      rating: 4,
+      profilePicture:
+        "https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png",
+    },
     nameOfBusiness: "RafLimited",
     phoneNumber: "3333333333",
     license: "license test",
     verified: true,
-    price: 1300,
-    description: "I offer web development services",
-    rating: 4,
   },
   {
     roles: "client",

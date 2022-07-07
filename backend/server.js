@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const appointmentRoutes = require('./routes/appointmentRoutes')
 // const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 
 const PORT = process.env.PORT || process.env.API_PORT;
@@ -25,7 +26,8 @@ app.use("/api/seed", require("./routes/seedRoutes"));
 app.use("/api/category", categoryRoutes);
 // register routes
 app.use("/api/auth", authRoutes);
-// app.use('/api/friend-invitation', friendInvitationRoutes);
+// appointment routes
+app.use('/api/appointment', appointmentRoutes)
 
 console.log("Starting the server...");
 

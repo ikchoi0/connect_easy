@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import { Card, Container } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -10,7 +10,26 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Stack from "@mui/material/Stack";
 import TextFieldWithLabel from "../shared/components/TextFieldWithLabel";
+import moment from "moment";
+import AppointmentCard from "./AppointmentCard";
+import { useSelector, useDispatch } from "react-redux";
+import Grid from "@mui/material/Grid";
+import { setOneAppointment } from "../store/reducers/scheduleReducer";
+import { createOpenAppointments } from "../store/reducers/scheduleReducer";
+
 export default function Content() {
+  const { openingAppoinmentsList } = useSelector((state) => state.scheduler);
+  const dispatch = useDispatch();
+
+  const [isFormValid, setIsFormValid] = useState(false);
+  useEffect(() => {
+
+    if(openingAppoinmentsList.length){
+      
+      setIsFormValid(true);
+    }
+  }, [openingAppoinmentsList, setIsFormValid]);
+
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
@@ -18,7 +37,7 @@ export default function Content() {
     new Date(new Date().getTime() + 30 * 60 * 1000)
   );
   const handleDateChange = (newValue) => {
-    setDate(newValue.getDate());
+    setDate(newValue);
   };
   const handleStartTimeChange = (newValue) => {
     setStartTime(newValue);
@@ -27,14 +46,38 @@ export default function Content() {
     setEndTime(newValue);
   };
 
+  const appointmentCards = openingAppoinmentsList.map((appointment, index) => {
+    return (
+      <AppointmentCard
+        key={index}
+        description={appointment.description}
+        date={appointment.date}
+        startTime={appointment.startTime}
+        endTime={appointment.endTime}
+      />
+    );
+  });
+
+  let cards = (
+    <Card sx={{ margin: 2 }}>
+      <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
+        {description}
+      </Typography>
+    </Card>
+  );
+
   const handleCreateButton = () => {
     let card = {
       date: date.toString(),
-      startTime: startTime.toString(),
-      endTime: endTime.toString(),
+      appointmentStartTime: startTime.toUTCString(),
+      appointmentEndTime: endTime.toUTCString(),
       description,
     };
-    console.log(card);
+    dispatch(setOneAppointment(card));
+  };
+
+  const handleSaveAppointmentsButton = () => {
+    dispatch(createOpenAppointments(openingAppoinmentsList));
   };
 
   return (
@@ -45,7 +88,7 @@ export default function Content() {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Button
               variant="contained"
-              sx={{ mr: 1 }}
+              sx={{ mr: 2, ml: 2, mt: 2 }}
               onClick={() => handleCreateButton()}
             >
               Create New Appointment
@@ -57,48 +100,45 @@ export default function Content() {
               value={description}
               setValue={setDescription}
             />
-            <DesktopDatePicker
-              label="Appointment Date"
-              inputFormat="MM/dd/yyyy"
-              value={date}
-              onChange={() => handleDateChange(date)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <TimePicker
-              label="Start Time"
-              value={startTime}
-              onChange={handleStartTimeChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <TimePicker
-              label="End Time"
-              value={endTime}
-              onChange={handleEndTimeChange}
-              renderInput={(params) => <TextField {...params} />}
-            />{" "}
+            <Grid
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
+              <DesktopDatePicker
+                minDate={new Date()}
+                label="Appointment Date"
+                inputFormat="MM/dd/yyyy"
+                value={date}
+                onChange={handleDateChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <TimePicker
+                label="Start Time"
+                value={startTime}
+                onChange={handleStartTimeChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <TimePicker
+                label="End Time"
+                value={endTime}
+                onChange={handleEndTimeChange}
+                renderInput={(params) => <TextField {...params} />}
+              />{" "}
+            </Grid>
+            {appointmentCards && appointmentCards}
+
+            <Button
+              variant="contained"
+              sx={{ mr: 2, ml: 2, mt: 2 }}
+              onClick={() => handleSaveAppointmentsButton()}
+              disabled={appointmentCards && !isFormValid}
+            >
+              Save my time slots
+            </Button>
           </LocalizationProvider>
         </Stack>
-      </Card>
-      {/* Map cards below using consultant appointment data */}
-      <Card sx={{ margin: 2 }}>
-        <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-          consultant schedule
-        </Typography>
-      </Card>
-      <Card sx={{ margin: 2 }}>
-        <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-          consultant schedule
-        </Typography>
-      </Card>{" "}
-      <Card sx={{ margin: 2 }}>
-        <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-          consultant schedule
-        </Typography>
-      </Card>{" "}
-      <Card sx={{ margin: 2 }}>
-        <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-          consultant schedule
-        </Typography>
       </Card>
     </Container>
   );

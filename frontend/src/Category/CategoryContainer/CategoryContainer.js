@@ -6,12 +6,10 @@ import Grid from "@mui/material/Grid";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersWithinCategory } from "../../store/reducers/categoryReducer";
 
-
-
 export default function CategoryContainer() {
   const dispatch = useDispatch();
   const category = useSelector((state) => state.category);
-  
+
   useEffect(() => {
     dispatch(getUsersWithinCategory(category.selectedCategory));
   }, []);

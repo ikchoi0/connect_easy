@@ -18,7 +18,7 @@ export default function Content() {
     new Date(new Date().getTime() + 30 * 60 * 1000)
   );
   const handleDateChange = (newValue) => {
-    setDate(newValue.getDate());
+    setDate(newValue);
   };
   const handleStartTimeChange = (newValue) => {
     setStartTime(newValue);

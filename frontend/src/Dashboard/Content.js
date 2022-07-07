@@ -1,59 +1,83 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Card, Container } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import RefreshIcon from "@mui/icons-material/Refresh";
-
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import Stack from "@mui/material/Stack";
+import TextFieldWithLabel from "../shared/components/TextFieldWithLabel";
 export default function Content() {
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(
+    new Date(new Date().getTime() + 30 * 60 * 1000)
+  );
+  const handleDateChange = (newValue) => {
+    setDate(newValue.getDate());
+  };
+  const handleStartTimeChange = (newValue) => {
+    setStartTime(newValue);
+  };
+  const handleEndTimeChange = (newValue) => {
+    setEndTime(newValue);
+  };
+
+  const handleCreateButton = () => {
+    let card = {
+      date: date.toString(),
+      startTime: startTime.toString(),
+      endTime: endTime.toString(),
+      description,
+    };
+    console.log(card);
+  };
+
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
       {/* End hero unit */}
       <Card sx={{ margin: 2, overflow: "hidden" }}>
-        <AppBar
-          position="static"
-          color="default"
-          elevation={0}
-          sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
-        >
-          <Toolbar>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item>
-                <SearchIcon color="inherit" sx={{ display: "block" }} />
-              </Grid>
-              <Grid item xs>
-                <TextField
-                  fullWidth
-                  placeholder="Search by email address, phone number, or user UID"
-                  InputProps={{
-                    disableUnderline: true,
-                    sx: { fontSize: "default" },
-                  }}
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item>
-                <Button variant="contained" sx={{ mr: 1 }}>
-                  Add user
-                </Button>
-                <Tooltip title="Reload">
-                  <IconButton>
-                    <RefreshIcon color="inherit" sx={{ display: "block" }} />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-            </Grid>
-          </Toolbar>
-        </AppBar>
-        <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-          consultant schedule{" "}
-        </Typography>
+        <Stack spacing={3}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Button
+              variant="contained"
+              sx={{ mr: 1 }}
+              onClick={() => handleCreateButton()}
+            >
+              Create New Appointment
+            </Button>
+            <TextFieldWithLabel
+              id="description"
+              label="Description"
+              autoFocus={true}
+              value={description}
+              setValue={setDescription}
+            />
+            <DesktopDatePicker
+              label="Appointment Date"
+              inputFormat="MM/dd/yyyy"
+              value={date}
+              onChange={() => handleDateChange(date)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <TimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={handleStartTimeChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <TimePicker
+              label="End Time"
+              value={endTime}
+              onChange={handleEndTimeChange}
+              renderInput={(params) => <TextField {...params} />}
+            />{" "}
+          </LocalizationProvider>
+        </Stack>
       </Card>
       {/* Map cards below using consultant appointment data */}
       <Card sx={{ margin: 2 }}>

@@ -1,76 +1,56 @@
-import { createSlice, createAsyncThunk, isFulfilled } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+import * as api from '../../api';
 
 const authState = {
   userDetails: null,
   isLoggedIn: false,
-  name: "",
 };
 
 export const login = createAsyncThunk(
-  "auth/login",
-  async (userDetails, thunkApi) => {
-    // {Email, password}
+  'auth/login',
+  async ({ userDetails }, thunkApi) => {
+    const response = await api.login(userDetails);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:5002/api/auth/login",
-        userDetails
-      );
+    if (response.error) return thunkApi.rejectWithValue(response.message);
 
-      if (response.data) thunkApi.dispatch(setUserLoggedIn(response.data));
-    } catch (error) {
-      console.log(error);
-    }
+    return response.data;
   }
 );
 
 export const register = createAsyncThunk(
-  "auth/register",
-  async ({ userDetails, history }, thunkApi) => {
-    const response = {
-      error: false,
-      data: "hello",
-    };
-    // await axios.post(
-    //   "http://localhost:5002/api/auth/register",
-    //   userDetails
-    // );
-    if (response.error) {
-      // show error message in alert
-      return new Error();
-      console.log(response.error);
-    } else {
-      history.push("/");
-      // thunkApi.dispatch(setUserLoggedIn(response.data));
-      return userDetails;
-    }
+  'auth/register',
+  async ({ userDetails }, thunkApi) => {
+    const response = await api.register(userDetails);
+
+    if (response.error) return thunkApi.rejectWithValue(response.message);
+
+    return response.data;
   }
 );
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState: authState,
-  reducers: {
-    setUserLoggedIn(state, action) {
-      // console.log(action.payload);
-      state.userDetails = action.payload;
-      state.isLoggedIn = true;
-    },
-    // register: (state, { userDetails, history }) => {
-    //   register({ userDetails, history });
-    // },
-  },
+  reducers: {},
   extraReducers: {
     [register.fulfilled]: (state, action) => {
-      //
+      state.userDetails = action.payload.userDetails;
+      state.isLoggedIn = true;
     },
-    [register.rejected]: (state, action) => {
+    [register.rejected]: (state, _) => {
       // handle rejected
+      state.isLoggedIn = false;
+    },
+    [login.fulfilled]: (state, action) => {
+      state.userDetails = action.payload.userDetails;
+      state.isLoggedIn = true;
+    },
+    [login.rejected]: (state, _) => {
+      // handle rejected
+      state.isLoggedIn = false;
     },
   },
 });
-
-export const { setUserLoggedIn } = authSlice.actions;
 
 export default authSlice.reducer;

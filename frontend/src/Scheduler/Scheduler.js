@@ -3,7 +3,9 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 
 import './Scheduler.css';
-import { Container } from '@mui/material';
+import { Container, Box } from '@mui/material';
+import TimeSlots from './TimeSlots';
+import HomePageAppBar from '../HomePage/HomePageAppBar/HomePageAppBar';
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -45,25 +47,47 @@ const events = [
 ];
 
 export default function Scheduler() {
+  const [openTimeSlots, setOpenTimeSlots] = React.useState(false);
+  const [selectedEvent, setSelectedEvent] = React.useState(null);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  const handleOpenTimeSlots = (e) => {
+    setOpenTimeSlots(true);
+    setSelectedDate(e.start);
+  };
   return (
-    <Container sx={{ height: '780px' }}>
-      <Calendar
-        events={events}
-        localizer={localizer}
-        showMultiDayTimes
-        step={30}
-        views={['week', 'month']}
-        defaultView={'month'}
-        startAccessor="start"
-        endAccessor="end"
-        onSelectEvent={(e) => {
-          console.log(e);
+    <>
+      <HomePageAppBar />
+      <Container
+        sx={{
+          marginTop: 8,
+          height: '780px',
+          display: 'flex',
+          justifyContent: 'space-btween',
         }}
-        onSelectSlot={(e) => {
-          console.log(e);
-        }}
-        selectable
-      />
-    </Container>
+      >
+        <Box sx={{ width: '100%' }}>
+          <Calendar
+            events={events}
+            localizer={localizer}
+            showMultiDayTimes
+            step={30}
+            views={['week', 'month']}
+            defaultView={'month'}
+            startAccessor="start"
+            endAccessor="end"
+            onSelectEvent={(e) => {
+              console.log(e);
+            }}
+            onSelectSlot={(e) => {
+              console.log(e);
+              handleOpenTimeSlots(e);
+            }}
+            selectable
+          />
+        </Box>
+        {openTimeSlots && <TimeSlots selectedDate={selectedDate} />}
+      </Container>
+    </>
   );
 }

@@ -1,14 +1,14 @@
-import axios from 'axios';
-import { logout } from './shared/utils/auth';
+import axios from "axios";
+import { logout } from "./shared/utils/auth";
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5002/api',
+  baseURL: "http://localhost:5002/api",
   timeout: 1000,
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    const userDetails = localStorage.getItem('user');
+    const userDetails = localStorage.getItem("user");
 
     if (userDetails) {
       const token = JSON.parse(userDetails).token;
@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
 
 export const login = async (data) => {
   try {
-    return await apiClient.post('/auth/login', data);
+    return await apiClient.post("/auth/login", data);
   } catch (exception) {
     return {
       error: true,
@@ -36,7 +36,7 @@ export const login = async (data) => {
 
 export const register = async (data) => {
   try {
-    return await apiClient.post('/auth/register', data);
+    return await apiClient.post("/auth/register", data);
   } catch (exception) {
     return {
       error: true,
@@ -52,5 +52,17 @@ const checkResponseCode = (error) => {
 
   if (status) {
     (status === 401 || status === 403) && logout();
+  }
+};
+
+// queries category list
+export const getCategories = async () => {
+  try {
+    return await apiClient.get("/category");
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.response.data,
+    };
   }
 };

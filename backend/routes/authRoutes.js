@@ -23,6 +23,7 @@ router.post(
   validator.body(registerSchema),
   authController.controllers.postRegister
 );
+
 router.post(
   '/login',
   validator.body(loginSchema),

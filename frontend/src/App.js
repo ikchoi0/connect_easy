@@ -3,13 +3,14 @@ import {
   Switch,
   Route,
   Redirect,
-} from 'react-router-dom';
-import HomePage from './HomePage/HomePage';
-import RegisterPage from './HomePage/AuthPages/RegisterPage/RegisterPage';
-import LoginPage from './HomePage/AuthPages/LoginPage/LoginPage';
-import './App.css';
-import Scheduler from './Scheduler/Scheduler';
-import Category from './Category/Category';
+} from "react-router-dom";
+import HomePage from "./HomePage/HomePage";
+import RegisterPage from "./HomePage/AuthPages/RegisterPage/RegisterPage";
+import LoginPage from "./HomePage/AuthPages/LoginPage/LoginPage";
+import "./App.css";
+import Scheduler from "./Scheduler/Scheduler";
+import Category from "./Category/Category";
+import Dashboard from "./Dashboard/Dashboard";
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route exact path="/category">
             <Category />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
           <Route path="/">
             <Redirect to="/dashboard" />

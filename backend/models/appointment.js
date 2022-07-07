@@ -7,14 +7,15 @@ const appointmentSchema = new Schema(
     client: { type: Schema.Types.ObjectId, ref: 'User' },
     description: { type: String, required: true, trim: true },
 
+    date: {type: Date, required: true},
     appointmentBooked: { type: Boolean, default: false },
-    appointmentStartTime: { type: Timestamp, required: true },
-    appointmentEndTime: { type: Timestamp, required: true },
-    appointmentCancellation_time: { type: Timestamp },
+    appointmentStartTime: { type: Date, required: true },
+    appointmentEndTime: { type: Date, required: true },
+    appointmentCancellation_time: { type: Date },
     appointmentCancel: { type: Boolean, default: false },
 
-    videoStartTime: { type: Timestamp },
-    videoEndTime: { type: Timestamp },
+    videoStartTime: { type: Date },
+    videoEndTime: { type: Date },
   },
   { timestamps: true }
 );

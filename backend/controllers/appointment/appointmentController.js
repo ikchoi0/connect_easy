@@ -1,6 +1,8 @@
-const postAppointmnet = require('../controllers/appointment/postAppointment');
-const updateAppointment = require('../controllers/appointment/updateAppointment');
+const postAppointment = require('./postAppointment');
+const updateAppointment = require('./updateAppointment');
+
 exports.controllers = {
-  postAppointmnet,
+  postAppointment,
   updateAppointment,
 };
+

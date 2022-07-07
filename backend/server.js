@@ -9,6 +9,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
 // const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 
 const PORT = process.env.PORT || process.env.API_PORT;

@@ -6,6 +6,7 @@ import './Scheduler.css';
 import { Container, Box } from '@mui/material';
 import TimeSlots from './TimeSlots';
 import HomePageAppBar from '../HomePage/HomePageAppBar/HomePageAppBar';
+import OpenAppointment from '../OpenAppointment/OpenAppointment';
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -58,6 +59,7 @@ export default function Scheduler() {
   return (
     <>
       <HomePageAppBar />
+      <OpenAppointment />
       <Container
         sx={{
           marginTop: 8,

@@ -1,9 +1,9 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardMedia } from "@mui/material";
+import React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { CardMedia } from '@mui/material';
 
 export default function CategoryCard({
   firstName,
@@ -14,11 +14,9 @@ export default function CategoryCard({
   price,
 }) {
   return (
-    
-    <Card sx={{ display: "flex", height: "100%" }}>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <CardContent sx={{ flex: "1 0 auto" }}>
-
+    <Card sx={{ display: 'flex', height: '100%' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <CardContent sx={{ flex: '1 0 auto' }}>
           <Typography
             component="div"
             variant="h6"
@@ -27,7 +25,6 @@ export default function CategoryCard({
           >
             {firstName} {lastName}
           </Typography>
-
 
           <CardMedia
             display="flex"
@@ -42,7 +39,7 @@ export default function CategoryCard({
           {description}
         </Typography>
 
-        <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Typography
             variant="subtitle1"
             color="text.secondary"
@@ -62,10 +59,10 @@ export default function CategoryCard({
       </Box>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "80%",
-          justifyContent: "center",
+          display: 'flex',
+          alignItems: 'center',
+          width: '80%',
+          justifyContent: 'center',
         }}
       ></Box>
     </Card>

@@ -11,6 +11,12 @@ import './App.css';
 import Scheduler from './Scheduler/Scheduler';
 import Category from './Category/Category';
 
+/**
+ *
+ * https://reacttraining.com/blog/react-router-v5-1/
+ * shows how to use the params in the url
+ */
+
 function App() {
   return (
     <>

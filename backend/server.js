@@ -1,33 +1,34 @@
-const express = require("express");
-const http = require("http");
-const cors = require("cors");
-const morgan = require("morgan");
-const mongoose = require("mongoose");
-require("dotenv").config();
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 // const socketServer = require('./socketServer');
 
-const authRoutes = require("./routes/authRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
+const authRoutes = require('./routes/authRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 // const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 
 const PORT = process.env.PORT || process.env.API_PORT;
 
 const app = express();
 app.use(express.json());
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(cors());
 
 // seed the database
-app.use("/api/seed", require("./routes/seedRoutes"));
+app.use('/api/seed', require('./routes/seedRoutes'));
 
 // category routes
-app.use("/api/category", categoryRoutes);
+app.use('/api/category', categoryRoutes);
 // register routes
-app.use("/api/auth", authRoutes);
-// app.use('/api/friend-invitation', friendInvitationRoutes);
+app.use('/api/auth', authRoutes);
+// appointment routes
+app.use('/api/appointment', appointmentRoutes);
 
-console.log("Starting the server...");
+console.log('Starting the server...');
 
 const server = http.createServer(app);
 // socketServer.registerSocketServer(server);

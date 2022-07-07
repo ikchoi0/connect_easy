@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,19 +13,28 @@ import HomePageAppBar from '../../HomePageAppBar/HomePageAppBar';
 import { useHistory } from 'react-router-dom';
 import { ButtonBase } from '@mui/material';
 import RegisterPageInputs from './RegisterPageInputs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../../store/reducers/authReducer';
 
 const theme = createTheme();
 
 export default function RegisterPage() {
+  const user = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [consultantCheck, setConsultantCheck] = useState(false);
+
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      localStorage.setItem('user', JSON.stringify(user.userDetails));
+      history.push('/dashboard');
+    }
+  }, [user.isLoggedIn]);
 
   const handleSubmit = (event) => {
     // TODO: dispatch(register)

@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -17,22 +16,32 @@ import HomePageAppBar from '../../HomePageAppBar/HomePageAppBar';
 import { ButtonBase } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import LoginPageInputs from './LoginPageInputs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../../store/reducers/authReducer';
 
 const theme = createTheme();
 
 export default function Login() {
+  const user = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      localStorage.setItem('user', JSON.stringify(user.userDetails));
+      history.push('/dashboard');
+    }
+  }, [user.isLoggedIn]);
+
+  const handleSubmit = () => {
     const userDetails = {
-     email,
-     password,
+      email,
+      password,
     };
-    // dispatch(login({ userDetails, history }));
+    dispatch(login({ userDetails, history }));
   };
 
   const handleRegisterOnClick = () => {
@@ -49,12 +58,12 @@ export default function Login() {
         <Box
           sx={{
             marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -67,12 +76,10 @@ export default function Login() {
             sx={{ mt: 1 }}
           >
             <LoginPageInputs
-              
               email={email}
               setEmail={setEmail}
               password={password}
               setPassword={setPassword}
-
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -94,7 +101,7 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <ButtonBase onClick={handleRegisterOnClick}>
-                  <Typography variant="body2" color={"primary.main"}>
+                  <Typography variant="body2" color={'primary.main'}>
                     {"Don't have an account? Register here"}
                   </Typography>
                 </ButtonBase>

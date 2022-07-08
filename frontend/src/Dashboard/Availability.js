@@ -104,7 +104,7 @@ export default function Availability() {
               sx={{ mr: 2, ml: 2, mt: 2 }}
               onClick={() => handleCreateButton()}
             >
-              Create New Appointment
+              Create New Availability Spot
             </Button>
             <TextFieldWithLabel
               id="description"
@@ -148,7 +148,7 @@ export default function Availability() {
               onClick={() => handleSaveAppointmentsButton()}
               disabled={appointmentCards && !isFormValid}
             >
-              Save my time slots
+              Save my changes
             </Button>
           </LocalizationProvider>
         </Stack>

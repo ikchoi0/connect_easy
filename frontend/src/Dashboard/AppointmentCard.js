@@ -1,12 +1,16 @@
 import React from 'react';
-import { Box, Button, Card } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
-import { useDispatch } from 'react-redux';
-import { deleteOneAppointment } from '../store/reducers/scheduleReducer';
 
-const AppointmentCard = ({ id, date, startTime, endTime, description }) => {
-  const dispatch = useDispatch();
+const AppointmentCard = ({
+  id,
+  date,
+  startTime,
+  endTime,
+  description,
+  onDelete,
+}) => {
   return (
     <Box
       sx={{
@@ -63,7 +67,7 @@ const AppointmentCard = ({ id, date, startTime, endTime, description }) => {
           variant="contained"
           color="secondary"
           size="large"
-          onClick={() => dispatch(deleteOneAppointment(id))}
+          onClick={() => onDelete(id)}
         >
           Delete
         </Button>

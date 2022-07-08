@@ -16,7 +16,7 @@ import AppointmentCard from './AppointmentCard';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setOneAppointment,
-  deleteOneAppointment,
+  deleteOneOpeningAppointment,
 } from '../store/reducers/scheduleReducer';
 import {
   createOpenAppointments,
@@ -34,6 +34,10 @@ export default function Availability() {
   const [endTime, setEndTime] = useState(null);
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
 
+  /**
+   * TODO: NEED TO FIX FORM VALIDATION
+   */
+
   useEffect(() => {
     if (
       openingAppointmentsList.length &&
@@ -44,6 +48,11 @@ export default function Availability() {
     ) {
       setIsFormValid(true);
     }
+    const handleCreateAppointmentCheck = () => {
+      setIsNewAppointmentValid(
+        description.length && date && startTime && endTime ? true : false
+      );
+    };
     handleCreateAppointmentCheck();
   }, [
     openingAppointmentsList,
@@ -63,12 +72,6 @@ export default function Availability() {
     return result;
   };
 
-  const handleCreateAppointmentCheck = () => {
-    setIsNewAppointmentValid(
-      description.length && date && startTime && endTime ? true : false
-    );
-  };
-
   const handleDateChange = (newValue) => {
     setDate(newValue);
   };
@@ -82,18 +85,18 @@ export default function Availability() {
   };
 
   const handleDeleteAppointmentOnClick = (key) => {
-    dispatch(deleteOneAppointment(key));
+    dispatch(deleteOneOpeningAppointment(key));
   };
 
-  const appointmentCards = openingAppointmentsList.map((appointment, index) => {
+  const appointmentCards = openingAppointmentsList.map((appointment) => {
     return (
       <AppointmentCard
         key={appointment.key}
         id={appointment.key}
         description={appointment.description}
         date={appointment.date}
-        startTime={appointment.appointmentStartTime}
-        endTime={appointment.appointmentEndTime}
+        startTime={moment(appointment.appointmentStartTime).format('HH:mm A')}
+        endTime={moment(appointment.appointmentEndTime).format('HH:mm A')}
         onDelete={handleDeleteAppointmentOnClick}
       />
     );
@@ -108,9 +111,9 @@ export default function Availability() {
     let card = {
       key,
       consultant: consultantId,
-      date: date.toString(),
-      appointmentStartTime: startTime.toString(),
-      appointmentEndTime: endTime.toString(),
+      date: moment(date).toISOString(),
+      appointmentStartTime: moment(startTime).toISOString(),
+      appointmentEndTime: moment(endTime).toISOString(),
       description,
     };
 
@@ -124,8 +127,6 @@ export default function Availability() {
 
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
-      {/* End hero unit */}
-
       <Stack spacing={3}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Button

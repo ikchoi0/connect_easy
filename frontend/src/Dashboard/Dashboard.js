@@ -12,6 +12,7 @@ import { theme } from './theme';
 import Copyright from '../shared/components/Copyright';
 import { logout } from '../shared/utils/auth';
 import { setUser } from '../store/reducers/authReducer';
+import Home from './Home';
 const drawerWidth = 256;
 
 export default function Dashboard() {
@@ -29,7 +30,7 @@ export default function Dashboard() {
     } else {
       dispatch(setUser(JSON.parse(userDetails)));
     }
-  }, []);
+  }, [dispatch]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -63,7 +64,7 @@ export default function Dashboard() {
             component="main"
             sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}
           >
-            {selectedNavigatorItem === 'Home' && <>Home</>}
+            {selectedNavigatorItem === 'Home' && <Home />}
             {selectedNavigatorItem === 'Availability' && <Availability />}
             {selectedNavigatorItem === 'Calendar' && <Scheduler />}
             {selectedNavigatorItem === 'Payments' && <>payments</>}

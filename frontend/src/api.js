@@ -104,3 +104,15 @@ export const getAppointmentsForConsultant = async (consultantId) => {
     };
   }
 };
+
+export const deleteOneAppointmentById = async (appointmentId) => {
+  try {
+    return await apiClient.delete(`/appointment/${appointmentId}`);
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};

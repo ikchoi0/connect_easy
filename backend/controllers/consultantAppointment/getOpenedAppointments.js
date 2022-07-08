@@ -24,8 +24,8 @@ const getOpenedAppointments = async (req, res) => {
       return {
         appointmentId: appointment._id,
         title: appointment.description,
-        start: moment(appointment.appointmentStartTime).toDate(),
-        end: moment(appointment.appointmentEndTime).toDate(),
+        start: appointment.appointmentStartTime,
+        end: appointment.appointmentEndTime,
         allDay: false,
         resource: appointment.client,
       };

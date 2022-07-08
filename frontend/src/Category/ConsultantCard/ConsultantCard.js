@@ -90,7 +90,7 @@ export default function CategoryCard({
       <div>
         <Dialog
           fullWidth={true}
-          maxWidth="xl"
+          maxWidth="md"
           open={open}
           onClose={handleClose}
           aria-labelledby="responsive-dialog-title"

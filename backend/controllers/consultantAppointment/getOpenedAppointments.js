@@ -22,6 +22,7 @@ const getOpenedAppointments = async (req, res) => {
 
     const parsedAppointments = appointments.map((appointment) => {
       return {
+        appointmentId: appointment._id,
         title: appointment.description,
         start: moment(appointment.appointmentStartTime).toDate(),
         end: moment(appointment.appointmentEndTime).toDate(),
@@ -32,7 +33,7 @@ const getOpenedAppointments = async (req, res) => {
 
     return res.status(200).send(parsedAppointments);
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send(error.message);
   }
 };
 

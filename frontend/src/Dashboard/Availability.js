@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import Typography from '@mui/material/Typography';
-import { Card, Container } from '@mui/material';
+import { v4 as uuid } from 'uuid';
+import { Container } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -13,25 +14,45 @@ import TextFieldWithLabel from '../shared/components/TextFieldWithLabel';
 import moment from 'moment';
 import AppointmentCard from './AppointmentCard';
 import { useSelector, useDispatch } from 'react-redux';
-import Grid from '@mui/material/Grid';
-import { setOneAppointment } from '../store/reducers/scheduleReducer';
-import { createOpenAppointments } from '../store/reducers/scheduleReducer';
+import {
+  setOneAppointment,
+  deleteOneAppointment,
+} from '../store/reducers/scheduleReducer';
+import {
+  createOpenAppointments,
+  clearOpeningAppointmentsList,
+} from '../store/reducers/scheduleReducer';
 
 export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
-  useEffect(() => {
-    if (openingAppointmentsList.length) {
-      setIsFormValid(true);
-    }
-  }, [openingAppointmentsList, setIsFormValid]);
-
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(moment().toDate());
-  const [startTime, setStartTime] = useState(moment().toDate());
-  const [endTime, setEndTime] = useState(moment().add(30, 'minutes').toDate());
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
+
+  useEffect(() => {
+    if (
+      openingAppointmentsList.length &&
+      description &&
+      date &&
+      startTime &&
+      endTime
+    ) {
+      setIsFormValid(true);
+    }
+    handleCreateAppointmentCheck();
+  }, [
+    openingAppointmentsList,
+    setIsFormValid,
+    description,
+    date,
+    startTime,
+    endTime,
+  ]);
 
   const parseDate = (value, setValue) => {
     const time = moment(value).format('HH:mm');
@@ -40,6 +61,12 @@ export default function Availability() {
 
     setValue(result);
     return result;
+  };
+
+  const handleCreateAppointmentCheck = () => {
+    setIsNewAppointmentValid(
+      description.length && date && startTime && endTime ? true : false
+    );
   };
 
   const handleDateChange = (newValue) => {
@@ -54,31 +81,32 @@ export default function Availability() {
     parseDate(newValue, setEndTime);
   };
 
+  const handleDeleteAppointmentOnClick = (key) => {
+    dispatch(deleteOneAppointment(key));
+  };
+
   const appointmentCards = openingAppointmentsList.map((appointment, index) => {
     return (
       <AppointmentCard
-        key={index}
+        key={appointment.key}
+        id={appointment.key}
         description={appointment.description}
         date={appointment.date}
         startTime={appointment.appointmentStartTime}
         endTime={appointment.appointmentEndTime}
+        onDelete={handleDeleteAppointmentOnClick}
       />
     );
   });
-
-  let cards = (
-    <Card sx={{ margin: 2 }}>
-      <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-        {description}
-      </Typography>
-    </Card>
-  );
 
   const handleCreateButton = () => {
     const consultant = localStorage.getItem('user');
     const consultantId = JSON.parse(consultant).userId;
 
+    const key = uuid();
+
     let card = {
+      key,
       consultant: consultantId,
       date: date.toString(),
       appointmentStartTime: startTime.toString(),
@@ -91,68 +119,70 @@ export default function Availability() {
 
   const handleSaveAppointmentsButton = () => {
     dispatch(createOpenAppointments(openingAppointmentsList));
+    dispatch(clearOpeningAppointmentsList());
   };
 
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
       {/* End hero unit */}
-      <Card sx={{ margin: 2, overflow: 'hidden' }}>
-        <Stack spacing={3}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Button
-              variant="contained"
-              sx={{ mr: 2, ml: 2, mt: 2 }}
-              onClick={() => handleCreateButton()}
-            >
-              Create New Appointment
-            </Button>
-            <TextFieldWithLabel
-              id="description"
-              label="Description"
-              autoFocus={true}
-              value={description}
-              setValue={setDescription}
-            />
-            <Grid
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-around',
-              }}
-            >
-              <DesktopDatePicker
-                minDate={new Date()}
-                label="Appointment Date"
-                inputFormat="MM/dd/yyyy"
-                value={date}
-                onChange={handleDateChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <TimePicker
-                label="Start Time"
-                value={startTime}
-                onChange={handleStartTimeChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <TimePicker
-                label="End Time"
-                value={endTime}
-                onChange={handleEndTimeChange}
-                renderInput={(params) => <TextField {...params} />}
-              />{' '}
-            </Grid>
-            {appointmentCards && appointmentCards}
 
-            <Button
-              variant="contained"
-              sx={{ mr: 2, ml: 2, mt: 2 }}
-              onClick={() => handleSaveAppointmentsButton()}
-              disabled={appointmentCards && !isFormValid}
-            >
-              Save my time slots
-            </Button>
-          </LocalizationProvider>
-        </Stack>
-      </Card>
+      <Stack spacing={3}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Button
+            variant="contained"
+            sx={{ mr: 2, ml: 2, mt: 2 }}
+            onClick={() => handleCreateButton()}
+            disabled={!isNewAppointmentValid}
+          >
+            Create New Appointment
+          </Button>
+
+          <TextFieldWithLabel
+            id="description"
+            label="Description"
+            autoFocus={true}
+            value={description}
+            setValue={setDescription}
+          />
+          <Grid
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-around',
+            }}
+          >
+            <DesktopDatePicker
+              minDate={new Date()}
+              label="Appointment Date"
+              inputFormat="MM/dd/yyyy"
+              value={date}
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <TimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={handleStartTimeChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <TimePicker
+              label="End Time"
+              value={endTime}
+              onChange={handleEndTimeChange}
+              renderInput={(params) => <TextField {...params} />}
+            />{' '}
+          </Grid>
+          {appointmentCards && appointmentCards}
+
+          <Button
+            variant="contained"
+            sx={{ mr: 2, ml: 2, mt: 2 }}
+            onClick={() => handleSaveAppointmentsButton()}
+            disabled={appointmentCards && !isFormValid}
+          >
+            Save my time slots
+          </Button>
+        </LocalizationProvider>
+      </Stack>
     </Container>
   );
 }

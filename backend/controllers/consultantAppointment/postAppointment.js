@@ -8,7 +8,7 @@ const postAppointment = async (req, res) => {
 
     return res.status(200).send(appointments);
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send(error.message);
   }
 };
 

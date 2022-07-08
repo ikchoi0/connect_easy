@@ -34,6 +34,15 @@ const schedulerSlice = createSlice({
     setOneAppointment: (state, action) => {
       state.openingAppointmentsList.push(action.payload);
     },
+    deleteOneAppointment: (state, action) => {
+      console.log('DELETE APPOINTMENT', action.payload);
+      state.openingAppointmentsList = state.openingAppointmentsList.filter(
+        (appointment) => appointment.key !== action.payload
+      );
+    },
+    clearOpeningAppointmentsList: (state) => {
+      state.openingAppointmentsList = [];
+    },
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
@@ -52,5 +61,9 @@ const schedulerSlice = createSlice({
   },
 });
 
-export const { setOneAppointment } = schedulerSlice.actions;
+export const {
+  setOneAppointment,
+  deleteOneAppointment,
+  clearOpeningAppointmentsList,
+} = schedulerSlice.actions;
 export default schedulerSlice.reducer;

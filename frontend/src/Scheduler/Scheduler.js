@@ -56,7 +56,7 @@ export default function Scheduler({ selectable = true }) {
             localizer={localizer}
             showMultiDayTimes
             step={30}
-            views={['month', 'week']}
+            views={['month']}
             defaultView={'month'}
             startAccessor="start"
             endAccessor="end"

@@ -1,19 +1,21 @@
 const Appointment = require('../../models/appointment');
+const Types = require('mongoose').Types;
 
 const updateAppointment = async (req, res) => {
   try {
+    const { appointmentId } = req.params;
+
     const {
-      conultant,
-      client,
+      consultant,
       description,
       appointmentBooked,
       appointmentStartTime,
       appointmentEndTime,
-      appointmentCancellation_time,
-      appointmentCancel,
     } = req.body;
 
-    const appointment = await Appointment.findById(req.params.id);
+    const appointment = await Appointment.findById(
+      Types.ObjectId(appointmentId)
+    );
     if (!appointment) {
       return res.status(404).send('Appointment not found');
     }

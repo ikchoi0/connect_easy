@@ -58,8 +58,6 @@ export default function Scheduler() {
   };
   return (
     <>
-      <HomePageAppBar />
-      <OpenAppointment />
       <Container
         sx={{
           marginTop: 8,

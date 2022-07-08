@@ -17,7 +17,7 @@ import Grid from '@mui/material/Grid';
 import { setOneAppointment } from '../store/reducers/scheduleReducer';
 import { createOpenAppointments } from '../store/reducers/scheduleReducer';
 
-export default function Content() {
+export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const dispatch = useDispatch();
 

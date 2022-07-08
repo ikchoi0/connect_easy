@@ -1,5 +1,6 @@
 const Types = require('mongoose').Types;
 const Appointment = require('../../models/appointment');
+const moment = require('moment');
 
 const getOpenedAppointments = async (req, res) => {
   try {
@@ -22,8 +23,8 @@ const getOpenedAppointments = async (req, res) => {
     const parsedAppointments = appointments.map((appointment) => {
       return {
         title: appointment.description,
-        start: appointment.date,
-        end: appointment.appointmentEndTime,
+        start: moment(appointment.appointmentStartTime).toDate(),
+        end: moment(appointment.appointmentEndTime).toDate(),
         allDay: false,
         resource: appointment.client,
       };

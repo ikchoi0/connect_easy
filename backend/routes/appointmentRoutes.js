@@ -21,13 +21,22 @@ const appointmentSchema = Joi.object({
 
 const appointmentSchemas = Joi.array().items(appointmentSchema);
 
+/**
+ * enum: ['admin', 'client', 'consultant']
+ * example: auth('consultant')
+ */
+
 router.post(
   '/',
-  auth,
+  auth('consultant'),
   // validator.body(appointmentSchemas),
   appointmentController.controllers.postAppointment
 );
 
-router.get('/', auth, appointmentController.controllers.getOpenedAppointments);
+router.get(
+  '/:consultantId',
+  auth('consultant'),
+  appointmentController.controllers.getOpenedAppointments
+);
 
 module.exports = router;

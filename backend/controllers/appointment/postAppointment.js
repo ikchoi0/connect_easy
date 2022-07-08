@@ -2,9 +2,7 @@ const Appointment = require('../../models/appointment');
 
 const postAppointment = async (req, res) => {
   try {
-    console.log(req.body);
-
-    // const consultantId = req.params;
+    // check if user role is consultant
 
     const appointments = await Appointment.insertMany(req.body);
 

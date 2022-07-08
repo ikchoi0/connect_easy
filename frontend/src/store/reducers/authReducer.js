@@ -32,7 +32,12 @@ export const register = createAsyncThunk(
 const authSlice = createSlice({
   name: 'auth',
   initialState: authState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.userDetails = action.payload;
+      state.isLoggedIn = true;
+    },
+  },
   extraReducers: {
     [register.fulfilled]: (state, action) => {
       state.userDetails = action.payload.userDetails;
@@ -53,4 +58,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

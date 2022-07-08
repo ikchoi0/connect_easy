@@ -3,7 +3,7 @@ import * as api from '../../api';
 
 const schedulerState = {
   openingAppointmentsList: [],
-  appointments: null,
+  appointments: [],
 };
 
 export const createOpenAppointments = createAsyncThunk(
@@ -17,8 +17,8 @@ export const createOpenAppointments = createAsyncThunk(
 
 export const getAppointmentsForConsultant = createAsyncThunk(
   'schedule/getAppointments',
-  async (thunkApi) => {
-    const response = await api.getAppointmentsForConsultant();
+  async (consultantId, thunkApi) => {
+    const response = await api.getAppointmentsForConsultant(consultantId);
     console.log('GET APPOINTMENT THUNK', response);
     if (response.error) return thunkApi.rejectWithValue(response.message);
 

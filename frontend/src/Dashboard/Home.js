@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -6,16 +6,43 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AppointmentCard from "./AppointmentCard";
 import { useDispatch, useSelector } from "react-redux";
-
+import { getAppointmentsForConsultant } from "../store/reducers/scheduleReducer";
+import moment from "moment";
 
 export default function Home() {
+  // Grab the user details state from the store:
   const userDetails = useSelector((state) => state.auth.userDetails);
-  
-  const [appointmentStatus, setAppointmentStatus] = React.useState("");
 
+  // Grab the all appointments for the user above from the store:
+  const consultantAppointments = useSelector((state) => state.scheduler);
+
+  // Filter menu for appointment status types:
+  const [filterStatus, setFilterStatus] = React.useState("");
+  const dispatch = useDispatch();
   const handleChange = (event) => {
-    setAppointmentStatus(event.target.value);
+    setFilterStatus(event.target.value);
   };
+
+  // Mapped out the appointments for the user:
+  const mappedAppointments = consultantAppointments.appointments.map(
+    (appointment, index) => {
+      return (
+        <AppointmentCard
+          key={index}
+          description={appointment.title}
+          date={moment(appointment.date).format("MMM Do YYYY")}
+          startTime={moment(appointment.start).format("HH:mm A")}
+          endTime={moment(appointment.end).format("HH:mm A")}
+        />
+      );
+    }
+  );
+
+  useEffect(() => {
+    if (userDetails) {
+      dispatch(getAppointmentsForConsultant(userDetails.userId));
+    }
+  }, [dispatch, userDetails]);
 
   return (
     <Box
@@ -44,7 +71,7 @@ export default function Home() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={appointmentStatus}
+          value={filterStatus}
           label="Appointment Status"
           onChange={handleChange}
         >
@@ -68,12 +95,9 @@ export default function Home() {
           borderRadius: "5px",
         }}
       >
-        <AppointmentCard
-          description={"appointment.description"}
-          date={"appointment.date"}
-          startTime={"appointment.appointmentStartTime"}
-          endTime={"appointment.appointmentEndTime"}
-        />
+        <Typography variant="h4" component="h1" mb={"30px"}>
+          {mappedAppointments}
+        </Typography>
       </Box>
     </Box>
   );

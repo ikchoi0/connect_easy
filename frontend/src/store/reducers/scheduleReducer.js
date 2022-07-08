@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as api from "../../api";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as api from '../../api';
 
 const schedulerState = {
   openingAppointmentsList: [],
@@ -7,7 +7,7 @@ const schedulerState = {
 };
 
 export const createOpenAppointments = createAsyncThunk(
-  "schedule/createOpenAppointments",
+  'schedule/createOpenAppointments',
   async (openAppointmentsList, thunkApi) => {
     const response = await api.setOpenAppointments(openAppointmentsList);
     if (response.error) return thunkApi.rejectWithValue(response.message);
@@ -16,10 +16,10 @@ export const createOpenAppointments = createAsyncThunk(
 );
 
 export const getAppointmentsForConsultant = createAsyncThunk(
-  "schedule/getAppointments",
+  'schedule/getAppointments',
   async (thunkApi) => {
     const response = await api.getAppointmentsForConsultant();
-    console.log("GET APPOINTMENT THUNK", response);
+    console.log('GET APPOINTMENT THUNK', response);
     if (response.error) return thunkApi.rejectWithValue(response.message);
 
     return response.data;
@@ -27,7 +27,7 @@ export const getAppointmentsForConsultant = createAsyncThunk(
 );
 
 const schedulerSlice = createSlice({
-  name: "scheduler",
+  name: 'scheduler',
   initialState: schedulerState,
 
   reducers: {
@@ -37,17 +37,17 @@ const schedulerSlice = createSlice({
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
-      console.log("create fulfilled", action.payload);
+      console.log('create fulfilled', action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {
-      console.log("create rejected", action.payload);
+      console.log('create rejected', action.payload);
     },
     [getAppointmentsForConsultant.fulfilled]: (state, action) => {
       state.appointments = action.payload;
-      console.log("get fulfilled", action.payload);
+      console.log('get fulfilled', action.payload);
     },
     [getAppointmentsForConsultant.rejected]: (state, action) => {
-      console.log("get rejected", action.payload);
+      console.log('get rejected', action.payload);
     },
   },
 });

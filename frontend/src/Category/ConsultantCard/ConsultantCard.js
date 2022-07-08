@@ -7,8 +7,6 @@ import { CardMedia } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Scheduler from '../../Scheduler/Scheduler';
 export default function CategoryCard({
   firstName,
@@ -23,8 +21,6 @@ export default function CategoryCard({
     console.log('clicked');
   };
   const [open, setOpen] = React.useState(false);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,6 +29,7 @@ export default function CategoryCard({
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Card sx={{ display: 'flex', height: '100%' }} onClick={handleClick}>

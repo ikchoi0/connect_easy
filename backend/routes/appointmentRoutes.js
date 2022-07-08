@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 
-const appointmentController = require('../controllers/appointment/appointmentController');
+const appointmentController = require('../controllers/consultantAppointment/appointmentController');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const validator = require('express-joi-validation').createValidator({});
@@ -39,4 +39,22 @@ router.get(
   appointmentController.controllers.getOpenedAppointments
 );
 
+router.delete(
+  '/:consultantId',
+  auth('consultant'),
+  appointmentController.controllers.deleteAppointment
+);
+
+// Consultant Appointments
+router.get(
+  '/:appointmentId',
+  auth('consultant'),
+  appointmentController.controllers.getAppointment
+);
+
+router.get(
+  '/date/:date',
+  auth('consultant'),
+  appointmentController.controllers.getAppointmentByDate
+);
 module.exports = router;

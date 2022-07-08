@@ -21,10 +21,24 @@ const getOpenedAppointments = async (req, res) => {
      */
 
     const parsedAppointments = appointments.map((appointment) => {
+      const newDate = moment(appointment.date).format('YYYY-MM-DD');
+      const startTime = moment(appointment.appointmentStartTime).format(
+        'HH:mm'
+      );
+      const endTime = moment(appointment.appointmentEndTime).format('HH:mm');
+
+      const newStartTime = moment(newDate + ' ' + startTime).format(
+        'YYYY-MM-DD HH:mm'
+      );
+      const newEndTime = moment(newDate + ' ' + endTime).format(
+        'YYYY-MM-DD HH:mm'
+      );
       return {
+        appointmentId: appointment._id,
         title: appointment.description,
-        start: moment(appointment.appointmentStartTime).toDate(),
-        end: moment(appointment.appointmentEndTime).toDate(),
+        date: appointment.date,
+        start: newStartTime,
+        end: newEndTime,
         allDay: false,
         resource: appointment.client,
       };
@@ -32,7 +46,7 @@ const getOpenedAppointments = async (req, res) => {
 
     return res.status(200).send(parsedAppointments);
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send(error.message);
   }
 };
 

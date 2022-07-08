@@ -19,7 +19,7 @@ export default function CategoryContainer() {
   const consultantCards = category.usersWithinCategory.map(
     (consultant, index) => {
       return (
-        <Grid item key={index} xs={12} sm={6} lg={3}>
+        <Grid item key={index} xs={12} sm={6} lg={4}>
           <ConsultantCard
             key={consultant.id}
             firstName={consultant.firstName}

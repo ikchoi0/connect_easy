@@ -1,6 +1,6 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
-import { FormControl } from '@mui/material';
+import React from "react";
+import TextField from "@mui/material/TextField";
+import { FormControl } from "@mui/material";
 
 const TextFieldWithLabel = ({
   id,
@@ -9,7 +9,7 @@ const TextFieldWithLabel = ({
   autoFocus = false,
   value,
   setValue,
-  type = '',
+  type = "",
 }) => {
   const handleValueChange = (e) => {
     setValue(e.target.value);
@@ -21,6 +21,7 @@ const TextFieldWithLabel = ({
         name={id}
         label={label}
         required
+        autoComplete={autoComplete}
         // fullWidth
         autoFocus={autoFocus}
         type={type}

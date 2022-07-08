@@ -32,6 +32,7 @@ export default function Home() {
     }
   }, [dispatch, userDetails]);
 
+  // Delete an appointment:
   const handleDeleteAppointmentOnClick = (id) => {
     dispatch(deleteOneAppointment(id));
   };
@@ -40,7 +41,7 @@ export default function Home() {
   const mappedAppointments = consultantAppointments.appointments.map(
     (appointment, index) => {
       return (
-        <AppointmentCard 
+        <AppointmentCard
           key={index}
           id={appointment.appointmentId}
           description={appointment.title}
@@ -109,8 +110,7 @@ export default function Home() {
           component="h1"
           sx={{
             backgroundColor: "#fafafa",
-            borderRadius: "5px",
-            
+            borderRadius: "10px",
           }}
         >
           {mappedAppointments}

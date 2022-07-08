@@ -14,7 +14,7 @@ const postRegister = async (req, res) => {
       return res.status(409).send('E-mail already in use.');
     }
 
-    // ecrypt password
+    // encrypt password
     const encryptedPassword = await bcrypt.hash(password, 10);
 
     // create user document and save in the database
@@ -23,7 +23,7 @@ const postRegister = async (req, res) => {
       lastName,
       email: email.toLowerCase(),
       password: encryptedPassword,
-      roles: consultantCheck ? 'consultant' : 'client',
+      role: consultantCheck ? 'consultant' : 'client',
     });
 
     // create JWT token

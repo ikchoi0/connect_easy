@@ -1,12 +1,14 @@
-import React from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
+import React, { useEffect } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
 
-import "./Scheduler.css";
-import { Container, Box } from "@mui/material";
-import TimeSlots from "./TimeSlots";
-import HomePageAppBar from "../HomePage/HomePageAppBar/HomePageAppBar";
-import OpenAppointment from "../OpenAppointment/OpenAppointment";
+import './Scheduler.css';
+import { Container, Box } from '@mui/material';
+import TimeSlots from './TimeSlots';
+import HomePageAppBar from '../HomePage/HomePageAppBar/HomePageAppBar';
+import OpenAppointment from '../OpenAppointment/OpenAppointment';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppointmentsForConsultant } from '../store/reducers/scheduleReducer';
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -15,42 +17,24 @@ const localizer = momentLocalizer(moment); // or globalizeLocalizer
  * https://jquense.github.io/react-big-calendar/
  */
 
-const events = [
-  {
-    id: 0,
-    title: "Board meeting",
-    start: new Date(2022, 6, 29, 9, 0, 0),
-    end: new Date(2022, 6, 29, 13, 0, 0),
-    resourceId: 1,
-  },
-  {
-    id: 1,
-    title: "MS training",
-    allDay: true,
-    start: new Date(2022, 6, 19, 14, 0, 0),
-    end: new Date(2022, 6, 19, 16, 0, 0),
-    resourceId: 2,
-  },
-  {
-    id: 2,
-    title: "Team lead meeting",
-    start: new Date(2022, 6, 23, 9, 0, 0),
-    end: new Date(2022, 6, 24, 13, 0, 0),
-    resourceId: 3,
-  },
-  {
-    id: 11,
-    title: "Birthday Party",
-    start: new Date(2022, 6, 5, 9, 0, 0),
-    end: new Date(2022, 6, 8, 13, 0, 0),
-    resourceId: 4,
-  },
-];
-
 export default function Scheduler() {
   const [openTimeSlots, setOpenTimeSlots] = React.useState(false);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  const scheduler = useSelector((state) => state.scheduler);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const consultant = localStorage.getItem('user');
+    if (consultant) {
+      const consultantId = JSON.parse(consultant).userId;
+      console.log(consultantId);
+
+      dispatch(getAppointmentsForConsultant(consultantId));
+    }
+  }, []);
 
   const handleOpenTimeSlots = (e) => {
     setOpenTimeSlots(true);
@@ -58,24 +42,22 @@ export default function Scheduler() {
   };
   return (
     <>
-      <HomePageAppBar />
-      <OpenAppointment />
       <Container
         sx={{
           marginTop: 8,
-          height: "780px",
-          display: "flex",
-          justifyContent: "space-between",
+          height: '780px',
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: '100%' }}>
           <Calendar
-            events={events}
+            events={scheduler && scheduler.appointments}
             localizer={localizer}
             showMultiDayTimes
             step={30}
-            views={["week", "month"]}
-            defaultView={"month"}
+            views={'month'}
+            defaultView={'month'}
             startAccessor="start"
             endAccessor="end"
             onSelectEvent={(e) => {

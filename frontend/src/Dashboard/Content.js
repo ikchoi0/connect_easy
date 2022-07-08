@@ -75,12 +75,17 @@ export default function Content() {
   );
 
   const handleCreateButton = () => {
+    const consultant = localStorage.getItem('user');
+    const consultantId = JSON.parse(consultant).userId;
+
     let card = {
+      consultant: consultantId,
       date: date.toString(),
       appointmentStartTime: startTime.toString(),
       appointmentEndTime: endTime.toString(),
       description,
     };
+
     dispatch(setOneAppointment(card));
   };
 

@@ -1,13 +1,13 @@
 import React from "react";
+import { useState } from "react";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import Scheduler from "../../Scheduler/Scheduler";
+import DialogPopUp from "../../shared/components/DialogPopUp";
 export default function CategoryCard({
   firstName,
   lastName,
@@ -19,12 +19,10 @@ export default function CategoryCard({
   const handleClick = () => {
     handleClickOpen();
   };
-  const [open, setOpen] = React.useState(false);
-
+  const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -83,25 +81,16 @@ export default function CategoryCard({
           }}
         ></Box>
       </Card>
-      <div>
-        <Dialog
-          fullWidth={true}
-          maxWidth="md"
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="responsive-dialog-title"
-        >
-          <Scheduler selectable={false} />
-          <DialogActions>
-            <Button autoFocus onClick={handleClose}>
-              Disagree
-            </Button>
-            <Button onClick={handleClose} autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      <DialogPopUp
+        onAccept={handleClose}
+        onCancel={handleClose}
+        onClose={handleClose}
+        open={open}
+        acceptName="Book Now"
+        cancelName="Cancel"
+      >
+        <Scheduler selectable />
+      </DialogPopUp>
     </>
   );
 }

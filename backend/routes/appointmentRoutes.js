@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 
-const appointmentController = require('../controllers/consultantAppointment/appointmentController');
-const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi);
-const validator = require('express-joi-validation').createValidator({});
+const appointmentController = require("../controllers/appointment/appointmentController");
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
+const validator = require("express-joi-validation").createValidator({});
 // const auth = require("../middleware/auth");
 
 const appointmentSchema = Joi.object({
@@ -27,34 +27,34 @@ const appointmentSchemas = Joi.array().items(appointmentSchema);
  */
 
 router.post(
-  '/',
-  auth('consultant'),
+  "/",
+  auth(["consultant"]),
   // validator.body(appointmentSchemas),
   appointmentController.controllers.postAppointment
 );
 
 router.get(
-  '/:consultantId',
-  auth('consultant'),
+  "/:consultantId",
+  auth(["consultant", "client"]),
   appointmentController.controllers.getOpenedAppointments
 );
 
 router.delete(
-  '/:consultantId',
-  auth('consultant'),
+  "/:consultantId",
+  auth(["consultant"]),
   appointmentController.controllers.deleteAppointment
 );
 
 // Consultant Appointments
 router.get(
-  '/:appointmentId',
-  auth('consultant'),
+  "/:appointmentId",
+  auth(["consultant"]),
   appointmentController.controllers.getAppointment
 );
 
 router.get(
-  '/date/:date',
-  auth('consultant'),
+  "/date/:date",
+  auth(["consultant"]),
   appointmentController.controllers.getAppointmentByDate
 );
 module.exports = router;

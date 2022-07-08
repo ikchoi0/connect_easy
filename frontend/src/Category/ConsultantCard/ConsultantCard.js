@@ -28,6 +28,7 @@ export default function CategoryCard({
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Card sx={{ display: "flex", height: "100%" }} onClick={handleClick}>

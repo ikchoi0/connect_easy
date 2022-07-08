@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-const AppointmentCard = ({date, startTime, endTime, description}) => {
+const AppointmentCard = ({ date, startTime, endTime, description }) => {
   return (
     <Card sx={{ margin: 2 }}>
       <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
@@ -18,7 +18,7 @@ const AppointmentCard = ({date, startTime, endTime, description}) => {
         {endTime}
       </Typography>
     </Card>
-  )
-}
+  );
+};
 
-export default AppointmentCard
+export default AppointmentCard;

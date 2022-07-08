@@ -53,7 +53,7 @@ router.get(
 );
 
 router.get(
-  '/:date',
+  '/date/:date',
   auth('consultant'),
   appointmentController.controllers.getAppointmentByDate
 );

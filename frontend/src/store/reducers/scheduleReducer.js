@@ -26,6 +26,17 @@ export const getAppointmentsForConsultant = createAsyncThunk(
   }
 );
 
+export const getAppointmentsForTheDay = createAsyncThunk(
+  'schedule/getAppointmentsForTheDay',
+  async (date, thunkApi) => {
+    const response = await api.getAppointmentsForConsultantsByDate(date);
+
+    if (response.error) return thunkApi.rejectWithValue(response.message);
+
+    return response.data;
+  }
+);
+
 export const deleteOneAppointment = createAsyncThunk(
   'schedule/deleteOneAppointment',
   async (appointmentId, thunkApi) => {
@@ -62,6 +73,7 @@ const schedulerSlice = createSlice({
       console.log('create rejected', action.payload);
     },
     [getAppointmentsForConsultant.fulfilled]: (state, action) => {
+      console.log('get appointments fulfilled', action.payload);
       state.appointments = action.payload;
     },
     [getAppointmentsForConsultant.rejected]: (state, action) => {
@@ -71,6 +83,9 @@ const schedulerSlice = createSlice({
       state.appointments = state.appointments.filter((appointment) => {
         return appointment.appointmentId !== action.payload._id;
       });
+    },
+    [getAppointmentsForTheDay.fulfilled]: (state, action) => {
+      console.log('get appointments for the day', action.payload);
     },
   },
 });

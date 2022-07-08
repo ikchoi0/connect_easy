@@ -22,7 +22,9 @@ const getAppointment = async (req, res) => {
      */
 
     const parsedAppointment = {
+      appointmentId: appointment._id,
       title: appointment.description,
+      date: appointment.date,
       start: moment(appointment.appointmentStartTime).toDate(),
       end: moment(appointment.appointmentEndTime).toDate(),
       allDay: false,

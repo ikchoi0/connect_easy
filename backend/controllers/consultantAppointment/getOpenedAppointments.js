@@ -21,11 +21,24 @@ const getOpenedAppointments = async (req, res) => {
      */
 
     const parsedAppointments = appointments.map((appointment) => {
+      const newDate = moment(appointment.date).format('YYYY-MM-DD');
+      const startTime = moment(appointment.appointmentStartTime).format(
+        'HH:mm'
+      );
+      const endTime = moment(appointment.appointmentEndTime).format('HH:mm');
+
+      const newStartTime = moment(newDate + ' ' + startTime).format(
+        'YYYY-MM-DD HH:mm'
+      );
+      const newEndTime = moment(newDate + ' ' + endTime).format(
+        'YYYY-MM-DD HH:mm'
+      );
       return {
         appointmentId: appointment._id,
         title: appointment.description,
-        start: appointment.appointmentStartTime,
-        end: appointment.appointmentEndTime,
+        date: appointment.date,
+        start: newStartTime,
+        end: newEndTime,
         allDay: false,
         resource: appointment.client,
       };

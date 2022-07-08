@@ -5,8 +5,6 @@ import moment from 'moment';
 import './Scheduler.css';
 import { Container, Box } from '@mui/material';
 import TimeSlots from './TimeSlots';
-import HomePageAppBar from '../HomePage/HomePageAppBar/HomePageAppBar';
-import OpenAppointment from '../OpenAppointment/OpenAppointment';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAppointmentsForConsultant } from '../store/reducers/scheduleReducer';
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
@@ -34,7 +32,7 @@ export default function Scheduler({ selectable = true }) {
 
       dispatch(getAppointmentsForConsultant(consultantId));
     }
-  }, []);
+  }, [dispatch]);
 
   const handleOpenTimeSlots = (e) => {
     setOpenTimeSlots(true);

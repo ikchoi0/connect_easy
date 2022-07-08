@@ -29,8 +29,8 @@ export default function Availability() {
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState(moment().toDate());
-  const [startTime, setStartTime] = useState(null);
+  const [date, setDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(null);
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
 
@@ -69,19 +69,18 @@ export default function Availability() {
     const result = moment(newDate + ' ' + time).format('YYYY-MM-DD HH:mm');
 
     setValue(result);
-    return result;
   };
 
-  const handleDateChange = (newValue) => {
-    setDate(newValue);
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
   };
 
-  const handleStartTimeChange = (newValue) => {
-    parseDate(newValue, setStartTime);
+  const handleStartTimeChange = (startTime) => {
+    parseDate(startTime, setStartTime);
   };
 
-  const handleEndTimeChange = (newValue) => {
-    parseDate(newValue, setEndTime);
+  const handleEndTimeChange = (endTime) => {
+    parseDate(endTime, setEndTime);
   };
 
   const handleDeleteAppointmentOnClick = (key) => {
@@ -111,7 +110,13 @@ export default function Availability() {
     let card = {
       key,
       consultant: consultantId,
-      date: moment(date).toISOString(),
+      date: moment(date)
+        .utcOffset(0)
+        .hours(0)
+        .minutes(0)
+        .seconds(0)
+        .milliseconds(0)
+        .toISOString(),
       appointmentStartTime: moment(startTime).toISOString(),
       appointmentEndTime: moment(endTime).toISOString(),
       description,

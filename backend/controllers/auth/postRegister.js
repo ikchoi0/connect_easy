@@ -1,17 +1,25 @@
-const User = require('../../models/user');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const User = require("../../models/user");
+const Category = require("../../models/category");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const postRegister = async (req, res) => {
   try {
-    console.log('register controller');
+    console.log("register controller");
     // the user is sending their username, password, and mail
-    const { firstName, lastName, password, email, consultantCheck } = req.body;
+    const {
+      firstName,
+      lastName,
+      password,
+      email,
+      consultantCheck,
+      consultantCategoryId,
+    } = req.body;
 
     // check if user exists
     const userExists = await User.exists({ email: email.toLowerCase() });
     if (userExists) {
-      return res.status(409).send('E-mail already in use.');
+      return res.status(409).send("E-mail already in use.");
     }
 
     // encrypt password
@@ -23,8 +31,14 @@ const postRegister = async (req, res) => {
       lastName,
       email: email.toLowerCase(),
       password: encryptedPassword,
-      role: consultantCheck ? 'consultant' : 'client',
+      role: consultantCheck ? "consultant" : "client",
     });
+
+    // push new user to the category
+    const category = await Category.findById(consultantCategoryId);
+    category.users.push(user._id);
+    await category.save();
+    console.log("TEsting", category, consultantCategoryId);
 
     // create JWT token
     const token = jwt.sign(
@@ -34,7 +48,7 @@ const postRegister = async (req, res) => {
       },
       process.env.TOKEN_KEY,
       {
-        expiresIn: '24h',
+        expiresIn: "24h",
       }
     );
 
@@ -50,7 +64,7 @@ const postRegister = async (req, res) => {
       },
     });
   } catch (err) {
-    return res.status(500).send('Error occured. Please try again.');
+    return res.status(500).send("Error occured. Please try again.");
   }
 };
 

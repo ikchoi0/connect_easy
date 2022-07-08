@@ -1,21 +1,21 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import Typography from "@mui/material/Typography";
-import { Card, Container } from "@mui/material";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import Stack from "@mui/material/Stack";
-import TextFieldWithLabel from "../shared/components/TextFieldWithLabel";
-import moment from "moment";
-import AppointmentCard from "./AppointmentCard";
-import { useSelector, useDispatch } from "react-redux";
-import Grid from "@mui/material/Grid";
-import { setOneAppointment } from "../store/reducers/scheduleReducer";
-import { createOpenAppointments } from "../store/reducers/scheduleReducer";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import Typography from '@mui/material/Typography';
+import { Card, Container } from '@mui/material';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import Stack from '@mui/material/Stack';
+import TextFieldWithLabel from '../shared/components/TextFieldWithLabel';
+import moment from 'moment';
+import AppointmentCard from './AppointmentCard';
+import { useSelector, useDispatch } from 'react-redux';
+import Grid from '@mui/material/Grid';
+import { setOneAppointment } from '../store/reducers/scheduleReducer';
+import { createOpenAppointments } from '../store/reducers/scheduleReducer';
 
 export default function Content() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
@@ -28,20 +28,30 @@ export default function Content() {
     }
   }, [openingAppointmentsList, setIsFormValid]);
 
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(
-    new Date(new Date().getTime() + 30 * 60 * 1000)
-  );
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState(moment().toDate());
+  const [startTime, setStartTime] = useState(moment().toDate());
+  const [endTime, setEndTime] = useState(moment().add(30, 'minutes').toDate());
+
+  const parseDate = (value, setValue) => {
+    const time = moment(value).format('HH:mm');
+    const newDate = moment(date).format('YYYY-MM-DD');
+    const result = moment(newDate + ' ' + time).format('YYYY-MM-DD HH:mm');
+
+    setValue(result);
+    return result;
+  };
+
   const handleDateChange = (newValue) => {
     setDate(newValue);
   };
+
   const handleStartTimeChange = (newValue) => {
-    setStartTime(newValue);
+    parseDate(newValue, setStartTime);
   };
+
   const handleEndTimeChange = (newValue) => {
-    setEndTime(newValue);
+    parseDate(newValue, setEndTime);
   };
 
   const appointmentCards = openingAppointmentsList.map((appointment, index) => {
@@ -50,8 +60,8 @@ export default function Content() {
         key={index}
         description={appointment.description}
         date={appointment.date}
-        startTime={appointment.startTime}
-        endTime={appointment.endTime}
+        startTime={appointment.appointmentStartTime}
+        endTime={appointment.appointmentEndTime}
       />
     );
   });
@@ -67,8 +77,8 @@ export default function Content() {
   const handleCreateButton = () => {
     let card = {
       date: date.toString(),
-      appointmentStartTime: startTime.toUTCString(),
-      appointmentEndTime: endTime.toUTCString(),
+      appointmentStartTime: startTime.toString(),
+      appointmentEndTime: endTime.toString(),
       description,
     };
     dispatch(setOneAppointment(card));
@@ -81,7 +91,7 @@ export default function Content() {
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
       {/* End hero unit */}
-      <Card sx={{ margin: 2, overflow: "hidden" }}>
+      <Card sx={{ margin: 2, overflow: 'hidden' }}>
         <Stack spacing={3}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Button
@@ -100,8 +110,8 @@ export default function Content() {
             />
             <Grid
               sx={{
-                display: "flex",
-                justifyContent: "space-around",
+                display: 'flex',
+                justifyContent: 'space-around',
               }}
             >
               <DesktopDatePicker
@@ -123,7 +133,7 @@ export default function Content() {
                 value={endTime}
                 onChange={handleEndTimeChange}
                 renderInput={(params) => <TextField {...params} />}
-              />{" "}
+              />{' '}
             </Grid>
             {appointmentCards && appointmentCards}
 

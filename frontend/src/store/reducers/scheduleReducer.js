@@ -1,42 +1,56 @@
-import { createSlice, createAsyncThunk  } from '@reduxjs/toolkit'
-import * as api from '../../api'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as api from "../../api";
 
 const schedulerState = {
-  openingAppoinmentsList: []
-
-}
+  openingAppointmentsList: [],
+  appointments: null,
+};
 
 export const createOpenAppointments = createAsyncThunk(
-  'schedule/createOpenAppointments',
-  async (openAppointmentsList, thunkApi)=>{
-    const response = await api.setOpenAppointments(openAppointmentsList)
-    console.log("data that goes to BE", openAppointmentsList)
-    console.log('CREATE OPEN APPOINTMENT THUNK', response)
+  "schedule/createOpenAppointments",
+  async (openAppointmentsList, thunkApi) => {
+    const response = await api.setOpenAppointments(openAppointmentsList);
+    if (response.error) return thunkApi.rejectWithValue(response.message);
+    return response.data;
+  }
+);
+
+export const getAppointmentsForConsultant = createAsyncThunk(
+  "schedule/getAppointments",
+  async (thunkApi) => {
+    const response = await api.getAppointmentsForConsultant();
+    console.log("GET APPOINTMENT THUNK", response);
     if (response.error) return thunkApi.rejectWithValue(response.message);
 
     return response.data;
   }
-)
+);
 
 const schedulerSlice = createSlice({
-  name: 'scheduler',
+  name: "scheduler",
   initialState: schedulerState,
-  reducers:{
+
+  reducers: {
     setOneAppointment: (state, action) => {
-      console.log("new appointment: ", action.payload)
-      state.openingAppoinmentsList.push(action.payload)
-    }
+      state.openingAppointmentsList.push(action.payload);
+    },
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
-      console.log("create fulfilled", action.payload)
+      console.log("create fulfilled", action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {
-      console.log("create rejected", action.payload)
+      console.log("create rejected", action.payload);
     },
+    [getAppointmentsForConsultant.fulfilled]: (state, action) => {
+      state.appointments = action.payload;
+      console.log("get fulfilled", action.payload);
+    },
+    [getAppointmentsForConsultant.rejected]: (state, action) => {
+      console.log("get rejected", action.payload);
+    },
+  },
+});
 
-  }
-})
-
-export const { setOneAppointment} = schedulerSlice.actions;
-export default schedulerSlice.reducer
+export const { setOneAppointment } = schedulerSlice.actions;
+export default schedulerSlice.reducer;

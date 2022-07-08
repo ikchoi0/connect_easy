@@ -4,7 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Navigator from './Navigator';
-import Content from './Content';
+import Availability from './Availability';
 import Header from './Header';
 import Scheduler from '../Scheduler/Scheduler';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,7 +63,8 @@ export default function Dashboard() {
             component="main"
             sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}
           >
-            {selectedNavigatorItem === 'Home' && <Content />}
+            {selectedNavigatorItem === 'Home' && <>Home</>}
+            {selectedNavigatorItem === 'Availability' && <Availability />}
             {selectedNavigatorItem === 'Calendar' && <Scheduler />}
             {selectedNavigatorItem === 'Payments' && <>payments</>}
           </Box>

@@ -1,15 +1,15 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardMedia } from "@mui/material";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Scheduler from "../../Scheduler/Scheduler";
+import React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { CardMedia } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Scheduler from '../../Scheduler/Scheduler';
 export default function CategoryCard({
   firstName,
   lastName,
@@ -20,11 +20,11 @@ export default function CategoryCard({
 }) {
   const handleClick = () => {
     handleClickOpen();
-    console.log("clicked");
+    console.log('clicked');
   };
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -35,9 +35,9 @@ export default function CategoryCard({
   };
   return (
     <>
-      <Card sx={{ display: "flex", height: "100%" }} onClick={handleClick}>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
+      <Card sx={{ display: 'flex', height: '100%' }} onClick={handleClick}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <CardContent sx={{ flex: '1 0 auto' }}>
             <Typography
               component="div"
               variant="h6"
@@ -60,7 +60,7 @@ export default function CategoryCard({
             {description}
           </Typography>
 
-          <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
             <Typography
               variant="subtitle1"
               color="text.secondary"
@@ -80,10 +80,10 @@ export default function CategoryCard({
         </Box>
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "80%",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            width: '80%',
+            justifyContent: 'center',
           }}
         ></Box>
       </Card>
@@ -95,7 +95,7 @@ export default function CategoryCard({
           onClose={handleClose}
           aria-labelledby="responsive-dialog-title"
         >
-          <Scheduler />
+          <Scheduler selectable={false} />
           <DialogActions>
             <Button autoFocus onClick={handleClose}>
               Disagree

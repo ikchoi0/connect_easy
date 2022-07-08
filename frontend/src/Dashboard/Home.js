@@ -5,11 +5,12 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AppointmentCard from "./AppointmentCard";
+import { useDispatch, useSelector } from "react-redux";
 
-const user = JSON.parse(localStorage.getItem("user"));
-console.log(user);
 
 export default function Home() {
+  const userDetails = useSelector((state) => state.auth.userDetails);
+  
   const [appointmentStatus, setAppointmentStatus] = React.useState("");
 
   const handleChange = (event) => {
@@ -30,7 +31,8 @@ export default function Home() {
       }}
     >
       <Typography variant="h4" component="h1" mb={"30px"}>
-        Welcome, {user.email}!
+        Welcome, {userDetails && userDetails.firstName}{" "}
+        {userDetails && userDetails.lastName}!
       </Typography>
 
       <FormControl
@@ -46,6 +48,7 @@ export default function Home() {
           label="Appointment Status"
           onChange={handleChange}
         >
+          <MenuItem value={"Unbooked"}>Unbooked</MenuItem>
           <MenuItem value={"Past"}>Past</MenuItem>
           <MenuItem value={"Canceled"}>Canceled</MenuItem>
           <MenuItem value={"Upcoming"}>Upcoming</MenuItem>

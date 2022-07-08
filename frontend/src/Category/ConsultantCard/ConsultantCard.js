@@ -85,12 +85,12 @@ export default function CategoryCard({
       <div>
         <Dialog
           fullWidth={true}
-          maxWidth="xl"
+          maxWidth="md"
           open={open}
           onClose={handleClose}
           aria-labelledby="responsive-dialog-title"
         >
-          <Scheduler />
+          <Scheduler selectable={false} />
           <DialogActions>
             <Button autoFocus onClick={handleClose}>
               Disagree

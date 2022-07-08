@@ -17,7 +17,7 @@ import Grid from '@mui/material/Grid';
 import { setOneAppointment } from '../store/reducers/scheduleReducer';
 import { createOpenAppointments } from '../store/reducers/scheduleReducer';
 
-export default function Content() {
+export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const dispatch = useDispatch();
 
@@ -104,7 +104,7 @@ export default function Content() {
               sx={{ mr: 2, ml: 2, mt: 2 }}
               onClick={() => handleCreateButton()}
             >
-              Create New Appointment
+              Create New Availability Spot
             </Button>
             <TextFieldWithLabel
               id="description"
@@ -148,7 +148,7 @@ export default function Content() {
               onClick={() => handleSaveAppointmentsButton()}
               disabled={appointmentCards && !isFormValid}
             >
-              Save my time slots
+              Save my changes
             </Button>
           </LocalizationProvider>
         </Stack>

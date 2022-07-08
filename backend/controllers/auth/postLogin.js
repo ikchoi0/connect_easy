@@ -29,6 +29,8 @@ const postLogin = async (req, res) => {
           token: token,
           userId: user._id,
           role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
         },
       });
     }

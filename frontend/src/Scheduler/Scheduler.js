@@ -17,7 +17,7 @@ const localizer = momentLocalizer(moment); // or globalizeLocalizer
  * https://jquense.github.io/react-big-calendar/
  */
 
-export default function Scheduler() {
+export default function Scheduler({ selectable = true }) {
   const [openTimeSlots, setOpenTimeSlots] = React.useState(false);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
@@ -56,7 +56,7 @@ export default function Scheduler() {
             localizer={localizer}
             showMultiDayTimes
             step={30}
-            views={'month'}
+            views={['month', 'week']}
             defaultView={'month'}
             startAccessor="start"
             endAccessor="end"
@@ -67,7 +67,7 @@ export default function Scheduler() {
               console.log(e);
               handleOpenTimeSlots(e);
             }}
-            selectable
+            selectable={selectable}
           />
         </Box>
         {openTimeSlots && <TimeSlots selectedDate={selectedDate} />}

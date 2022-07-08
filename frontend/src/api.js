@@ -82,11 +82,23 @@ export const getConsultantsWithinCategory = async (categoryName) => {
 // create open appointments
 export const setOpenAppointments = async (openAppointmentsList) => {
   try {
-    return await apiClient.post('/appointment', openAppointmentsList)
+    return await apiClient.post("/appointment", openAppointmentsList);
   } catch (exception) {
     return {
       error: true,
       message: exception.response.data,
     };
   }
-}
+};
+
+// get existing appointments
+export const getAppointmentsForConsultant = async (consultantId) => {
+  try {
+    return await apiClient.get(`/appointment/${consultantId}`);
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};

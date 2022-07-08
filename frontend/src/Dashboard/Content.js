@@ -18,17 +18,15 @@ import { setOneAppointment } from "../store/reducers/scheduleReducer";
 import { createOpenAppointments } from "../store/reducers/scheduleReducer";
 
 export default function Content() {
-  const { openingAppoinmentsList } = useSelector((state) => state.scheduler);
+  const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
   useEffect(() => {
-
-    if(openingAppoinmentsList.length){
-      
+    if (openingAppointmentsList.length) {
       setIsFormValid(true);
     }
-  }, [openingAppoinmentsList, setIsFormValid]);
+  }, [openingAppointmentsList, setIsFormValid]);
 
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
@@ -46,7 +44,7 @@ export default function Content() {
     setEndTime(newValue);
   };
 
-  const appointmentCards = openingAppoinmentsList.map((appointment, index) => {
+  const appointmentCards = openingAppointmentsList.map((appointment, index) => {
     return (
       <AppointmentCard
         key={index}
@@ -77,7 +75,7 @@ export default function Content() {
   };
 
   const handleSaveAppointmentsButton = () => {
-    dispatch(createOpenAppointments(openingAppoinmentsList));
+    dispatch(createOpenAppointments(openingAppointmentsList));
   };
 
   return (

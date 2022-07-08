@@ -40,7 +40,9 @@ const HomePageCard = ({ name, description, pictureUrl }) => {
             </Box>
           </CardContent>
           <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-            <Button>Learn More</Button>
+            <Button sx={{ marginLeft: "8px" }}>
+              Learn More
+            </Button>
           </Box>
         </Box>
         <Box

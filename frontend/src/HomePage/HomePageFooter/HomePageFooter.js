@@ -8,12 +8,12 @@ import Link from '@mui/material/Link';
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
+      {"Copyright © "}
+      <Link color="inherit" href="http://localhost:3000/">
+        Connect Easy
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -22,18 +22,15 @@ function HomePageFooter(props) {
   // const { description, title } = props;
 
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
+    <Box component="footer" sx={{ bgcolor: "background.paper", py: 6 }}>
       <Container maxWidth="lg">
-        <Typography variant="h6" align="center" gutterBottom>
-          connect easy
-        </Typography>
         <Typography
           variant="subtitle1"
           align="center"
           color="text.secondary"
           component="p"
         >
-          connect easy with connect easy
+          All rights reserved.
         </Typography>
         <Copyright />
       </Container>

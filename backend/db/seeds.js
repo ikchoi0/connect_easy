@@ -225,37 +225,43 @@ const category = [
 const CategorySeedDB = (userData) => [
   {
     name: "Sales",
-    description: "Sales description",
+    description:
+      "Revenue generation experts can guide you in the right direction of your business and sales quotas.",
     pictureUrl: "https://tinyurl.com/2s4jrbwh",
     users: [userData[0]._id],
   },
   {
     name: "Therapists",
-    description: "Therapists description",
+    description:
+      "It's simple to schedule appointments for individual or group therapy sessions.",
     pictureUrl: "https://tinyurl.com/2s4jrbwh",
     users: [userData[1]._id],
   },
   {
     name: "Lawyers",
-    description: "Lawyers description",
+    description:
+      "Using a secure and private virtual space, lessen the back and forth and manage your legal schedule.",
     pictureUrl: "https://tinyurl.com/2s4jrbwh",
     users: [userData[2]._id],
   },
   {
     name: "Developers",
-    description: "Developers description",
+    description:
+      "Meet local and international software developers that can help creating the app of your dreams.",
     pictureUrl: "https://tinyurl.com/2s4jrbwh",
     users: [userData[3]._id],
   },
   {
     name: "Mortgage",
-    description: "Mortgage description",
+    description:
+      "An excellent opportunity to introduce yourself to your valued mortgage broker.",
     pictureUrl: "https://tinyurl.com/2s4jrbwh",
     users: [userData[4]._id],
   },
   {
     name: "Doctors",
-    description: "Doctors description",
+    description:
+      "Consult with a doctor privately anytime. No office visit required.",
     pictureUrl: "https://tinyurl.com/2s4jrbwh",
     users: [userData[5]._id],
   },

@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
-import { Box, Container, Typography } from "@mui/material";
-import ConsultantCard from "../ConsultantCard/ConsultantCard";
-import { useTheme } from "@emotion/react";
-import Grid from "@mui/material/Grid";
-import { useDispatch, useSelector } from "react-redux";
-import { getUsersWithinCategory } from "../../store/reducers/categoryReducer";
+import React, { useEffect } from 'react';
+import { Box, Container, Typography } from '@mui/material';
+import ConsultantCard from '../ConsultantCard/ConsultantCard';
+import Grid from '@mui/material/Grid';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsersWithinCategory } from '../../store/reducers/categoryReducer';
+import { useHistory } from 'react-router-dom';
 
 export default function CategoryContainer() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const category = useSelector((state) => state.category);
 
   useEffect(() => {
-    dispatch(getUsersWithinCategory(category.selectedCategory));
+    if (category.selectedCategory === null) {
+      history.push('/');
+    } else {
+      dispatch(getUsersWithinCategory(category.selectedCategory));
+    }
   }, []);
-
-  const theme = useTheme();
 
   const consultantCards = category.usersWithinCategory.map(
     (consultant, index) => {
@@ -34,6 +37,7 @@ export default function CategoryContainer() {
       );
     }
   );
+
   return (
     <Container maxWidth="lg" color="primary.main">
       <Typography variant="h3" align="center" mt={5} color="#317773">
@@ -41,15 +45,15 @@ export default function CategoryContainer() {
       </Typography>
       <Box
         sx={{
-          marginTop: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          textTransform: "none",
-          position: "relative",
-          backgroundColor: "#E2D1F9",
-          borderRadius: "5px",
-          padding: "20px",
+          marginTop: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textTransform: 'none',
+          position: 'relative',
+          backgroundColor: '#E2D1F9',
+          borderRadius: '5px',
+          padding: '20px',
         }}
       >
         <Grid container spacing={3} display="flex">

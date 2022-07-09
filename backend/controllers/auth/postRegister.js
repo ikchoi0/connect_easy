@@ -35,14 +35,15 @@ const postRegister = async (req, res) => {
       role: consultantCheck ? 'consultant' : 'client',
     });
 
-    // if your is signing up with consultant
-    if (user.role === 'consultant') {
+    // if your are signing up with consultant
+    if (user.role === "consultant") {
       // push new user to the category
       const category = await Category.findById(
         Types.ObjectId(consultantCategoryId)
       );
       category.users.push(user._id);
       await category.save();
+      console.log("Testing", category, consultantCategoryId);
     }
 
     // create JWT token

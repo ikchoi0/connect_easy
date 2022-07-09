@@ -6,63 +6,55 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AppointmentCard from "./AppointmentCard";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOneAppointment } from "../../store/reducers/scheduleReducer";
-
+import {
+  getAllAppointments,
+  deleteOneAppointment,
+} from "../store/reducers/scheduleReducer";
+import getUserById from "../store/reducers/userReducer";
 import moment from "moment";
 
-export default function Home({
-  getAppointmentAction,
-  appointmentStatusFilterOptionList,
-  buttonLabel,
-  handleCardButton,
-}) {
+export default function Home() {
   // Grab the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
   const userDetails = JSON.parse(localStorage.getItem("user"));
+
   // Filter menu for appointment status types:
   const [filterStatus, setFilterStatus] = React.useState("");
   const dispatch = useDispatch();
-  const handleChange = (event) => {
-    setFilterStatus(event.target.value);
-  };
 
   useEffect(() => {
-    dispatch(getAppointmentAction(userDetails.userId));
+    dispatch(getAllAppointments(userDetails.userId));
   }, [dispatch]);
 
-  // // Delete an appointment:
-  // const handleDeleteAppointmentOnClick = (id) => {
-  //   dispatch(deleteOneAppointment(id));
-  // };
-
-  const menuItem = appointmentStatusFilterOptionList.map((option, idx) => {
-    return (
-      <MenuItem key={idx} value={option}>
-        {option}
-      </MenuItem>
-    );
-  });
+  // Delete an appointment:
+  const handleDeleteAppointmentOnClick = (id) => {
+    dispatch(deleteOneAppointment(id));
+  };
 
   // Mapped appointments for the user:  scheduler.appointments
   const mappedAppointments = appointments.map((appointment, index) => {
+    let description = appointment.description;
+    if (description) {
+      description = "unbooked";
+    }
     return (
       <AppointmentCard
-        role={JSON.parse(localStorage.getItem("user")).role}
-        clientName={appointment.client}
-        consultantName={appointment.consultant}
+        clientName={appointment.clientName}
+        consultantName={appointment.consultantName}
         key={index}
         id={appointment.appointmentId}
         description={appointment.description}
         date={appointment.date}
         startTime={moment(appointment.start).format("HH:mm A")}
         endTime={moment(appointment.end).format("HH:mm A")}
-        // onDelete={handleDeleteAppointmentOnClick}
-        buttonLabel={buttonLabel}
-        handleCardButton={handleCardButton}
-        appointmentBooked={appointment.appointmentBooked}
+        onDelete={handleDeleteAppointmentOnClick}
       />
     );
   });
+
+  const handleChange = (event) => {
+    setFilterStatus(event.target.value);
+  };
 
   return (
     <Box
@@ -71,7 +63,6 @@ export default function Home({
         minHeight: "50vh",
         padding: "20px",
         height: "auto",
-        backgroundColor: "#fafafa",
         display: "flex",
         flexDirection: "column",
         borderRadius: "5px",
@@ -84,7 +75,7 @@ export default function Home({
 
       <FormControl
         sx={{
-          maxWidth: "30%",
+          maxWidth: "20%",
         }}
       >
         <InputLabel id="demo-simple-select-label">Filter by Status</InputLabel>
@@ -95,22 +86,23 @@ export default function Home({
           label="Appointment Status"
           onChange={handleChange}
         >
-          {menuItem}
+          <MenuItem value={"Unbooked"}>Unbooked</MenuItem>
+          <MenuItem value={"Past"}>Past</MenuItem>
+          <MenuItem value={"Canceled"}>Canceled</MenuItem>
+          <MenuItem value={"Upcoming"}>Upcoming</MenuItem>
         </Select>
       </FormControl>
 
       <Box
         sx={{
-          marginTop: "20px",
-          maxWidth: "100%",
-          minHeight: "50vh",
-          padding: "20px",
-          height: "auto",
+          marginTop: "50px",
           display: "flex",
           flexDirection: "column",
-          borderRadius: "5px",
         }}
       >
+        <Typography variant="h5" component="h2" mb={"30px"}>
+          Appointments
+        </Typography>
         <Typography variant="h4" component="h1" mb={"30px"}>
           {mappedAppointments}
         </Typography>

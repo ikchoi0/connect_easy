@@ -16,7 +16,7 @@ import { Button } from '@mui/material';
 import Logo from './Logo';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
+import { logout } from "../../shared/utils/auth";
 import { updateSelectedNavigatorItem } from '../../store/reducers/dashboardReducer';
 
 const companyName = 'Connect Easy';
@@ -60,15 +60,19 @@ export default function Navigator(props) {
     history.push('/');
   };
 
+    const handleLogoutOnClick = () => {
+      logout();
+    };
+
   return (
     <Drawer
       variant="permanent"
       PaperProps={{ style: { width: drawerWidth } }}
-      sx={{ display: { sm: 'block', xs: 'none' } }}
+      sx={{ display: { sm: "block", xs: "none" } }}
     >
       <List disablePadding>
         <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}
+          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
         >
           <Logo
             name={companyName}
@@ -95,7 +99,7 @@ export default function Navigator(props) {
         ))}
 
         <Divider sx={{ mt: 2 }} />
-        <Button>Logout</Button>
+        <Button onClick={handleLogoutOnClick} >Logout</Button>
       </List>
     </Drawer>
   );

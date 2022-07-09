@@ -16,14 +16,14 @@ const appointmentSchema = Joi.object({
   appointmentEndTime: Joi.date().required(),
   appointmentCancellation_time: Joi.date(),
   // appointmentCancel: Joi.boolean().required(),
-  description: Joi.string(),
+  description: Joi.string().optional(),
 });
 
 const appointmentSchemas = Joi.array().items(appointmentSchema);
 
 /**
  * enum: ['admin', 'client', 'consultant']
- * example: auth('consultant')
+ * example: auth(['consultant'])
  */
 
 router.post(
@@ -46,11 +46,11 @@ router.delete(
 );
 
 // Consultant Appointments
-// router.get(
-//   '/:appointmentId',
-//   auth(['consultant']),
-//   appointmentController.controllers.getAppointment
-// );
+router.get(
+  '/:appointmentId',
+  auth(['consultant']),
+  appointmentController.controllers.getAppointment
+);
 
 router.get(
   '/date/:consultantId/:date',
@@ -67,7 +67,7 @@ router.patch(
 // Client Appointments
 router.get(
   '/client/:clientId',
-  auth(['client']),
+  auth(['client', 'consultant']),
   appointmentController.controllers.getAppointmentsForClientId
 );
 

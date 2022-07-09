@@ -33,7 +33,6 @@ export default function RegisterPage() {
   useEffect(() => {
     if (user.isLoggedIn) {
       localStorage.setItem('user', JSON.stringify(user.userDetails));
-
       history.push('/clientDashboard');
     }
   }, [user.isLoggedIn]);

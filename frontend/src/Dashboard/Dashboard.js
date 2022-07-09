@@ -8,12 +8,12 @@ import Availability from './Availability';
 import Header from './Header';
 import Scheduler from '../Scheduler/Scheduler';
 import { useDispatch, useSelector } from 'react-redux';
-import { theme } from './theme';
+import { theme } from '../shared/styles/theme';
 import Copyright from '../shared/components/Copyright';
 import { logout } from '../shared/utils/auth';
 import { setUser } from '../store/reducers/authReducer';
 import Home from './Home';
-const drawerWidth = 256;
+const drawerWidth = 300;
 
 export default function Dashboard() {
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -9,8 +9,8 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: ['admin', 'client', 'consultant'],
-      default: 'client',
+      enum: ["admin", "client", "consultant"],
+      default: "client",
     },
     options: {
       description: { type: String },
@@ -26,10 +26,10 @@ const userSchema = new Schema(
       website: { type: String },
 
       available: { type: Boolean },
-      schedules: [{ type: Schema.Types.ObjectId, ref: 'Schedule' }],
+      schedules: [{ type: Schema.Types.ObjectId, ref: "Schedule" }],
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

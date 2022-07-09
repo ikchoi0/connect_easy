@@ -1,14 +1,14 @@
-const postAppointment = require('./postAppointment');
-const updateAppointment = require('./updateAppointment');
-const getOpenedAppointments = require('./getOpenedAppointments');
-const deleteAppointment = require('./deleteAppointment');
-const getAppointment = require('./getAppointment');
-const getAppointmentByDate = require('./getAppointmentByDate');
+const postAppointment = require("./postAppointment");
+const updateAppointment = require("./updateAppointment");
+const getAllAppointments = require("./getAllAppointments");
+const deleteAppointment = require("./deleteAppointment");
+const getAppointment = require("./getAppointment");
+const getAppointmentByDate = require("./getAppointmentByDate");
 
 exports.controllers = {
   postAppointment,
   updateAppointment,
-  getOpenedAppointments,
+  getAllAppointments,
   deleteAppointment,
   getAppointment,
   getAppointmentByDate,

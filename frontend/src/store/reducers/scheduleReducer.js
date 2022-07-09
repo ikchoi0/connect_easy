@@ -1,13 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '../../api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as api from "../../api";
 
 const schedulerState = {
   openingAppointmentsList: [],
   appointments: [],
+  appointmentsForSelectedDate: [],
+  booked: false,
 };
 
 export const createOpenAppointments = createAsyncThunk(
-  'schedule/createOpenAppointments',
+  "schedule/createOpenAppointments",
   async (openAppointmentsList, thunkApi) => {
     const response = await api.setOpenAppointments(openAppointmentsList);
     if (response.error) return thunkApi.rejectWithValue(response.message);
@@ -15,10 +17,10 @@ export const createOpenAppointments = createAsyncThunk(
   }
 );
 
-export const getAppointmentsForConsultant = createAsyncThunk(
-  'schedule/getAppointments',
+export const getOpenedAppointments = createAsyncThunk(
+  "schedule/getAppointments",
   async (consultantId, thunkApi) => {
-    const response = await api.getAppointmentsForConsultant(consultantId);
+    const response = await api.getOpenedAppointments(consultantId);
 
     if (response.error) return thunkApi.rejectWithValue(response.message);
 
@@ -27,9 +29,12 @@ export const getAppointmentsForConsultant = createAsyncThunk(
 );
 
 export const getAppointmentsForTheDay = createAsyncThunk(
-  'schedule/getAppointmentsForTheDay',
-  async (date, thunkApi) => {
-    const response = await api.getAppointmentsForConsultantsByDate(date);
+  "schedule/getAppointmentsForTheDay",
+  async ({ consultantId, date }, thunkApi) => {
+    const response = await api.getAppointmentsForConsultantsByDate(
+      consultantId,
+      date
+    );
 
     if (response.error) return thunkApi.rejectWithValue(response.message);
 
@@ -38,7 +43,7 @@ export const getAppointmentsForTheDay = createAsyncThunk(
 );
 
 export const deleteOneAppointment = createAsyncThunk(
-  'schedule/deleteOneAppointment',
+  "schedule/deleteOneAppointment",
   async (appointmentId, thunkApi) => {
     const response = await api.deleteOneAppointmentById(appointmentId);
 
@@ -48,8 +53,19 @@ export const deleteOneAppointment = createAsyncThunk(
   }
 );
 
+export const bookAppointment = createAsyncThunk(
+  "schedule/boAppointment",
+  async (appointmentData, thunkApi) => {
+    const response = await api.bookAppointment(appointmentData);
+
+    if (response.error) return thunkApi.rejectWithValue(response.message);
+
+    return response.data;
+  }
+);
+
 const schedulerSlice = createSlice({
-  name: 'scheduler',
+  name: "scheduler",
   initialState: schedulerState,
 
   reducers: {
@@ -64,20 +80,23 @@ const schedulerSlice = createSlice({
     clearOpeningAppointmentsList: (state) => {
       state.openingAppointmentsList = [];
     },
+    clearAppointmentsList: (state) => {
+      state.appointments = [];
+    },
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
-      console.log('create fulfilled', action.payload);
+      console.log("create fulfilled", action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {
-      console.log('create rejected', action.payload);
+      console.log("create rejected", action.payload);
     },
-    [getAppointmentsForConsultant.fulfilled]: (state, action) => {
-      console.log('get appointments fulfilled', action.payload);
+    [getOpenedAppointments.fulfilled]: (state, action) => {
+      console.log("get appointments fulfilled", action.payload);
       state.appointments = action.payload;
     },
-    [getAppointmentsForConsultant.rejected]: (state, action) => {
-      console.log('get rejected', action.payload);
+    [getOpenedAppointments.rejected]: (state, action) => {
+      console.log("get rejected", action.payload);
     },
     [deleteOneAppointment.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
@@ -85,7 +104,15 @@ const schedulerSlice = createSlice({
       });
     },
     [getAppointmentsForTheDay.fulfilled]: (state, action) => {
-      console.log('get appointments for the day', action.payload);
+      state.appointmentsForSelectedDate = action.payload;
+      console.log("get appointments for the day", action.payload);
+    },
+    [bookAppointment.fulfilled]: (state, action) => {
+      state.booked = true;
+      console.log("appointment booked", action.payload);
+    },
+    [bookAppointment.reject]: (state, action) => {
+      console.log("get rejected", action.payload);
     },
   },
 });
@@ -94,5 +121,6 @@ export const {
   setOneAppointment,
   deleteOneOpeningAppointment,
   clearOpeningAppointmentsList,
+  clearAppointmentsList,
 } = schedulerSlice.actions;
 export default schedulerSlice.reducer;

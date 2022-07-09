@@ -12,7 +12,7 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).max(12).required(),
   email: Joi.string().email().required(),
   consultantCheck: Joi.boolean().required(),
-  consultantCategoryId: Joi.objectId().optional(),
+  consultantCategoryId: Joi.optional(),
 });
 
 const loginSchema = Joi.object({
@@ -31,10 +31,5 @@ router.post(
   validator.body(loginSchema),
   authController.controllers.postLogin
 );
-
-// test route to verify if our middleware is working
-// router.get("/test", auth, (req, res) => {
-//   res.send("request passed");
-// });
 
 module.exports = router;

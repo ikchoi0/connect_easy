@@ -36,7 +36,7 @@ router.post(
 router.get(
   "/:consultantId",
   auth(["consultant", "client"]),
-  appointmentController.controllers.getOpenedAppointments
+  appointmentController.controllers.getAllAppointments
 );
 
 router.delete(
@@ -53,8 +53,14 @@ router.get(
 );
 
 router.get(
-  "/date/:date",
-  auth(["consultant"]),
+  "/date/:consultantId/:date",
+  auth(["consultant", "client"]),
   appointmentController.controllers.getAppointmentByDate
+);
+
+router.patch(
+  "/book",
+  auth(["client"]),
+  appointmentController.controllers.updateAppointment
 );
 module.exports = router;

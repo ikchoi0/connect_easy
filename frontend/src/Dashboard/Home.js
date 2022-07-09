@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import AppointmentCard from "./AppointmentCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAppointmentsForConsultant,
+  getOpenedAppointments,
   deleteOneAppointment,
 } from "../store/reducers/scheduleReducer";
 import moment from "moment";
@@ -28,7 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     if (userDetails) {
-      dispatch(getAppointmentsForConsultant(userDetails.userId));
+      dispatch(getOpenedAppointments(userDetails.userId));
     }
   }, [dispatch, userDetails]);
 
@@ -105,14 +105,7 @@ export default function Home() {
           borderRadius: "5px",
         }}
       >
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{
-            backgroundColor: "#fafafa",
-            borderRadius: "10px",
-          }}
-        >
+        <Typography variant="h4" component="h1" mb={"30px"}>
           {mappedAppointments}
         </Typography>
       </Box>

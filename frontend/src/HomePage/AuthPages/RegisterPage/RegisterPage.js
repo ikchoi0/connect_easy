@@ -33,8 +33,8 @@ export default function RegisterPage() {
   useEffect(() => {
     if (user.isLoggedIn) {
       localStorage.setItem("user", JSON.stringify(user.userDetails));
+      history.push('/clientDashboard');
 
-        history.push('/clientDashboard');
 
     }
   }, [user.isLoggedIn]);
@@ -50,6 +50,7 @@ export default function RegisterPage() {
       consultantCategoryId,
     };
     dispatch(register({ userDetails, history }));
+
   };
 
   const handleSignInOnClick = () => {

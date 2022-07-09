@@ -7,11 +7,14 @@ import Select from '@mui/material/Select';
 import AppointmentCard from './AppointmentCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteOneAppointment } from '../../store/reducers/scheduleReducer';
+
 import moment from 'moment';
 
 export default function Home({
   getAppointmentAction,
   appointmentStatusFilterOptionList,
+  buttonLabel,
+  handleCardButton,
 }) {
   // Grab the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
@@ -28,10 +31,10 @@ export default function Home({
     dispatch(getAppointmentAction(userDetails.userId));
   }, [dispatch]);
 
-  // Delete an appointment:
-  const handleDeleteAppointmentOnClick = (id) => {
-    dispatch(deleteOneAppointment(id));
-  };
+  // // Delete an appointment:
+  // const handleDeleteAppointmentOnClick = (id) => {
+  //   dispatch(deleteOneAppointment(id));
+  // };
 
   const menuItem = appointmentStatusFilterOptionList.map((option, idx) => {
     return (
@@ -51,7 +54,9 @@ export default function Home({
         date={appointment.date}
         startTime={moment(appointment.start).format('HH:mm A')}
         endTime={moment(appointment.end).format('HH:mm A')}
-        onDelete={handleDeleteAppointmentOnClick}
+        // onDelete={handleDeleteAppointmentOnClick}
+        buttonLabel={buttonLabel}
+        handleCardButton={handleCardButton}
       />
     );
   });

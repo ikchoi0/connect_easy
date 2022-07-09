@@ -5,6 +5,8 @@ const deleteAppointment = require('./deleteAppointment');
 const getAppointment = require('./getAppointment');
 const getAppointmentByDate = require('./getAppointmentByDate');
 const getAppointmentsForClientId = require('./getAppointmentsForClientId');
+const updateAppointmentBookedStatus = require('./updateAppointmentBookedStatus');
+
 exports.controllers = {
   postAppointment,
   updateAppointment,
@@ -13,4 +15,5 @@ exports.controllers = {
   getAppointment,
   getAppointmentByDate,
   getAppointmentsForClientId,
+  updateAppointmentBookedStatus,
 };

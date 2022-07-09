@@ -156,3 +156,15 @@ export const getAppointmentsForClientId = async (clientId) => {
     };
   }
 };
+
+export const cancelBookedAppointment = async (appointmentId) => {
+  try {
+    return await apiClient.patch(`/appointment/cancel`, appointmentId);
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};

@@ -17,9 +17,10 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useHistory } from 'react-router-dom';
 import { handleAuth, handleUserRole } from '../shared/utils/auth';
 import {
-  getAppointmentsForClientId,
+  appointmentBookingCancel,
   getOpenedAppointments,
   deleteOneAppointment,
+  getAppointmentsForClientId,
 } from '../store/reducers/scheduleReducer';
 
 const drawerWidth = 300;
@@ -35,6 +36,7 @@ const menuItems = [
 
 const ClientDashboard = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   // return user if not logged in
   handleAuth();
   const user = JSON.parse(localStorage.getItem('user'));
@@ -43,6 +45,11 @@ const ClientDashboard = () => {
     history.push('/dashboard');
   }
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
+
+  const handleCardButton = (appointmentId) => {
+    dispatch(appointmentBookingCancel(appointmentId));
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -66,6 +73,8 @@ const ClientDashboard = () => {
                   'Canceled',
                   'Upcoming',
                 ]}
+                buttonLabel="Cancel"
+                handleCardButton={handleCardButton}
               />
             )}
             {selectedNavigatorItem === 'Schedule' && <>Schedule</>}

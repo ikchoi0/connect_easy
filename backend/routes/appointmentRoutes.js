@@ -70,4 +70,10 @@ router.get(
   auth(['client']),
   appointmentController.controllers.getAppointmentsForClientId
 );
+
+router.patch(
+  '/cancel',
+  auth(['client', 'consultant']),
+  appointmentController.controllers.updateAppointmentBookedStatus
+);
 module.exports = router;

@@ -75,8 +75,18 @@ export const bookAppointment = createAsyncThunk(
       history.push('/clientDashboard');
       return response.data;
     }
+  }
+);
 
-    // return response.data;
+export const appointmentBookingCancel = createAsyncThunk(
+  'schedule/appointmentBookingCancel',
+  async (appointmentId, thunkApi) => {
+    console.log('appointmentId', appointmentId);
+    const response = await api.cancelBookedAppointment({ appointmentId });
+
+    if (response.error) return thunkApi.rejectWithValue(response.message);
+
+    return response.data;
   }
 );
 
@@ -143,6 +153,11 @@ const schedulerSlice = createSlice({
     },
     [getAppointmentsForClientId.rejected]: (state, action) => {
       console.log('get appointments for client rejected', action.payload);
+    },
+    [appointmentBookingCancel.fulfilled]: (state, action) => {
+      state.appointments = state.appointments.filter((appointment) => {
+        return appointment.appointmentId !== action.payload._id;
+      });
     },
   },
 });

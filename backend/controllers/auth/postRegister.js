@@ -1,12 +1,12 @@
-const User = require("../../models/user");
-const Category = require("../../models/category");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const Types = require("mongoose").Types;
+const User = require('../../models/user');
+const Category = require('../../models/category');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Types = require('mongoose').Types;
 
 const postRegister = async (req, res) => {
   try {
-    console.log("register controller");
+    console.log('register controller');
     // the user is sending their username, password, and mail
     const {
       firstName,
@@ -20,7 +20,7 @@ const postRegister = async (req, res) => {
     // check if user exists
     const userExists = await User.exists({ email: email.toLowerCase() });
     if (userExists) {
-      return res.status(409).send("E-mail already in use.");
+      return res.status(409).send('E-mail already in use.');
     }
 
     // encrypt password
@@ -32,7 +32,7 @@ const postRegister = async (req, res) => {
       lastName,
       email: email.toLowerCase(),
       password: encryptedPassword,
-      role: consultantCheck ? "consultant" : "client",
+      role: consultantCheck ? 'consultant' : 'client',
     });
 
     // if your are signing up with consultant
@@ -54,7 +54,7 @@ const postRegister = async (req, res) => {
       },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "24h",
+        expiresIn: '24h',
       }
     );
 
@@ -70,7 +70,7 @@ const postRegister = async (req, res) => {
       },
     });
   } catch (err) {
-    return res.status(500).send("Error occured. Please try again.");
+    return res.status(500).send('Error occured. Please try again.');
   }
 };
 

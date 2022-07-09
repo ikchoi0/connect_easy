@@ -1,6 +1,6 @@
-const Types = require('mongoose').Types;
-const Appointment = require('../../models/appointment');
-const moment = require('moment');
+const Types = require("mongoose").Types;
+const Appointment = require("../../models/appointment");
+const moment = require("moment");
 
 const getAppointment = async (req, res) => {
   try {
@@ -10,10 +10,10 @@ const getAppointment = async (req, res) => {
       Types.ObjectId(appointmentId)
     );
 
-    if (!appointment) return res.status(404).send('Appointment not found');
+    if (!appointment) return res.status(404).send("Appointment not found");
     /**
      * Event {
-        title: string,
+        description: string,
         start: Date,
         end: Date,
         allDay?: boolean
@@ -23,7 +23,7 @@ const getAppointment = async (req, res) => {
 
     const parsedAppointment = {
       appointmentId: appointment._id,
-      title: appointment.description,
+      description: appointment.description,
       date: appointment.date,
       start: moment(appointment.appointmentStartTime).toDate(),
       end: moment(appointment.appointmentEndTime).toDate(),

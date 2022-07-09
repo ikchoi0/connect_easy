@@ -26,7 +26,7 @@ const getAppointmentByDate = async (req, res) => {
 
     /**
      * Event {
-        title: string,
+        description: string,
         start: Date,
         end: Date,
         allDay?: boolean
@@ -49,7 +49,7 @@ const getAppointmentByDate = async (req, res) => {
       );
       return {
         appointmentId: appointment._id,
-        title: appointment.description,
+        description: appointment.description,
         date: appointment.date,
         start: newStartTime,
         end: newEndTime,

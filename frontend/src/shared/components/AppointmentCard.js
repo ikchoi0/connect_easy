@@ -4,15 +4,27 @@ import Typography from "@mui/material/Typography";
 import moment from "moment";
 
 const AppointmentCard = ({
+  role,
+  clientName,
+  consultantName,
   id,
   date,
   startTime,
   endTime,
-  description,
+  description = "Unbooked",
   onDelete,
   buttonLabel,
   handleCardButton,
+  appointmentBooked,
 }) => {
+  let something = appointmentBooked ? clientName : "Unbooked";
+  let title = "Appointment With: ";
+  title += role === "consultant" ? something : consultantName;
+  const body = appointmentBooked ? description : "This appointment is unbooked";
+
+  const styles = appointmentBooked
+    ? { backgroundColor: "#fafafa" }
+    : { backgroundColor: "#dbdbdb" };
   return (
     <Box
       sx={{
@@ -21,17 +33,41 @@ const AppointmentCard = ({
         border: "3px solid #ccc",
         borderRadius: "5px",
         marginY: "10px",
+        ...styles,
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
         <Typography
-          sx={{ my: 5, mx: 2 }}
+          sx={{
+            my: 5,
+            wordWrap: "break-word",
+            width: "250px",
+            mr: "5px",
+            ml: "15px",
+          }}
           color="text.primary"
           align="left"
           variant="body1"
-          width={"50%"}
+          maxWidth={"500px"}
+          flexWrap
         >
-          {description}
+          {title}
+        </Typography>
+        <Typography
+          sx={{
+            my: 5,
+            wordWrap: "break-word",
+            width: "300px",
+            mr: "5px",
+            ml: "15px",
+          }}
+          color="text.primary"
+          align="left"
+          variant="body1"
+          maxWidth={"300px"}
+          flexWrap
+        >
+          {body}
         </Typography>
       </Box>
       <Box
@@ -39,9 +75,12 @@ const AppointmentCard = ({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-evenly",
-          flexGrow: 1,
+          width: "250px",
+          ml: "5px",
+          mr: "5px",
         }}
+        maxWidth={"250px"}
+        align="left"
       >
         <Typography variant="subtitle1">
           Date: {moment(date).format("YYYY-MM-DD")}
@@ -66,11 +105,16 @@ const AppointmentCard = ({
 
       <Box sx={{ flexGrow: 1 }}>
         <Button
-          sx={{ flexGrow: 1 }}
+          sx={{
+            ml: "5px",
+            mr: "5px",
+            flexGrow: 1,
+          }}
           variant="contained"
-          color="secondary"
+          color="primary"
           size="large"
           onClick={() => handleCardButton(id)}
+          disabled={appointmentBooked}
         >
           {buttonLabel}
         </Button>

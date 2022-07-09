@@ -6,7 +6,7 @@ import "./Scheduler.css";
 import { Container, Box } from "@mui/material";
 import TimeSlots from "./TimeSlots";
 import { useDispatch, useSelector } from "react-redux";
-import { getOpenedAppointments } from "../store/reducers/scheduleReducer";
+import { getAllAppointments } from "../store/reducers/scheduleReducer";
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -20,11 +20,11 @@ export default function Scheduler({ selectable = true, consultantId }) {
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   const scheduler = useSelector((state) => state.scheduler);
-
+  const role = JSON.parse(localStorage.getItem("user")).role;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getOpenedAppointments(consultantId));
+    dispatch(getAllAppointments(consultantId));
   }, [dispatch]);
 
   const handleOpenTimeSlots = (e) => {
@@ -50,9 +50,9 @@ export default function Scheduler({ selectable = true, consultantId }) {
             defaultView={"month"}
             startAccessor="start"
             endAccessor="end"
-            onSelectEvent={(e) => {
-              console.log(e);
-            }}
+            // onSelectEvent={(e) => {
+            //   console.log(e);
+            // }}
             onSelectSlot={(e) => {
               console.log(e);
               handleOpenTimeSlots(e);
@@ -60,7 +60,10 @@ export default function Scheduler({ selectable = true, consultantId }) {
             selectable={selectable}
           />
         </Box>
-        <TimeSlots selectedDate={selectedDate} consultantId={consultantId} />
+        {role === "client" && (
+          <TimeSlots selectedDate={selectedDate} consultantId={consultantId} />
+        )}
+        {/* <TimeSlots selectedDate={selectedDate} consultantId={consultantId} /> */}
       </Container>
     </>
   );

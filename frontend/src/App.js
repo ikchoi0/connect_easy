@@ -3,15 +3,16 @@ import {
   Switch,
   Route,
   Redirect,
-} from 'react-router-dom';
-import HomePage from './HomePage/HomePage';
-import RegisterPage from './HomePage/AuthPages/RegisterPage/RegisterPage';
-import LoginPage from './HomePage/AuthPages/LoginPage/LoginPage';
-import './App.css';
-import Scheduler from './Scheduler/Scheduler';
-import Category from './Category/Category';
-import Dashboard from './Dashboard/Dashboard';
-import ClientDashboard from './ClientDashboard/ClientDashboard';
+} from "react-router-dom";
+import HomePage from "./HomePage/HomePage";
+import RegisterPage from "./HomePage/AuthPages/RegisterPage/RegisterPage";
+import LoginPage from "./HomePage/AuthPages/LoginPage/LoginPage";
+import "./App.css";
+import Scheduler from "./Scheduler/Scheduler";
+import Category from "./Category/Category";
+import Dashboard from "./Dashboard/Dashboard";
+import ClientDashboard from "./ClientDashboard/ClientDashboard";
+import ConsultantDashboard from "./ConsultantDashboard/ConsultantDashboard";
 
 /**
  *
@@ -42,11 +43,14 @@ function App() {
           <Route path="/dashboard">
             <Dashboard />
           </Route>
+          <Route path="/consultantDashboard">
+            <ConsultantDashboard />
+          </Route>
           <Route path="/clientDashboard">
             <ClientDashboard />
           </Route>
           <Route path="/">
-            <Redirect to="/dashboard" />
+            <Redirect to="/" />
           </Route>
         </Switch>
       </Router>

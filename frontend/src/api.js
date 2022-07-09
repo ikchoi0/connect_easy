@@ -105,6 +105,7 @@ export const getOpenedAppointments = async (consultantId) => {
   }
 };
 
+// delete existing appointment by id
 export const deleteOneAppointmentById = async (appointmentId) => {
   try {
     return await apiClient.delete(`/appointment/${appointmentId}`);
@@ -144,7 +145,7 @@ export const getAppointmentsForConsultantsByDate = async (
   }
 };
 
-// get existing appointments
+// get existing appointments for the client
 export const getAppointmentsForClientId = async (clientId) => {
   try {
     return await apiClient.get(`/appointment/client/${clientId}`);

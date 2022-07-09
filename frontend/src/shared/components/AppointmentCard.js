@@ -1,7 +1,7 @@
-import React from 'react';
-import { Box, Button } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import moment from 'moment';
+import React from "react";
+import { Box, Button } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import moment from "moment";
 
 const AppointmentCard = ({
   id,
@@ -16,11 +16,11 @@ const AppointmentCard = ({
   return (
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        border: '3px solid #ccc',
-        borderRadius: '5px',
-        marginY: '10px',
+        display: "flex",
+        alignItems: "center",
+        border: "3px solid #ccc",
+        borderRadius: "5px",
+        marginY: "10px",
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
@@ -29,27 +29,27 @@ const AppointmentCard = ({
           color="text.primary"
           align="left"
           variant="body1"
-          width={'50%'}
+          width={"50%"}
         >
           {description}
         </Typography>
       </Box>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-evenly",
           flexGrow: 1,
         }}
       >
         <Typography variant="subtitle1">
-          Date: {moment(date).format('YYYY-MM-DD')}
+          Date: {moment(date).format("YYYY-MM-DD")}
         </Typography>
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <Typography color="text.secondary" align="center">

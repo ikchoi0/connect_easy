@@ -32,11 +32,12 @@ export default function Home() {
     }
   }, [dispatch, userDetails]);
 
+  // Delete an appointment:
   const handleDeleteAppointmentOnClick = (id) => {
     dispatch(deleteOneAppointment(id));
   };
 
-  // Mapped out the appointments for the user:
+  // Mapped appointments for the user:
   const mappedAppointments = consultantAppointments.appointments.map(
     (appointment, index) => {
       return (

@@ -132,11 +132,11 @@ export default function Availability() {
 
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
-      <Stack spacing={3}>
+      <Stack spacing={2}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Button
             variant="contained"
-            sx={{ mr: 2, ml: 2, mt: 2 }}
+            sx={{ mr: 0, ml: 0, mt: 2 }}
             onClick={() => handleCreateButton()}
             disabled={!isNewAppointmentValid}
           >
@@ -181,7 +181,7 @@ export default function Availability() {
 
           <Button
             variant="contained"
-            sx={{ mr: 2, ml: 2, mt: 2 }}
+            sx={{ mr: 0, ml: 0, mt: 2 }}
             onClick={() => handleSaveAppointmentsButton()}
             disabled={appointmentCards && !isFormValid}
           >

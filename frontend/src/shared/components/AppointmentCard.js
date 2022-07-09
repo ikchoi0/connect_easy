@@ -10,6 +10,8 @@ const AppointmentCard = ({
   endTime,
   description,
   onDelete,
+  buttonLabel,
+  handleCardButton,
 }) => {
   return (
     <Box
@@ -68,9 +70,9 @@ const AppointmentCard = ({
           variant="contained"
           color="secondary"
           size="large"
-          onClick={() => onDelete(id)}
+          onClick={() => handleCardButton(id)}
         >
-          Delete
+          {buttonLabel}
         </Button>
       </Box>
     </Box>

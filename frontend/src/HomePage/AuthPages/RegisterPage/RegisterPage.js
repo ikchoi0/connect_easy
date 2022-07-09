@@ -38,7 +38,7 @@ export default function RegisterPage() {
   }, [user.isLoggedIn]);
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+        event.preventDefault();
     // TODO: dispatch(register)
     const userDetails = {
       firstName,
@@ -94,6 +94,7 @@ export default function RegisterPage() {
               setConsultantCategoryId={setConsultantCategoryId}
             />
             <Button
+              type="submit"
               onClick={(e) => handleSubmit(e)}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

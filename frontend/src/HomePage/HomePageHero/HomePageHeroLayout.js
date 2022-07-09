@@ -47,19 +47,20 @@ function HomePageHeroLayout(props) {
             }}
           >
             <Typography
-              component="h3"
-              variant="h3"
+              variant="h5"
               color="inherit"
               gutterBottom
             >
-              hihi
+              Everything you need to manage your business as a service
+              professional
             </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
-              hihi
+            <Typography variant="h7" color="inherit" paragraph>
+              Schedule meetings, host video calls, and collect payments all in
+              one place.
             </Typography>
-            <Link variant="subtitle1" href="#">
+            {/* <Link variant="subtitle1" href="#">
               hihi
-            </Link>
+            </Link> */}
           </Box>
         </Grid>
       </Grid>

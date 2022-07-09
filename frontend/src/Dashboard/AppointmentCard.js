@@ -15,7 +15,6 @@ const AppointmentCard = ({
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
         border: '1px solid #ccc',
         borderRadius: '5px',
@@ -25,8 +24,10 @@ const AppointmentCard = ({
         <Typography
           sx={{ my: 5, mx: 2 }}
           color="text.primary"
-          align="center"
-          variant="h3"
+          align="left"
+          variant="body1"
+          width={'50%'}
+          
         >
           {description}
         </Typography>

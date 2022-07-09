@@ -46,11 +46,11 @@ router.delete(
 );
 
 // Consultant Appointments
-router.get(
-  '/:appointmentId',
-  auth(['consultant']),
-  appointmentController.controllers.getAppointment
-);
+// router.get(
+//   '/:appointmentId',
+//   auth(['consultant']),
+//   appointmentController.controllers.getAppointment
+// );
 
 router.get(
   '/date/:consultantId/:date',

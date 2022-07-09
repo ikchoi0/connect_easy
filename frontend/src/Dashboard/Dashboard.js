@@ -10,33 +10,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../shared/styles/theme';
 import Copyright from '../shared/components/Copyright';
 import { logout } from '../shared/utils/auth';
-import { setUser } from '../store/reducers/authReducer';
+
 import { useHistory } from 'react-router-dom';
 import { handleAuth } from '../shared/utils/auth';
 import Home from './Home';
 const drawerWidth = 300;
 
 export default function Dashboard(d) {
-  handleAuth();
   const history = useHistory();
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
+
   const userDetails = JSON.parse(localStorage.getItem('user'));
   if (userDetails.role !== 'consultant') {
     history.push('/clientDashboard');
   }
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    const userDetails = localStorage.getItem('user');
-    if (userDetails.role !== 'consultant') {
-      history.push('/clientDashboard');
-    }
-    if (!userDetails) {
-      logout();
-    } else {
-      dispatch(setUser(JSON.parse(userDetails)));
-    }
-  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

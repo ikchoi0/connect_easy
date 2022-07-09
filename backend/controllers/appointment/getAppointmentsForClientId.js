@@ -1,6 +1,6 @@
-const Types = require('mongoose').Types;
-const Appointment = require('../../models/appointment');
-const moment = require('moment');
+const Types = require("mongoose").Types;
+const Appointment = require("../../models/appointment");
+const moment = require("moment");
 
 const getAppointmentsForClientId = async (req, res) => {
   try {
@@ -8,11 +8,13 @@ const getAppointmentsForClientId = async (req, res) => {
 
     const appointments = await Appointment.find({
       client: Types.ObjectId(clientId),
-    });
+    })
+      .populate("client")
+      .populate("consultant");
 
     /**
      * Event {
-        title: string,
+        description: string,
         start: Date,
         end: Date,
         allDay?: boolean
@@ -21,26 +23,34 @@ const getAppointmentsForClientId = async (req, res) => {
      */
 
     const parsedAppointments = appointments.map((appointment) => {
-      const newDate = moment(appointment.date).format('YYYY-MM-DD');
+      const newDate = moment(appointment.date).format("YYYY-MM-DD");
       const startTime = moment(appointment.appointmentStartTime).format(
-        'HH:mm'
+        "HH:mm"
       );
-      const endTime = moment(appointment.appointmentEndTime).format('HH:mm');
+      const endTime = moment(appointment.appointmentEndTime).format("HH:mm");
 
-      const newStartTime = moment(newDate + ' ' + startTime).format(
-        'YYYY-MM-DD HH:mm'
+      const newStartTime = moment(newDate + " " + startTime).format(
+        "YYYY-MM-DD HH:mm"
       );
-      const newEndTime = moment(newDate + ' ' + endTime).format(
-        'YYYY-MM-DD HH:mm'
+      const newEndTime = moment(newDate + " " + endTime).format(
+        "YYYY-MM-DD HH:mm"
       );
       return {
+        consultant:
+          appointment.consultant.firstName +
+          " " +
+          appointment.consultant.lastName,
+        client: appointment.client
+          ? appointment.client.firstName + " " + appointment.client.lastName
+          : "",
         appointmentId: appointment._id,
-        title: appointment.description,
+        description: appointment.description,
         date: appointment.date,
         start: newStartTime,
         end: newEndTime,
         allDay: false,
         resource: appointment.client,
+        appointmentBooked: appointment.appointmentBooked,
       };
     });
 

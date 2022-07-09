@@ -14,6 +14,9 @@ import Home from "../shared/components/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import PaymentIcon from "@mui/icons-material/Payment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import Availability from "./Availability";
+
 import { useHistory } from "react-router-dom";
 import { handleAuth, handleUserRole } from "../shared/utils/auth";
 import {
@@ -29,6 +32,7 @@ const menuItems = [
     id: "Home",
     icon: <PeopleIcon />,
   },
+  { id: "Availability", icon: <AddCircleOutlineIcon /> },
   { id: "Calendar", icon: <CalendarMonthIcon /> },
   { id: "Payments", icon: <PaymentIcon /> },
 ];
@@ -41,13 +45,13 @@ const ClientDashboard = () => {
   handleAuth();
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user.role !== "client") {
-    history.push("/consultantDashboard");
+  if (user.role !== "consultant") {
+    history.push("/clientDashboard");
   }
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
 
   const handleCardButton = (appointmentId) => {
-    dispatch(appointmentBookingCancel(appointmentId));
+    dispatch(deleteOneAppointment(appointmentId));
   };
 
   return (
@@ -67,17 +71,19 @@ const ClientDashboard = () => {
           >
             {selectedNavigatorItem === "Home" && (
               <Home
-                getAppointmentAction={getAppointmentsForClientId}
+                getAppointmentAction={getAllAppointments}
                 appointmentStatusFilterOptionList={[
-                  "Past",
-                  "Canceled",
                   "Upcoming",
+                  "Unbooked",
+                  "Canceled",
+                  "Past",
                 ]}
-                buttonLabel="Cancel"
+                buttonLabel="Delete"
                 handleCardButton={handleCardButton}
               />
             )}
-            {selectedNavigatorItem === "Schedule" && <>Schedule</>}
+            {selectedNavigatorItem === "Availability" && <Availability />}
+            {selectedNavigatorItem === "Calendar" && <Scheduler />}
             {selectedNavigatorItem === "Payments" && <>payments</>}
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>

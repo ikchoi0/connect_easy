@@ -16,7 +16,7 @@ const appointmentSchema = Joi.object({
   appointmentEndTime: Joi.date().required(),
   appointmentCancellation_time: Joi.date(),
   // appointmentCancel: Joi.boolean().required(),
-  description: Joi.string(),
+  description: Joi.string().optional(),
 });
 
 const appointmentSchemas = Joi.array().items(appointmentSchema);

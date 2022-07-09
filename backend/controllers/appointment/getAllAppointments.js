@@ -10,18 +10,22 @@ const getAllAppointments = async (req, res) => {
     if (req.user.role === "consultant") {
       appointments = await Appointment.find({
         consultant: Types.ObjectId(consultantId),
-      });
+      })
+        .populate("client")
+        .populate("consultant");
       // if user is client or non-registered user
     } else if (req.user.role === "client") {
       appointments = await Appointment.find({
         consultant: Types.ObjectId(consultantId),
         appointmentBooked: false,
-      });
+      })
+        .populate("client")
+        .populate("consultant");
     }
 
     /**
      * Event {
-        title: string,
+        description: string,
         start: Date,
         end: Date,
         allDay?: boolean
@@ -42,14 +46,26 @@ const getAllAppointments = async (req, res) => {
       const newEndTime = moment(newDate + " " + endTime).format(
         "YYYY-MM-DD HH:mm"
       );
+      const titleStartTime = moment(newDate + " " + startTime).format("HH:mmA");
+      const titleEndTime = moment(newDate + " " + endTime).format("HH:mmA");
+
       return {
+        consultant:
+          appointment.consultant.firstName +
+          " " +
+          appointment.consultant.lastName,
+        client: appointment.client
+          ? appointment.client.firstName + " " + appointment.client.lastName
+          : "",
         appointmentId: appointment._id,
-        title: appointment.description,
+        description: appointment.description,
         date: appointment.date,
         start: newStartTime,
         end: newEndTime,
+        title: `${titleStartTime} - ${titleEndTime}`,
         allDay: false,
         resource: appointment.client,
+        appointmentBooked: appointment.appointmentBooked,
       };
     });
 

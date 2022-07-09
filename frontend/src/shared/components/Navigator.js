@@ -12,11 +12,12 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import PaymentIcon from '@mui/icons-material/Payment';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Button } from '@mui/material';
 import Logo from './Logo';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { updateSelectedNavigatorItem } from '../../store/reducers/dashboardReducer'
+import { updateSelectedNavigatorItem } from '../../store/reducers/dashboardReducer';
 
 const companyName = 'Connect Easy';
 
@@ -47,19 +48,24 @@ const itemCategory = {
 };
 
 export default function Navigator(props) {
-  const { menuItems,drawerWidth} = props;
+  const { menuItems, drawerWidth } = props;
   const dispatch = useDispatch();
   const history = useHistory();
 
   const handleNavigatorMenuClick = (childId) => {
     dispatch(updateSelectedNavigatorItem(childId));
   };
+
   const handleLogoOnClick = () => {
     history.push('/');
   };
+
   return (
-    <Drawer variant="permanent" PaperProps={{ style: { width: drawerWidth } }}
-    sx={{ display: { sm: "block", xs: "none" } }}>
+    <Drawer
+      variant="permanent"
+      PaperProps={{ style: { width: drawerWidth } }}
+      sx={{ display: { sm: 'block', xs: 'none' } }}
+    >
       <List disablePadding>
         <ListItem
           sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}
@@ -89,6 +95,7 @@ export default function Navigator(props) {
         ))}
 
         <Divider sx={{ mt: 2 }} />
+        <Button>Logout</Button>
       </List>
     </Drawer>
   );

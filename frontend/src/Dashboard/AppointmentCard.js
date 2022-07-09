@@ -16,8 +16,9 @@ const AppointmentCard = ({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        border: '1px solid #ccc',
+        border: '3px solid #ccc',
         borderRadius: '5px',
+        marginY: '10px',
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
@@ -27,7 +28,6 @@ const AppointmentCard = ({
           align="left"
           variant="body1"
           width={'50%'}
-          
         >
           {description}
         </Typography>

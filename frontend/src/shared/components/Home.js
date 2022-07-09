@@ -6,13 +6,16 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AppointmentCard from "./AppointmentCard";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getOpenedAppointments,
-  deleteOneAppointment,
-} from "../../store/reducers/scheduleReducer";
+import { deleteOneAppointment } from "../../store/reducers/scheduleReducer";
+
 import moment from "moment";
 
-export default function Home() {
+export default function Home({
+  getAppointmentAction,
+  appointmentStatusFilterOptionList,
+  buttonLabel,
+  handleCardButton,
+}) {
   // Grab the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
   const userDetails = JSON.parse(localStorage.getItem("user"));
@@ -25,13 +28,21 @@ export default function Home() {
   };
 
   useEffect(() => {
-    dispatch(getOpenedAppointments(userDetails.userId));
+    dispatch(getAppointmentAction(userDetails.userId));
   }, [dispatch]);
 
-  // Delete an appointment:
-  const handleDeleteAppointmentOnClick = (id) => {
-    dispatch(deleteOneAppointment(id));
-  };
+  // // Delete an appointment:
+  // const handleDeleteAppointmentOnClick = (id) => {
+  //   dispatch(deleteOneAppointment(id));
+  // };
+
+  const menuItem = appointmentStatusFilterOptionList.map((option, idx) => {
+    return (
+      <MenuItem key={idx} value={option}>
+        {option}
+      </MenuItem>
+    );
+  });
 
   // Mapped appointments for the user:  scheduler.appointments
   const mappedAppointments = appointments.map((appointment, index) => {
@@ -43,7 +54,9 @@ export default function Home() {
         date={appointment.date}
         startTime={moment(appointment.start).format("HH:mm A")}
         endTime={moment(appointment.end).format("HH:mm A")}
-        onDelete={handleDeleteAppointmentOnClick}
+        // onDelete={handleDeleteAppointmentOnClick}
+        buttonLabel={buttonLabel}
+        handleCardButton={handleCardButton}
       />
     );
   });
@@ -68,7 +81,7 @@ export default function Home() {
 
       <FormControl
         sx={{
-          maxWidth: "20%",
+          maxWidth: "30%",
         }}
       >
         <InputLabel id="demo-simple-select-label">Filter by Status</InputLabel>
@@ -79,10 +92,7 @@ export default function Home() {
           label="Appointment Status"
           onChange={handleChange}
         >
-          <MenuItem value={"Unbooked"}>Unbooked</MenuItem>
-          <MenuItem value={"Past"}>Past</MenuItem>
-          <MenuItem value={"Canceled"}>Canceled</MenuItem>
-          <MenuItem value={"Upcoming"}>Upcoming</MenuItem>
+          {menuItem}
         </Select>
       </FormControl>
 

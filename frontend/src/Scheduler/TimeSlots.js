@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import { Box, Button, Grid, Typography, ButtonGroup } from "@mui/material";
-import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAppointmentsForTheDay } from "../store/reducers/scheduleReducer";
-import moment from "moment";
-import SchedulerDetailsInputs from "./SchedulerDetailsInputs";
-import { bookAppointment } from "../store/reducers/scheduleReducer";
-import { useHistory } from "react-router-dom";
+import React, { useState } from 'react';
+import { Box, Button, Grid, Typography, ButtonGroup } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppointmentsForTheDay } from '../store/reducers/scheduleReducer';
+import moment from 'moment';
+import SchedulerDetailsInputs from './SchedulerDetailsInputs';
+import { bookAppointment } from '../store/reducers/scheduleReducer';
+import { useHistory } from 'react-router-dom';
 
 const Item = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: "center",
+  textAlign: 'center',
   color: theme.palette.text.secondary,
-  border: "2px solid #e0e0e0",
+  border: '2px solid #e0e0e0',
 }));
 
 export default function TimeSlots(props) {
-  const [description, setDescription] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
+  const [description, setDescription] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -33,7 +33,7 @@ export default function TimeSlots(props) {
   useEffect(() => {
     setSelectedDate(props.selectedDate.toLocaleDateString());
 
-    const date = moment(props.selectedDate).format("YYYY-MM-DD");
+    const date = moment(props.selectedDate).format('YYYY-MM-DD');
 
     dispatch(
       getAppointmentsForTheDay({ consultantId: props.consultantId, date })
@@ -41,13 +41,13 @@ export default function TimeSlots(props) {
   }, [props.selectedDate, dispatch]);
 
   const handleDismissOnClick = () => {
-    setSelectedAppointmentId("");
+    setSelectedAppointmentId('');
   };
 
   const handledBookingAppointment = () => {
-    const bookingData = { description, selectedAppointmentId };
-    dispatch(bookAppointment(bookingData));
-    history.push("/dashboard");
+    const appointmentData = { description, selectedAppointmentId };
+
+    dispatch(bookAppointment({ appointmentData, history }));
   };
 
   const items = appointmentsForDay.map((item) => (
@@ -59,7 +59,7 @@ export default function TimeSlots(props) {
         <Grid container spacing={1}>
           <Grid item xs={4}>
             <Typography variant="subtitle1">
-              {moment(item.start).format("HH:mm A")}
+              {moment(item.start).format('HH:mm A')}
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -67,7 +67,7 @@ export default function TimeSlots(props) {
           </Grid>
           <Grid item xs={4}>
             <Typography variant="subtitle1">
-              {moment(item.end).format("HH:mm A")}
+              {moment(item.end).format('HH:mm A')}
             </Typography>
           </Grid>
         </Grid>
@@ -88,10 +88,10 @@ export default function TimeSlots(props) {
   return (
     <Box
       sx={{
-        width: "20%",
+        width: '20%',
         marginLeft: 3,
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <Typography variant="h6" gutterBottom>
@@ -108,7 +108,7 @@ export default function TimeSlots(props) {
             />
           </>
         )}
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button onClick={handleDismissOnClick}>Dismiss</Button>
           <Button onClick={handledBookingAppointment}>Book</Button>
         </Box>

@@ -3,15 +3,15 @@ import {
   Switch,
   Route,
   Redirect,
-} from "react-router-dom";
-import HomePage from "./HomePage/HomePage";
-import RegisterPage from "./HomePage/AuthPages/RegisterPage/RegisterPage";
-import LoginPage from "./HomePage/AuthPages/LoginPage/LoginPage";
-import "./App.css";
-import Scheduler from "./Scheduler/Scheduler";
-import Category from "./Category/Category";
-import Dashboard from "./Dashboard/Dashboard";
-import ClientDashboard from "./ClientDashboard/ClientDashboard";
+} from 'react-router-dom';
+import HomePage from './HomePage/HomePage';
+import RegisterPage from './HomePage/AuthPages/RegisterPage/RegisterPage';
+import LoginPage from './HomePage/AuthPages/LoginPage/LoginPage';
+import './App.css';
+import Scheduler from './Scheduler/Scheduler';
+import Category from './Category/Category';
+import Dashboard from './Dashboard/Dashboard';
+import ClientDashboard from './ClientDashboard/ClientDashboard';
 
 /**
  *

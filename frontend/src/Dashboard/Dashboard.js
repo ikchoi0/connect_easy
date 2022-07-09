@@ -34,6 +34,8 @@ export default function Dashboard() {
     }
   }, [dispatch]);
 
+
+  
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>

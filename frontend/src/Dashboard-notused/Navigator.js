@@ -9,7 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 
 import PeopleIcon from "@mui/icons-material/People";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
+import LogoutIcon from "@mui/icons-material/Logout";
 import PaymentIcon from "@mui/icons-material/Payment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Logo from "../shared/components/Logo";
@@ -39,6 +39,7 @@ const menuItems = [
   { id: "Calendar", icon: <CalendarMonthIcon /> },
   { id: "Payments", icon: <PaymentIcon /> },
 ];
+const authMenuItems = [{ id: "Logout", icon: <LogoutIcon /> }];
 
 const item = {
   py: "2px",
@@ -95,7 +96,19 @@ export default function Navigator(props) {
             </ListItemButton>
           </ListItem>
         ))}
-
+        <Divider sx={{ mt: 2 }} />
+        {menuItems.map(({ id: childId, icon, active }) => (
+          <ListItem disablePadding key={childId}>
+            <ListItemButton
+              selected={active}
+              sx={item}
+              onClick={() => handleNavigatorMenuClick(childId)}
+            >
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText>{childId}</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ))}
         <Divider sx={{ mt: 2 }} />
       </List>
     </Drawer>

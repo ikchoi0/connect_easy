@@ -32,7 +32,7 @@ export default function Login() {
   useEffect(() => {
     if (user.isLoggedIn) {
       localStorage.setItem('user', JSON.stringify(user.userDetails));
-        history.push('/clientDashboard');
+      history.push('/clientDashboard');
     }
   }, [user.isLoggedIn]);
 
@@ -51,8 +51,6 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      {email}
-      {password}
       <HomePageAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />

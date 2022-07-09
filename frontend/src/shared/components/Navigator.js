@@ -1,48 +1,43 @@
-import * as React from 'react';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-
-import PeopleIcon from '@mui/icons-material/People';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
-import PaymentIcon from '@mui/icons-material/Payment';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { Button } from '@mui/material';
-import Logo from './Logo';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import * as React from "react";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Logo from "./Logo";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { logout } from "../../shared/utils/auth";
-import { updateSelectedNavigatorItem } from '../../store/reducers/dashboardReducer';
+import { updateSelectedNavigatorItem } from "../../store/reducers/dashboardReducer";
 
-const companyName = 'Connect Easy';
+const companyName = "Connect Easy";
 
 const lgLogoStyle = {
   mr: 2,
-  display: { xs: 'none', md: 'flex' },
-  fontFamily: 'monospace',
+  display: { xs: "none", md: "flex" },
+  fontFamily: "monospace",
   fontWeight: 700,
-  letterSpacing: '.3rem',
-  color: 'inherit',
-  textDecoration: 'none',
+  letterSpacing: ".3rem",
+  color: "inherit",
+  textDecoration: "none",
 };
-const lgLogoIconStyle = { display: { xs: 'none', md: 'flex' }, mr: 1 };
+const lgLogoIconStyle = { display: { xs: "none", md: "flex" }, mr: 1 };
+const authMenuItems = { id: "Logout", icon: <LogoutIcon /> };
 
 const item = {
-  py: '2px',
+  py: "2px",
   px: 3,
-  color: 'rgba(255, 255, 255, 0.7)',
-  '&:hover, &:focus': {
-    bgcolor: 'rgba(255, 255, 255, 0.08)',
+  color: "rgba(255, 255, 255, 0.7)",
+  "&:hover, &:focus": {
+    bgcolor: "rgba(255, 255, 255, 0.08)",
   },
 };
 
 const itemCategory = {
-  boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
+  boxShadow: "0 -1px 0 rgb(255,255,255,0.1) inset",
   py: 1.5,
   px: 3,
 };
@@ -57,12 +52,12 @@ export default function Navigator(props) {
   };
 
   const handleLogoOnClick = () => {
-    history.push('/');
+    history.push("/");
   };
 
-    const handleLogoutOnClick = () => {
-      logout();
-    };
+  const handleLogoutOnClick = () => {
+    logout();
+  };
 
   return (
     <Drawer
@@ -99,7 +94,10 @@ export default function Navigator(props) {
         ))}
 
         <Divider sx={{ mt: 2 }} />
-        <Button onClick={handleLogoutOnClick} >Logout</Button>
+        <ListItemButton sx={item} onClick={handleLogoutOnClick}>
+          <ListItemIcon>{authMenuItems.icon}</ListItemIcon>
+          <ListItemText>{authMenuItems.id}</ListItemText>
+        </ListItemButton>
       </List>
     </Drawer>
   );

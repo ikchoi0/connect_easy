@@ -6,7 +6,7 @@ import "./Scheduler.css";
 import { Container, Box } from "@mui/material";
 import TimeSlots from "./TimeSlots";
 import { useDispatch, useSelector } from "react-redux";
-import { getAppointmentsForConsultant } from "../store/reducers/scheduleReducer";
+import { getOpenedAppointments } from "../store/reducers/scheduleReducer";
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -15,8 +15,7 @@ const localizer = momentLocalizer(moment); // or globalizeLocalizer
  * https://jquense.github.io/react-big-calendar/
  */
 
-export default function Scheduler({ selectable = true }) {
-  const [openTimeSlots, setOpenTimeSlots] = React.useState(false);
+export default function Scheduler({ selectable = true, consultantId }) {
   const [selectedEvent, setSelectedEvent] = React.useState(null);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
@@ -25,17 +24,10 @@ export default function Scheduler({ selectable = true }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const consultant = localStorage.getItem("user");
-    if (consultant) {
-      const consultantId = JSON.parse(consultant).userId;
-      console.log(consultantId);
-
-      dispatch(getAppointmentsForConsultant(consultantId));
-    }
+    dispatch(getOpenedAppointments(consultantId));
   }, [dispatch]);
 
   const handleOpenTimeSlots = (e) => {
-    setOpenTimeSlots(true);
     setSelectedDate(e.start);
   };
   return (
@@ -50,7 +42,7 @@ export default function Scheduler({ selectable = true }) {
       >
         <Box sx={{ width: "100%" }}>
           <Calendar
-            events={scheduler && scheduler.appointments}
+            events={scheduler ? scheduler.appointments : []}
             localizer={localizer}
             showMultiDayTimes
             step={30}
@@ -60,7 +52,6 @@ export default function Scheduler({ selectable = true }) {
             endAccessor="end"
             onSelectEvent={(e) => {
               console.log(e);
-              handleOpenTimeSlots(e);
             }}
             onSelectSlot={(e) => {
               console.log(e);
@@ -69,7 +60,7 @@ export default function Scheduler({ selectable = true }) {
             selectable={selectable}
           />
         </Box>
-        {openTimeSlots && <TimeSlots selectedDate={selectedDate} />}
+        <TimeSlots selectedDate={selectedDate} consultantId={consultantId} />
       </Container>
     </>
   );

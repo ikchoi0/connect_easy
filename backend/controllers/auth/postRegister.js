@@ -2,6 +2,7 @@ const User = require("../../models/user");
 const Category = require("../../models/category");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Types = require("mongoose").Types;
 
 const postRegister = async (req, res) => {
   try {
@@ -34,11 +35,16 @@ const postRegister = async (req, res) => {
       role: consultantCheck ? "consultant" : "client",
     });
 
-    // push new user to the category
-    const category = await Category.findById(consultantCategoryId);
-    category.users.push(user._id);
-    await category.save();
-    console.log("TEsting", category, consultantCategoryId);
+    // if your is signing up with consultant
+    if (user.role === "consultant") {
+      // push new user to the category
+      const category = await Category.findById(
+        Types.ObjectId(consultantCategoryId)
+      );
+      category.users.push(user._id);
+      await category.save();
+      console.log("TEsting", category, consultantCategoryId);
+    }
 
     // create JWT token
     const token = jwt.sign(

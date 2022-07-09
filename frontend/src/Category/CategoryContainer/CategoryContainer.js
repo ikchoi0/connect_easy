@@ -21,7 +21,8 @@ export default function CategoryContainer() {
       return (
         <Grid item key={index} xs={12} sm={6} lg={4}>
           <ConsultantCard
-            key={consultant.id}
+            key={consultant._id}
+            consultantId={consultant._id}
             firstName={consultant.firstName}
             lastName={consultant.lastName}
             profilePicture={consultant.options.profilePicture}

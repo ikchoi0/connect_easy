@@ -8,14 +8,19 @@ import Typography from "@mui/material/Typography";
 import { CardMedia } from "@mui/material";
 import Scheduler from "../../Scheduler/Scheduler";
 import DialogPopUp from "../../shared/components/DialogPopUp";
-export default function CategoryCard({
+import { useDispatch } from "react-redux";
+import { clearAppointmentsList } from "../../store/reducers/scheduleReducer";
+
+const CategoryCard = ({
+  consultantId,
   firstName,
   lastName,
   profilePicture,
   description,
   rating,
   price,
-}) {
+}) => {
+  const dispatch = useDispatch();
   const handleClick = () => {
     handleClickOpen();
   };
@@ -24,6 +29,7 @@ export default function CategoryCard({
     setOpen(true);
   };
   const handleClose = () => {
+    dispatch(clearAppointmentsList());
     setOpen(false);
   };
 
@@ -81,16 +87,11 @@ export default function CategoryCard({
           }}
         ></Box>
       </Card>
-      <DialogPopUp
-        onAccept={handleClose}
-        onCancel={handleClose}
-        onClose={handleClose}
-        open={open}
-        acceptName="Book Now"
-        cancelName="Cancel"
-      >
-        <Scheduler selectable />
+      <DialogPopUp onClose={handleClose} open={open}>
+        <Scheduler selectable consultantId={consultantId} />
       </DialogPopUp>
     </>
   );
-}
+};
+
+export default CategoryCard;

@@ -1,28 +1,23 @@
-const Appointment = require("../../models/appointment");
 const Types = require("mongoose").Types;
+const Appointment = require("../../models/appointment");
 const moment = require("moment");
 
-/**
- * @description - gets all the available spots for the day
- */
-
-const getAppointmentByDate = async (req, res) => {
+const getAllAppointments = async (req, res) => {
   try {
-    const { consultantId, date } = req.params;
+    const { consultantId } = req.params;
 
-    const parsedDate = moment(date).toDate();
-    const parsedDatePlusOne = moment(date).add(1, "days").toDate();
-
-    const appointments = await Appointment.find({
-      date: {
-        $gte: parsedDate,
-        $lt: parsedDatePlusOne,
-      },
-      consultant: Types.ObjectId(consultantId),
-      appointmentBooked: false,
-    });
-    // .where("consultant")
-    // .equals(consultantId);
+    let appointments = [];
+    if (req.user.role === "consultant") {
+      appointments = await Appointment.find({
+        consultant: Types.ObjectId(consultantId),
+      });
+      // if user is client or non-registered user
+    } else if (req.user.role === "client") {
+      appointments = await Appointment.find({
+        consultant: Types.ObjectId(consultantId),
+        appointmentBooked: false,
+      });
+    }
 
     /**
      * Event {
@@ -64,4 +59,4 @@ const getAppointmentByDate = async (req, res) => {
   }
 };
 
-module.exports = getAppointmentByDate;
+module.exports = getAllAppointments;

@@ -36,7 +36,8 @@ export default function Login() {
     }
   }, [user.isLoggedIn]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const userDetails = {
       email,
       password,
@@ -58,12 +59,12 @@ export default function Login() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -84,8 +85,9 @@ export default function Login() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+              />
             <Button
+              type="submit"
               onClick={(e) => handleSubmit(e)}
               fullWidth
               variant="contained"
@@ -101,7 +103,7 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <ButtonBase onClick={handleRegisterOnClick}>
-                  <Typography variant="body2" color={'primary.main'}>
+                  <Typography variant="body2" color={"primary.main"}>
                     {"Don't have an account? Register here"}
                   </Typography>
                 </ButtonBase>

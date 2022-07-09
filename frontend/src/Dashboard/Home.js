@@ -13,11 +13,9 @@ import {
 import moment from "moment";
 
 export default function Home() {
-  // Grab the user details state from the store:
-  const userDetails = useSelector((state) => state.auth.userDetails);
-
   // Grab the all appointments for the user above from the store:
-  const consultantAppointments = useSelector((state) => state.scheduler);
+  const { appointments } = useSelector((state) => state.scheduler);
+  const userDetails = JSON.parse(localStorage.getItem("user"));
 
   // Filter menu for appointment status types:
   const [filterStatus, setFilterStatus] = React.useState("");
@@ -27,32 +25,28 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (userDetails) {
-      dispatch(getOpenedAppointments(userDetails.userId));
-    }
-  }, [dispatch, userDetails]);
+    dispatch(getOpenedAppointments(userDetails.userId));
+  }, [dispatch]);
 
   // Delete an appointment:
   const handleDeleteAppointmentOnClick = (id) => {
     dispatch(deleteOneAppointment(id));
   };
 
-  // Mapped appointments for the user:
-  const mappedAppointments = consultantAppointments.appointments.map(
-    (appointment, index) => {
-      return (
-        <AppointmentCard
-          key={index}
-          id={appointment.appointmentId}
-          description={appointment.title}
-          date={appointment.date}
-          startTime={moment(appointment.start).format("HH:mm A")}
-          endTime={moment(appointment.end).format("HH:mm A")}
-          onDelete={handleDeleteAppointmentOnClick}
-        />
-      );
-    }
-  );
+  // Mapped appointments for the user:  scheduler.appointments
+  const mappedAppointments = appointments.map((appointment, index) => {
+    return (
+      <AppointmentCard
+        key={index}
+        id={appointment.appointmentId}
+        description={appointment.title}
+        date={appointment.date}
+        startTime={moment(appointment.start).format("HH:mm A")}
+        endTime={moment(appointment.end).format("HH:mm A")}
+        onDelete={handleDeleteAppointmentOnClick}
+      />
+    );
+  });
 
   return (
     <Box

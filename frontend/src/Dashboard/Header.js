@@ -18,7 +18,7 @@ import Typography from "@mui/material/Typography";
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
 function Header(props) {
-  const { onDrawerToggle } = props;
+  // const { onDrawerToggle } = props;
 
   return (
     <React.Fragment>
@@ -33,7 +33,7 @@ function Header(props) {
               <IconButton
                 sx={{ color: "white" }}
                 aria-label="open drawer"
-                onClick={onDrawerToggle}
+                // onClick={onDrawerToggle}
                 edge="start"
               >
                 <MenuIcon />
@@ -47,8 +47,8 @@ function Header(props) {
   );
 }
 
-Header.propTypes = {
-  onDrawerToggle: PropTypes.func.isRequired,
-};
+// Header.propTypes = {
+//   onDrawerToggle: PropTypes.func.isRequired,
+// };
 
 export default Header;

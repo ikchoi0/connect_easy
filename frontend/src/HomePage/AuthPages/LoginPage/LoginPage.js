@@ -32,7 +32,7 @@ export default function Login() {
   useEffect(() => {
     if (user.isLoggedIn) {
       localStorage.setItem('user', JSON.stringify(user.userDetails));
-      history.push('/dashboard');
+        history.push('/clientDashboard');
     }
   }, [user.isLoggedIn]);
 

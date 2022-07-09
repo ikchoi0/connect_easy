@@ -1,14 +1,14 @@
-import axios from "axios";
-import { logout } from "./shared/utils/auth";
+import axios from 'axios';
+import { logout } from './shared/utils/auth';
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:5002/api",
+  baseURL: 'http://localhost:5002/api',
   timeout: 1000,
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    const userDetails = localStorage.getItem("user");
+    const userDetails = localStorage.getItem('user');
 
     if (userDetails) {
       const token = JSON.parse(userDetails).token;
@@ -25,7 +25,7 @@ apiClient.interceptors.request.use(
 
 export const login = async (data) => {
   try {
-    return await apiClient.post("/auth/login", data);
+    return await apiClient.post('/auth/login', data);
   } catch (exception) {
     return {
       error: true,
@@ -36,7 +36,7 @@ export const login = async (data) => {
 
 export const register = async (data) => {
   try {
-    return await apiClient.post("/auth/register", data);
+    return await apiClient.post('/auth/register', data);
   } catch (exception) {
     return {
       error: true,
@@ -58,7 +58,7 @@ const checkResponseCode = (error) => {
 // queries category list
 export const getCategories = async () => {
   try {
-    return await apiClient.get("/category");
+    return await apiClient.get('/category');
   } catch (exception) {
     return {
       error: true,
@@ -82,7 +82,7 @@ export const getConsultantsWithinCategory = async (categoryName) => {
 // create open appointments
 export const setOpenAppointments = async (openAppointmentsList) => {
   try {
-    return await apiClient.post("/appointment", openAppointmentsList);
+    return await apiClient.post('/appointment', openAppointmentsList);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -135,6 +135,19 @@ export const getAppointmentsForConsultantsByDate = async (
 ) => {
   try {
     return await apiClient.get(`/appointment/date/${consultantId}/${date}`);
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
+// get existing appointments
+export const getAppointmentsForClientId = async (clientId) => {
+  try {
+    return await apiClient.get(`/appointment/client/${clientId}`);
   } catch (exception) {
     checkResponseCode(exception);
     return {

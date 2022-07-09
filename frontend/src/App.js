@@ -11,6 +11,7 @@ import './App.css';
 import Scheduler from './Scheduler/Scheduler';
 import Category from './Category/Category';
 import Dashboard from './Dashboard/Dashboard';
+import ClientDashboard from './ClientDashboard/ClientDashboard';
 
 /**
  *
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/dashboard">
             <Dashboard />
+          </Route>
+          <Route path="/clientDashboard">
+            <ClientDashboard />
           </Route>
           <Route path="/">
             <Redirect to="/dashboard" />

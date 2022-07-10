@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getCategories, getConsultantsWithinCategory } from '../../api';
-// import { getCategory } from "../../api/categoryAPI";
+
 const categoryState = {
   categoryList: [],
   usersWithinCategory: [],
@@ -23,8 +23,9 @@ export const getUsersWithinCategory = createAsyncThunk(
   'category/getUsersWithinCategory',
   async (categoryName, thunkApi) => {
     const response = await getConsultantsWithinCategory(categoryName);
-    console.log(response);
+
     if (response.error) return thunkApi.rejectWithValue(response.message);
+
     return response.data.data;
   }
 );

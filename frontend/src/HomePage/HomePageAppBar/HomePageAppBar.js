@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,7 +9,10 @@ import Button from '@mui/material/Button';
 import { useHistory } from 'react-router-dom';
 import Logo from './Logo';
 import { logout } from '../../shared/utils/auth';
-
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 const companyName = 'Connect Easy';
 
 const smLogoStyle = {
@@ -63,6 +66,14 @@ const HomePageAppBar = () => {
     history.push('/');
   };
 
+  const handleDashBoardOnClick = () => {
+    if (userDetails.role === 'consultant') {
+      history.push('/consultantDashboard');
+    } else {
+      history.push('/clientDashboard');
+    }
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -97,16 +108,37 @@ const HomePageAppBar = () => {
           />
 
           <Box sx={{ flexGrow: 0 }}>
-            {userDetails && (userDetails.role === 'client' || 'consultant') ? (
-              <Button sx={{ color: 'white' }} onClick={handleLogoutOnClick}>
-                Logout
-              </Button>
+            {userDetails && (userDetails.role === 'client' || ' consultant') ? (
+              <>
+                <Button
+                  sx={{ color: 'white' }}
+                  startIcon={<DashboardIcon />}
+                  onClick={handleDashBoardOnClick}
+                >
+                  DashBoard
+                </Button>
+                <Button
+                  sx={{ color: 'white' }}
+                  startIcon={<LogoutIcon />}
+                  onClick={handleLogoutOnClick}
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
-                <Button sx={{ color: 'white' }} onClick={handleRegisterOnClick}>
+                <Button
+                  sx={{ color: 'white' }}
+                  startIcon={<LockOpenIcon />}
+                  onClick={handleRegisterOnClick}
+                >
                   Register
                 </Button>
-                <Button sx={{ color: 'white' }} onClick={handleLoginOnClick}>
+                <Button
+                  sx={{ color: 'white' }}
+                  startIcon={<LoginIcon />}
+                  onClick={handleLoginOnClick}
+                >
                   Login
                 </Button>
               </>

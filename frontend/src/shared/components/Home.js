@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import AppointmentCard from "./AppointmentCard";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteOneAppointment } from "../../store/reducers/scheduleReducer";
+import React, { useEffect } from 'react';
+import { Box, Typography } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import AppointmentCard from './AppointmentCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteOneAppointment } from '../../store/reducers/scheduleReducer';
+import { handleAuth } from '../utils/auth';
 
-import moment from "moment";
+import moment from 'moment';
 
 export default function Home({
   getAppointmentAction,
@@ -16,11 +17,12 @@ export default function Home({
   buttonLabel,
   handleCardButton,
 }) {
+  handleAuth();
   // Grab the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
-  const userDetails = JSON.parse(localStorage.getItem("user"));
+  const userDetails = JSON.parse(localStorage.getItem('user'));
   // Filter menu for appointment status types:
-  const [filterStatus, setFilterStatus] = React.useState("");
+  const [filterStatus, setFilterStatus] = React.useState('');
   const dispatch = useDispatch();
   const handleChange = (event) => {
     setFilterStatus(event.target.value);
@@ -47,15 +49,15 @@ export default function Home({
   const mappedAppointments = appointments.map((appointment, index) => {
     return (
       <AppointmentCard
-        role={JSON.parse(localStorage.getItem("user")).role}
+        role={JSON.parse(localStorage.getItem('user')).role}
         clientName={appointment.client}
         consultantName={appointment.consultant}
         key={index}
         id={appointment.appointmentId}
         description={appointment.description}
         date={appointment.date}
-        startTime={moment(appointment.start).format("HH:mm A")}
-        endTime={moment(appointment.end).format("HH:mm A")}
+        startTime={moment(appointment.start).format('HH:mm A')}
+        endTime={moment(appointment.end).format('HH:mm A')}
         // onDelete={handleDeleteAppointmentOnClick}
         buttonLabel={buttonLabel}
         handleCardButton={handleCardButton}
@@ -67,24 +69,24 @@ export default function Home({
   return (
     <Box
       sx={{
-        maxWidth: "100%",
-        minHeight: "50vh",
-        padding: "20px",
-        height: "auto",
-        backgroundColor: "#fafafa",
-        display: "flex",
-        flexDirection: "column",
-        borderRadius: "5px",
+        maxWidth: '100%',
+        minHeight: '50vh',
+        padding: '20px',
+        height: 'auto',
+        backgroundColor: '#fafafa',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: '5px',
       }}
     >
-      <Typography variant="h4" component="h1" mb={"30px"}>
-        Welcome, {userDetails && userDetails.firstName}{" "}
+      <Typography variant="h4" component="h1" mb={'30px'}>
+        Welcome, {userDetails && userDetails.firstName}{' '}
         {userDetails && userDetails.lastName}!
       </Typography>
 
       <FormControl
         sx={{
-          maxWidth: "30%",
+          maxWidth: '30%',
         }}
       >
         <InputLabel id="demo-simple-select-label">Filter by Status</InputLabel>
@@ -101,17 +103,17 @@ export default function Home({
 
       <Box
         sx={{
-          marginTop: "20px",
-          maxWidth: "100%",
-          minHeight: "50vh",
-          padding: "20px",
-          height: "auto",
-          display: "flex",
-          flexDirection: "column",
-          borderRadius: "5px",
+          marginTop: '20px',
+          maxWidth: '100%',
+          minHeight: '50vh',
+          padding: '20px',
+          height: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: '5px',
         }}
       >
-        <Typography variant="h4" component="h1" mb={"30px"}>
+        <Typography variant="h4" component="h1" mb={'30px'}>
           {mappedAppointments}
         </Typography>
       </Box>

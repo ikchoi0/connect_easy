@@ -10,6 +10,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const userRoutes = require('./routes/userRoutes');
 // const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 
 const PORT = process.env.PORT || process.env.API_PORT;
@@ -28,6 +30,10 @@ app.use('/api/category', categoryRoutes);
 app.use('/api/auth', authRoutes);
 // appointment routes
 app.use('/api/appointment', appointmentRoutes);
+// upload routes
+app.use('/api/upload', uploadRoutes);
+// user routes
+app.use('/api/user', userRoutes);
 
 console.log('Starting the server...');
 

@@ -15,7 +15,7 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Avatar } from '@mui/material';
 import TextFieldWithLabel from '../components/TextFieldWithLabel';
-import submitImage from '../utils/submitImage';
+import { submitImage, getUserProfile } from '../../api';
 
 const ProfilePage = () => {
   const history = useHistory();
@@ -41,9 +41,15 @@ const ProfilePage = () => {
     setPreviewImage(URL.createObjectURL(e.target.files[0]));
   };
   const handleOnSaveButtonClick = () => {
-    submitImage(imageFile, history);
+    submitImage('', imageFile, history);
   };
-  useEffect(() => {}, []);
+
+  useEffect(() => {
+    getUserProfile().then((res) => {
+      console.log(res.data);
+      setOriginalImage(res.data.options.profilePicture);
+    });
+  }, []);
 
   return (
     <>
@@ -64,7 +70,12 @@ const ProfilePage = () => {
         >
           <Avatar
             sx={{ width: '100px', height: '100px' }}
-            src={previewImage && previewImage}
+            src={
+              originalImage
+                ? 'https://connect-easy-images.s3.us-west-2.amazonaws.com/' +
+                  originalImage
+                : previewImage
+            }
           >
             {!previewImage && 'DK'}
           </Avatar>

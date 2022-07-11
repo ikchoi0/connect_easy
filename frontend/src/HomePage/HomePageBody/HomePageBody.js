@@ -21,6 +21,7 @@ export default function HomePageBody() {
     });
   }
   return (
+    
     <Container sx={{ py: 8 }} maxWidth="md">
       <Grid container spacing={4}>
         {categoryCards}

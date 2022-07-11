@@ -8,6 +8,8 @@ import Grid from "@mui/material/Grid";
 import { useHistory } from "react-router-dom";
 import { updateSelectedCategory } from "../../store/reducers/categoryReducer";
 import { useDispatch } from "react-redux";
+
+
 const HomePageCard = ({ name, description, pictureUrl }) => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -30,19 +32,20 @@ const HomePageCard = ({ name, description, pictureUrl }) => {
             ></Typography>
             <Typography
               variant="subtitle1"
-              color="text.secondary"
+              color="text.primary"
               component="div"
             >
               {name}
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+            <Box
+              color="text.secondary"
+              sx={{ display: "flex", justifyContent: "flex-start" }}
+            >
               {description}
             </Box>
           </CardContent>
           <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-            <Button sx={{ marginLeft: "8px" }}>
-              Learn More
-            </Button>
+            <Button sx={{ marginLeft: "8px" }}>Learn More</Button>
           </Box>
         </Box>
         <Box
@@ -53,7 +56,15 @@ const HomePageCard = ({ name, description, pictureUrl }) => {
             justifyContent: "center",
           }}
         >
-          <Avatar />
+          <Avatar
+            variant={"rounded"}
+            alt="Avatar image"
+            src={pictureUrl}
+            style={{
+              width: 100,
+              height: 100,
+            }}
+          />
         </Box>
       </Card>
     </Grid>

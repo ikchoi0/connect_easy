@@ -37,6 +37,7 @@ export default function Scheduler({ selectable = true, consultantId }) {
       <Container
         sx={{
           marginTop: 8,
+          marginBottom: 4,
           height: '780px',
           display: 'flex',
           justifyContent: 'space-between',

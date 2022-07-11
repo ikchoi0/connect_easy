@@ -11,6 +11,7 @@ function LoginPageInputs({ email, setEmail, password, setPassword }) {
           label="Email Address"
           value={email}
           setValue={setEmail}
+          autoFocus={true}
           autoComplete="email"
         />
       </Grid>

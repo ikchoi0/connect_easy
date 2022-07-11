@@ -227,42 +227,43 @@ const CategorySeedDB = (userData) => [
     name: "Sales",
     description:
       "Revenue generation experts can guide you in the right direction of your business and sales quotas.",
-    pictureUrl: "https://tinyurl.com/2s4jrbwh",
+    pictureUrl: "https://cdn-icons-png.flaticon.com/512/1389/1389079.png",
     users: [userData[0]._id],
   },
   {
     name: "Therapists",
     description:
       "It's simple to schedule appointments for individual or group therapy sessions.",
-    pictureUrl: "https://tinyurl.com/2s4jrbwh",
+    pictureUrl: "https://cdn-icons-png.flaticon.com/512/2913/2913000.png",
     users: [userData[1]._id],
   },
   {
     name: "Lawyers",
     description:
       "Using a secure and private virtual space, lessen the back and forth and manage your legal schedule.",
-    pictureUrl: "https://tinyurl.com/2s4jrbwh",
+    pictureUrl: "https://cdn-icons-png.flaticon.com/512/2811/2811156.png",
     users: [userData[2]._id],
   },
   {
     name: "Developers",
     description:
       "Meet local and international software developers that can help creating the app of your dreams.",
-    pictureUrl: "https://tinyurl.com/2s4jrbwh",
+    pictureUrl:
+      "https://cdn-icons.flaticon.com/png/512/2721/premium/2721688.png?token=exp=1657526001~hmac=8cd362465d03b52612be6a032bf6f0d2",
     users: [userData[3]._id],
   },
   {
     name: "Mortgage",
     description:
       "An excellent opportunity to introduce yourself to your valued mortgage broker.",
-    pictureUrl: "https://tinyurl.com/2s4jrbwh",
+    pictureUrl: "https://cdn-icons-png.flaticon.com/512/243/243224.png",
     users: [userData[4]._id],
   },
   {
     name: "Doctors",
     description:
       "Consult with a doctor privately anytime. No office visit required.",
-    pictureUrl: "https://tinyurl.com/2s4jrbwh",
+    pictureUrl: "https://cdn-icons-png.flaticon.com/128/809/809957.png",
     users: [userData[5]._id],
   },
 ];

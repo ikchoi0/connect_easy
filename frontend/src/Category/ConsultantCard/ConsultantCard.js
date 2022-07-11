@@ -52,7 +52,10 @@ const CategoryCard = ({
               component="img"
               height="120px"
               width="90%"
-              image={profilePicture}
+              src={
+                "https://connect-easy-images.s3.us-west-2.amazonaws.com/" +
+                profilePicture
+              }
               alt="profile picture"
             />
           </CardContent>

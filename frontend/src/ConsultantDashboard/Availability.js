@@ -139,7 +139,7 @@ export default function Availability() {
             onClick={() => handleCreateButton()}
             disabled={!isNewAppointmentValid}
           >
-            Create New Appointment
+            Create New Time Slot
           </Button>
 
           {/* <TextFieldWithLabel
@@ -184,7 +184,7 @@ export default function Availability() {
             onClick={() => handleSaveAppointmentsButton()}
             disabled={appointmentCards && !isFormValid}
           >
-            Save my time slots
+            Save
           </Button>
         </LocalizationProvider>
       </Stack>

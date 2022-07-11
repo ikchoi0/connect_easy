@@ -17,10 +17,11 @@ const AppointmentCard = ({
   handleCardButton,
   appointmentBooked,
 }) => {
-  let something = appointmentBooked ? clientName : "Unbooked";
-  let title = "Appointment With: ";
-  title += role === "consultant" ? something : consultantName;
-  const body = appointmentBooked ? description : "This appointment is unbooked";
+
+  let status = appointmentBooked ? clientName : "_______";
+  let title = "Client's name: ";
+  title += role === "consultant" ? status : consultantName;
+  const body = appointmentBooked ? description : "This time slot is unbooked";
 
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }

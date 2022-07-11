@@ -10,6 +10,7 @@ import Scheduler from "../../Scheduler/Scheduler";
 import DialogPopUp from "../../shared/components/DialogPopUp";
 import { useDispatch } from "react-redux";
 import { clearAppointmentsList } from "../../store/reducers/scheduleReducer";
+import { red } from "@mui/material/colors";
 
 const CategoryCard = ({
   consultantId,
@@ -51,7 +52,7 @@ const CategoryCard = ({
               display="flex"
               component="img"
               height="120px"
-              width="90%"
+              width="100%"
               image={profilePicture}
               alt="profile picture"
             />
@@ -87,7 +88,7 @@ const CategoryCard = ({
           }}
         ></Box>
       </Card>
-      <DialogPopUp onClose={handleClose} open={open}>
+      <DialogPopUp onClose={handleClose} open={open} >
         <Scheduler selectable consultantId={consultantId} />
       </DialogPopUp>
     </>

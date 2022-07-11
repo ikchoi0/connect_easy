@@ -28,6 +28,7 @@ export let theme = createTheme({
   mixins: {
     toolbar: {
       minHeight: 48,
+      maxHeight: 48,
     },
   },
 });

@@ -1,8 +1,8 @@
-const Appointment = require('../../models/appointment');
+const Appointment = require("../../models/appointment");
 
 const postAppointment = async (req, res) => {
   try {
-    // check if user role is consultant
+    // TODO: EDGE CASES
 
     const appointments = await Appointment.insertMany(req.body);
 

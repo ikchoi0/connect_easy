@@ -12,7 +12,7 @@ const Meeting = ({ meetingId }) => {
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
 
-  let myPeerConnection;
+  let myPeerConnection = useRef(null);
 
   useEffect(() => {
     init();

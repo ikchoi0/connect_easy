@@ -81,6 +81,7 @@ const ClientDashboard = () => {
                   'Past',
                   'Canceled',
                   'Upcoming',
+                  'Show All',
                 ]}
                 buttonLabel="Cancel"
                 handleCardButton={handleCardButton}

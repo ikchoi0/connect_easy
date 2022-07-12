@@ -4,6 +4,7 @@ import categoryReducer from "./reducers/categoryReducer";
 import dashboardReducer from "./reducers/dashboardReducer";
 import scheduleReducer from "./reducers/scheduleReducer";
 import meetingReducer from "./reducers/meetingReducer";
+import appointmentReducer from "./reducers/appointmentReducer";
 
 const reducer = combineReducers({
   auth: authReducer,
@@ -11,6 +12,7 @@ const reducer = combineReducers({
   dashboard: dashboardReducer,
   scheduler: scheduleReducer,
   meeting: meetingReducer,
+  appointment: appointmentReducer,
 });
 
 const store = configureStore({

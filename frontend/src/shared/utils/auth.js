@@ -4,6 +4,7 @@ export const logout = () => {
 };
 
 export const handleAuth = () => {
+  
   const user = JSON.parse(localStorage.getItem('user'));
   if (!user) {
     return logout();

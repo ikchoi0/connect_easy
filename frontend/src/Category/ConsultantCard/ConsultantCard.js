@@ -88,7 +88,7 @@ const CategoryCard = ({
           }}
         ></Box>
       </Card>
-      <DialogPopUp onClose={handleClose} open={open} >
+      <DialogPopUp onClose={handleClose} open={open}>
         <Scheduler selectable consultantId={consultantId} />
       </DialogPopUp>
     </>

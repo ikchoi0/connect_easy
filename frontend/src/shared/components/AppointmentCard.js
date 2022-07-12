@@ -16,12 +16,24 @@ const AppointmentCard = ({
   buttonLabel,
   handleCardButton,
   appointmentBooked,
+  children,
 }) => {
+  // status
+  // title
+  // body
+  let title = "Meeting with: ";
+  let body = "";
 
-  let status = appointmentBooked ? clientName : "_______";
-  let title = "Client's name: ";
-  title += role === "consultant" ? status : consultantName;
-  const body = appointmentBooked ? description : "This time slot is unbooked";
+  if (appointmentBooked) {
+    body = description;
+    if (role === "consultant") {
+      title += clientName;
+    } else if (role === "client") {
+      title = consultantName;
+    }
+  } else {
+    title = "UNBOOKED";
+  }
 
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }
@@ -119,6 +131,7 @@ const AppointmentCard = ({
         >
           {buttonLabel}
         </Button>
+        {children}
       </Box>
     </Box>
   );

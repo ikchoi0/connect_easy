@@ -13,6 +13,7 @@ import Category from "./Category/Category";
 import Dashboard from "./Dashboard/Dashboard";
 import ClientDashboard from "./ClientDashboard/ClientDashboard";
 import ConsultantDashboard from "./ConsultantDashboard/ConsultantDashboard";
+import Meeting from "./Meeting/Meeting";
 
 /**
  *
@@ -48,6 +49,9 @@ function App() {
           </Route>
           <Route path="/clientDashboard">
             <ClientDashboard />
+          </Route>
+          <Route path="/meeting">
+            <Meeting />
           </Route>
           <Route path="/">
             <Redirect to="/" />

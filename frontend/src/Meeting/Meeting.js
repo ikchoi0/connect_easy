@@ -13,13 +13,16 @@ const Meeting = ({ meetingId }) => {
   const videoRef = useRef(null);
 
   let myPeerConnection;
+  let myStream;
 
   useEffect(() => {
-    init();
-    myPeerConnection = new RTCPeerConnection();
     myPeerConnection.addEventListener("icecandidate", handleIce);
     myPeerConnection.addEventListener("addstream", handleAddStream);
-  }, []);
+    init();
+    return () => {
+      socket.close();
+    };
+  }, [meetingId]);
 
   const getCamera = async (myFace) => {
     try {
@@ -28,20 +31,13 @@ const Meeting = ({ meetingId }) => {
         video: true,
       };
 
-      const myStream = await navigator.mediaDevices.getUserMedia(
-        initialConstraints
-      );
+      myStream = await navigator.mediaDevices.getUserMedia(initialConstraints);
       console.log(myStream);
       myFace.srcObject = myStream;
-
-      // myFace.onloadedmetadata = () => {
-      //   myFace.play();
-      // };
-
-      return myStream;
     } catch (err) {
       console.log(err);
     }
+    return myStream;
   };
 
   function handleIce(data) {
@@ -55,67 +51,71 @@ const Meeting = ({ meetingId }) => {
     console.log("PEER VIDEO REF", peerVideo);
 
     peerVideo.srcObject = data.stream;
+    socket.on("welcome", async () => {
+      try {
+        console.log("Sending offer");
+        const offer = await myPeerConnection.createOffer();
+
+        await myPeerConnection.setLocalDescription(offer);
+        socket.emit("offer", offer, meetingId);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    socket.on("offer", async (offer) => {
+      try {
+        await myPeerConnection.setRemoteDescription(offer);
+
+        console.log("🧩🧩🧩🧩🧩 does it work?");
+        const answer = await myPeerConnection.createAnswer();
+
+        console.log("Received offer");
+        await myPeerConnection.setLocalDescription(answer);
+
+        console.log("Sending answer");
+        socket.emit("answer", answer, meetingId);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    socket.on("answer", async (answer) => {
+      try {
+        console.log("Received answer");
+        console.log(answer);
+        if (!myPeerConnection.remoteDescription) {
+          await myPeerConnection.setRemoteDescription(answer);
+        }
+        console.log(myPeerConnection);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    socket.on("ice", async (ice) => {
+      try {
+        console.log("received candidate");
+        await myPeerConnection.addIceCandidate(ice);
+      } catch (error) {
+        console.log(error);
+      }
+    });
   }
   async function init() {
     let video = videoRef.current;
+    myPeerConnection = new RTCPeerConnection();
+    myStream = await getCamera(video);
+
     console.log("MY FACE VIDEO REF", video);
 
     socket.emit("join_room", meetingId);
 
-    const myStreamResult = await getCamera(video);
-
-    myStreamResult
+    myStream
       .getTracks()
-      .forEach((track) => myPeerConnection.addTrack(track, myStreamResult));
+      .forEach((track) => myPeerConnection.addTrack(track, myStream));
   }
   //TODO: MY STREAM
-
-  socket.on("welcome", async () => {
-    try {
-      console.log("Sending offer");
-      const offer = await myPeerConnection.createOffer();
-
-      await myPeerConnection.setLocalDescription(offer);
-      socket.emit("offer", offer, meetingId);
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  socket.on("offer", async (offer) => {
-    try {
-      await myPeerConnection.setRemoteDescription(offer);
-
-      const answer = await myPeerConnection.createAnswer();
-
-      console.log("Received offer");
-      await myPeerConnection.setLocalDescription(answer);
-
-      console.log("Sending answer");
-      socket.emit("answer", answer, meetingId);
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  socket.on("answer", async (answer) => {
-    try {
-      console.log("Received answer");
-      console.log(answer);
-      await myPeerConnection.setRemoteDescription(answer);
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  socket.on("ice", async (ice) => {
-    try {
-      console.log("received candidate");
-      await myPeerConnection.addIceCandidate(ice);
-    } catch (error) {
-      console.log(error);
-    }
-  });
 
   return (
     <>

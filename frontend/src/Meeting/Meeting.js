@@ -1,62 +1,32 @@
 import React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
-import VideoFrame from "./VideoFrame";
-
-const socket = io("http://localhost:5002");
-
+import { useHistory } from "react-router-dom";
 const Meeting = ({ meetingId }) => {
+  const socket = io("http://localhost:5002");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
-
+  const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
-
-  let myPeerConnection;
-  let myStream;
-
+  let peerConnectionRef;
+  let peerVideo;
+  let video;
   useEffect(() => {
-    myPeerConnection.addEventListener("icecandidate", handleIce);
-    myPeerConnection.addEventListener("addstream", handleAddStream);
-    init();
-    return () => {
-      socket.close();
-    };
-  }, [meetingId]);
+    console.log("PEERCONNECTIONREF", peerConnectionRef);
 
-  const getCamera = async (myFace) => {
-    try {
-      const initialConstraints = {
-        audio: false,
-        video: true,
-      };
+    peerConnectionRef = new RTCPeerConnection();
+    peerConnectionRef.addEventListener("icecandidate", handleIce);
+    peerConnectionRef.addEventListener("addstream", handleAddStream);
 
-      myStream = await navigator.mediaDevices.getUserMedia(initialConstraints);
-      console.log(myStream);
-      myFace.srcObject = myStream;
-    } catch (err) {
-      console.log(err);
-    }
-    return myStream;
-  };
-
-  function handleIce(data) {
-    console.log("sent candidate");
-    socket.emit("ice", data.candidate, meetingId);
-  }
-
-  function handleAddStream(data) {
-    console.log("DATA FROM ADD STREAM:", data);
-    let peerVideo = peerVideoRef.current;
-    console.log("PEER VIDEO REF", peerVideo);
-
-    peerVideo.srcObject = data.stream;
     socket.on("welcome", async () => {
       try {
         console.log("Sending offer");
-        const offer = await myPeerConnection.createOffer();
+        const offer = await peerConnectionRef?.createOffer({
+          iceRestart: true,
+        });
 
-        await myPeerConnection.setLocalDescription(offer);
+        await peerConnectionRef?.setLocalDescription(offer);
         socket.emit("offer", offer, meetingId);
       } catch (error) {
         console.log(error);
@@ -65,13 +35,12 @@ const Meeting = ({ meetingId }) => {
 
     socket.on("offer", async (offer) => {
       try {
-        await myPeerConnection.setRemoteDescription(offer);
+        await peerConnectionRef?.setRemoteDescription(offer);
 
-        console.log("🧩🧩🧩🧩🧩 does it work?");
-        const answer = await myPeerConnection.createAnswer();
+        const answer = await peerConnectionRef?.createAnswer();
 
         console.log("Received offer");
-        await myPeerConnection.setLocalDescription(answer);
+        await peerConnectionRef?.setLocalDescription(answer);
 
         console.log("Sending answer");
         socket.emit("answer", answer, meetingId);
@@ -84,38 +53,82 @@ const Meeting = ({ meetingId }) => {
       try {
         console.log("Received answer");
         console.log(answer);
-        if (!myPeerConnection.remoteDescription) {
-          await myPeerConnection.setRemoteDescription(answer);
-        }
-        console.log(myPeerConnection);
+
+        await peerConnectionRef?.setRemoteDescription(answer);
       } catch (error) {
         console.log(error);
+        socket.emit("leave", meetingId);
+        window.location.replace("/dashboard");
       }
     });
 
     socket.on("ice", async (ice) => {
       try {
-        console.log("received candidate");
-        await myPeerConnection.addIceCandidate(ice);
+        console.log("received candidate", ice);
+        if (!ice.candidate) {
+          window.location.replace("/dashboard");
+        }
+        await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
         console.log(error);
       }
     });
-  }
-  async function init() {
-    let video = videoRef.current;
-    myPeerConnection = new RTCPeerConnection();
-    myStream = await getCamera(video);
+    init();
 
+    return () => {
+      // socket.emit('disconnect-meeting', meetingId);
+      // socket.off();
+      peerConnectionRef?.close();
+      peerConnectionRef = null;
+      socket.close();
+      video = null;
+      socket.removeAllListeners();
+    };
+  }, [meetingId, init]);
+
+  const getCamera = async (myFace) => {
+    try {
+      const initialConstraints = {
+        audio: false,
+        video: true,
+      };
+
+      const myStream = await navigator.mediaDevices.getUserMedia(
+        initialConstraints
+      );
+      console.log(myStream);
+      myFace.srcObject = myStream;
+      return myStream;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  function handleIce(data) {
+    console.log("sent candidate");
+    socket.emit("ice", data.candidate, meetingId);
+  }
+
+  function handleAddStream(data) {
+    console.log("DATA FROM ADD STREAM:", data);
+    peerVideo = peerVideoRef.current;
+    console.log("PEER VIDEO REF", peerVideo);
+
+    peerVideo.srcObject = data.stream;
+  }
+
+  async function init() {
+    video = videoRef.current;
     console.log("MY FACE VIDEO REF", video);
 
     socket.emit("join_room", meetingId);
 
-    myStream
+    const myStreamResult = await getCamera(video);
+
+    myStreamResult
       .getTracks()
-      .forEach((track) => myPeerConnection.addTrack(track, myStream));
+      .forEach((track) => peerConnectionRef?.addTrack(track, myStreamResult));
   }
-  //TODO: MY STREAM
 
   return (
     <>

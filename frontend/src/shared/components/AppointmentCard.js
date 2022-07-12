@@ -55,27 +55,36 @@ const AppointmentCard = ({
         alignItems: "center",
         border: "3px solid #ccc",
         borderRadius: "5px",
-        marginY: "10px",
+        marginY: "15px",
         ...styles,
       }}
     >
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "left",
+          marginLeft: "20px",
+        }}
+        minHeight="100px"
+      >
         <Typography
           sx={{
             my: 5,
             wordWrap: "break-word",
-            width: "250px",
+            width: "300px",
             mr: "5px",
-            ml: "15px",
-            mb: "2px,",
-            mt: "10px",
+            mt: "15px",
+            mb: "2px",
           }}
           color="text.primary"
           align="left"
+          justifyContent="center"
           variant="body1"
-          maxWidth={"500px"}
-          fontWeight="bold"
+          maxWidth={"300px"}
           flexWrap
+          fontWeight="bold"
         >
           {title}
         </Typography>
@@ -83,16 +92,15 @@ const AppointmentCard = ({
           sx={{
             my: 5,
             wordWrap: "break-word",
-            width: "250px",
+            width: "300px",
             mr: "5px",
-            ml: "15px",
             mt: "2px",
             mb: "15px",
           }}
           color="text.primary"
           align="left"
           variant="body1"
-          maxWidth={"500px"}
+          maxWidth={"300px"}
           flexWrap
         >
           {name}
@@ -103,9 +111,8 @@ const AppointmentCard = ({
             wordWrap: "break-word",
             width: "300px",
             mr: "5px",
-            ml: "15px",
-            mt: "1px",
-            mb: "2x",
+            mt: "2px",
+            mb: "2px",
           }}
           color="text.primary"
           align="left"
@@ -122,8 +129,7 @@ const AppointmentCard = ({
             wordWrap: "break-word",
             width: "300px",
             mr: "5px",
-            ml: "15px",
-            mt: "1px",
+            mt: "2px",
             mb: "15px",
           }}
           color="text.primary"
@@ -140,16 +146,15 @@ const AppointmentCard = ({
             wordWrap: "break-word",
             width: "300px",
             mr: "5px",
-            ml: "15px",
-            mt: "1px",
-            mb: "2x",
+            mt: "2px",
+            mb: "2px",
           }}
           color="text.primary"
           align="left"
           variant="body1"
           maxWidth={"300px"}
-          fontWeight="bold"
           flexWrap
+          fontWeight="bold"
         >
           {clientEmailString || consultantEmailString}
         </Typography>
@@ -159,9 +164,8 @@ const AppointmentCard = ({
             wordWrap: "break-word",
             width: "300px",
             mr: "5px",
-            ml: "15px",
-            mt: "1px",
-            mb: "10px",
+            mt: "2px",
+            mb: "15px",
           }}
           color="text.primary"
           align="left"
@@ -172,6 +176,7 @@ const AppointmentCard = ({
           {email}
         </Typography>
       </Box>
+
       <Box
         sx={{
           display: "flex",

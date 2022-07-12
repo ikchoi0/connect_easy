@@ -63,6 +63,7 @@ export default function Home({
           clientName={appointment.client}
           consultantName={appointment.consultant}
           key={index}
+          email={userDetails.email}
           id={appointment.appointmentId}
           description={appointment.description}
           date={appointment.date}

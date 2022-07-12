@@ -9,18 +9,17 @@ const Meeting = ({ meetingId }) => {
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
 
-  const videoRef = useRef();
-  const peerVideoRef = useRef();
+  const peerVideoRef = useRef(null);
+  const videoRef = useRef(null);
 
   let myPeerConnection;
-  let myStream;
 
   useEffect(() => {
     init();
     myPeerConnection = new RTCPeerConnection();
     myPeerConnection.addEventListener("icecandidate", handleIce);
     myPeerConnection.addEventListener("addstream", handleAddStream);
-  }, [videoRef, peerVideoRef, meetingId, myPeerConnection, init]);
+  }, []);
 
   const getCamera = async (myFace) => {
     try {
@@ -29,16 +28,20 @@ const Meeting = ({ meetingId }) => {
         video: true,
       };
 
-      myStream = await navigator.mediaDevices.getUserMedia(initialConstraints);
+      const myStream = await navigator.mediaDevices.getUserMedia(
+        initialConstraints
+      );
+      console.log(myStream);
       myFace.srcObject = myStream;
 
       // myFace.onloadedmetadata = () => {
       //   myFace.play();
       // };
+
+      return myStream;
     } catch (err) {
       console.log(err);
     }
-    return myStream;
   };
 
   function handleIce(data) {
@@ -47,7 +50,7 @@ const Meeting = ({ meetingId }) => {
   }
 
   function handleAddStream(data) {
-    console.log(data);
+    console.log("DATA FROM ADD STREAM:", data);
     let peerVideo = peerVideoRef.current;
     console.log("PEER VIDEO REF", peerVideo);
 
@@ -57,47 +60,61 @@ const Meeting = ({ meetingId }) => {
     let video = videoRef.current;
     console.log("MY FACE VIDEO REF", video);
 
-    myStream = await getCamera(video);
+    socket.emit("join_room", meetingId);
 
-    myStream
+    const myStreamResult = await getCamera(video);
+
+    myStreamResult
       .getTracks()
-      .forEach((track) => myPeerConnection.addTrack(track, myStream));
+      .forEach((track) => myPeerConnection.addTrack(track, myStreamResult));
   }
   //TODO: MY STREAM
 
-  socket.emit("join_room", meetingId);
-
   socket.on("welcome", async () => {
-    const offer = await myPeerConnection.createOffer();
+    try {
+      console.log("Sending offer");
+      const offer = await myPeerConnection.createOffer();
 
-    await myPeerConnection.setLocalDescription(offer);
-
-    console.log("Sending offer");
-    socket.emit("offer", offer, meetingId);
+      await myPeerConnection.setLocalDescription(offer);
+      socket.emit("offer", offer, meetingId);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   socket.on("offer", async (offer) => {
-    await myPeerConnection.setRemoteDescription(offer);
+    try {
+      await myPeerConnection.setRemoteDescription(offer);
 
-    console.log("🧩🧩🧩🧩🧩 does it work?");
-    const answer = await myPeerConnection.createAnswer();
+      const answer = await myPeerConnection.createAnswer();
 
-    console.log("Received offer");
-    await myPeerConnection.setLocalDescription(answer);
+      console.log("Received offer");
+      await myPeerConnection.setLocalDescription(answer);
 
-    console.log("Sending answer");
-    socket.emit("answer", answer, meetingId);
+      console.log("Sending answer");
+      socket.emit("answer", answer, meetingId);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   socket.on("answer", async (answer) => {
-    console.log("Received answer");
-    console.log(answer);
-    await myPeerConnection.setRemoteDescription(answer);
+    try {
+      console.log("Received answer");
+      console.log(answer);
+      await myPeerConnection.setRemoteDescription(answer);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   socket.on("ice", async (ice) => {
-    console.log("received candidate");
-    await myPeerConnection.addIceCandidate(ice);
+    try {
+      console.log("received candidate");
+      await myPeerConnection.addIceCandidate(ice);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return (
@@ -116,8 +133,8 @@ const Meeting = ({ meetingId }) => {
         ref={peerVideoRef}
         autoPlay
         playsInline
-        width={"400px"}
-        height={"400px"}
+        width={"200px"}
+        height={"200px"}
       ></video>
       <h2>This is video 2</h2>
 

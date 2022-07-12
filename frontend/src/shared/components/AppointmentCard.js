@@ -9,6 +9,7 @@ const AppointmentCard = ({
   consultantName,
   id,
   date,
+  email,
   startTime,
   endTime,
   description = "Unbooked",
@@ -18,21 +19,30 @@ const AppointmentCard = ({
   appointmentBooked,
   children,
 }) => {
-  // status
-  // title
-  // body
   let title = "Meeting with: ";
+  let name = "";
   let body = "";
+  let clientEmailString = "";
+  let consultantEmailString = "";
+  let inquiry = "Inquiry: ";
 
   if (appointmentBooked) {
+    inquiry = inquiry;
     body = description;
     if (role === "consultant") {
-      title += clientName;
+      name = clientName;
+      clientEmailString = "Client's email: ";
+      email = email;
     } else if (role === "client") {
-      title = consultantName;
+      name = consultantName;
+      consultantEmailString = "Consultant's email: ";
+      email = email;
     }
   } else {
     title = "UNBOOKED";
+    email = "";
+    name = "";
+    inquiry = "";
   }
 
   const styles = appointmentBooked
@@ -45,24 +55,36 @@ const AppointmentCard = ({
         alignItems: "center",
         border: "3px solid #ccc",
         borderRadius: "5px",
-        marginY: "10px",
+        marginY: "15px",
         ...styles,
       }}
     >
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "left",
+          marginLeft: "20px",
+        }}
+        minHeight="100px"
+      >
         <Typography
           sx={{
             my: 5,
             wordWrap: "break-word",
-            width: "250px",
+            width: "300px",
             mr: "5px",
-            ml: "15px",
+            mt: "15px",
+            mb: "2px",
           }}
           color="text.primary"
           align="left"
+          justifyContent="center"
           variant="body1"
-          maxWidth={"500px"}
+          maxWidth={"300px"}
           flexWrap
+          fontWeight="bold"
         >
           {title}
         </Typography>
@@ -72,7 +94,43 @@ const AppointmentCard = ({
             wordWrap: "break-word",
             width: "300px",
             mr: "5px",
-            ml: "15px",
+            mt: "2px",
+            mb: "15px",
+          }}
+          color="text.primary"
+          align="left"
+          variant="body1"
+          maxWidth={"300px"}
+          flexWrap
+        >
+          {name}
+        </Typography>
+        <Typography
+          sx={{
+            my: 5,
+            wordWrap: "break-word",
+            width: "300px",
+            mr: "5px",
+            mt: "2px",
+            mb: "2px",
+          }}
+          color="text.primary"
+          align="left"
+          variant="body1"
+          maxWidth={"300px"}
+          flexWrap
+          fontWeight="bold"
+        >
+          {inquiry}
+        </Typography>
+        <Typography
+          sx={{
+            my: 5,
+            wordWrap: "break-word",
+            width: "300px",
+            mr: "5px",
+            mt: "2px",
+            mb: "15px",
           }}
           color="text.primary"
           align="left"
@@ -82,7 +140,43 @@ const AppointmentCard = ({
         >
           {body}
         </Typography>
+        <Typography
+          sx={{
+            my: 5,
+            wordWrap: "break-word",
+            width: "300px",
+            mr: "5px",
+            mt: "2px",
+            mb: "2px",
+          }}
+          color="text.primary"
+          align="left"
+          variant="body1"
+          maxWidth={"300px"}
+          flexWrap
+          fontWeight="bold"
+        >
+          {clientEmailString || consultantEmailString}
+        </Typography>
+        <Typography
+          sx={{
+            my: 5,
+            wordWrap: "break-word",
+            width: "300px",
+            mr: "5px",
+            mt: "2px",
+            mb: "15px",
+          }}
+          color="text.primary"
+          align="left"
+          variant="body1"
+          maxWidth={"300px"}
+          flexWrap
+        >
+          {email}
+        </Typography>
       </Box>
+
       <Box
         sx={{
           display: "flex",

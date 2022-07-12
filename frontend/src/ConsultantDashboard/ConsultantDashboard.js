@@ -81,10 +81,10 @@ const ClientDashboard = () => {
               <Home
                 getAppointmentAction={getAllAppointments}
                 appointmentStatusFilterOptionList={[
-                  "Upcoming",
-                  "Unbooked",
-                  "Canceled",
                   "Past",
+                  "Canceled",
+                  "Unbooked",
+                  "Upcoming",
                   "Show All",
                 ]}
                 buttonLabel="Delete"

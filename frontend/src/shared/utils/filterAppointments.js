@@ -23,7 +23,7 @@ export const filterAppointments = (appointments, selectedStatusFilter) => {
       break;
     case "Canceled":
       filteredAppointmentsList = appointments.filter((appointment) => {
-        if (appointment.appointmentCancel) {
+        if (appointment.hasOwnProperty("appointmentCancel")) {
           return appointment;
         }
       });

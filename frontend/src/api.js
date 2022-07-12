@@ -1,14 +1,15 @@
-import axios from 'axios';
-import { logout } from './shared/utils/auth';
+import axios from "axios";
+import { logout } from "./shared/utils/auth";
+import { showAlertMessage } from "./store/reducers/alertReducer";
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5002/api',
+  baseURL: "http://localhost:5002/api",
   timeout: 1000,
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    const userDetails = localStorage.getItem('user');
+    const userDetails = localStorage.getItem("user");
 
     if (userDetails) {
       const token = JSON.parse(userDetails).token;
@@ -25,7 +26,7 @@ apiClient.interceptors.request.use(
 
 export const login = async (data) => {
   try {
-    return await apiClient.post('/auth/login', data);
+    return await apiClient.post("/auth/login", data);
   } catch (exception) {
     return {
       error: true,
@@ -36,7 +37,7 @@ export const login = async (data) => {
 
 export const register = async (data) => {
   try {
-    return await apiClient.post('/auth/register', data);
+    return await apiClient.post("/auth/register", data);
   } catch (exception) {
     return {
       error: true,
@@ -58,7 +59,7 @@ const checkResponseCode = (error) => {
 // queries category list
 export const getCategories = async () => {
   try {
-    return await apiClient.get('/category');
+    return await apiClient.get("/category");
   } catch (exception) {
     return {
       error: true,
@@ -82,7 +83,7 @@ export const getConsultantsWithinCategory = async (categoryName) => {
 // create open appointments
 export const setOpenAppointments = async (openAppointmentsList) => {
   try {
-    return await apiClient.post('/appointment', openAppointmentsList);
+    return await apiClient.post("/appointment", openAppointmentsList);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -170,22 +171,10 @@ export const cancelBookedAppointment = async (appointmentId) => {
   }
 };
 
-export const getUserById = async (userId) => {
-  try {
-    return await apiClient.get(`/user/${userId}`);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      message: exception.response.data,
-    };
-  }
-};
-
 // get user profile
 export const getUserProfile = async () => {
   try {
-    return await apiClient.get('/user/profile');
+    return await apiClient.get("/user/profile");
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -200,7 +189,7 @@ export const submitImage = async (formData, imageFile, history) => {
   try {
     // issue GET request to get the presigned image url
     const uploadConfig = await apiClient.get(
-      'http://localhost:5002/api/upload'
+      "http://localhost:5002/api/upload"
     );
 
     console.log(uploadConfig);
@@ -215,12 +204,12 @@ export const submitImage = async (formData, imageFile, history) => {
     // upload image to the presigned url
     await axios.put(uploadConfig.data.url, imageFile, {
       headers: {
-        'Content-Type': imageFile.type, // specify the content type of the file for the security.
+        "Content-Type": imageFile.type, // specify the content type of the file for the security.
       },
     });
 
     // update user profile with the image url
-    const response = await apiClient.patch('/user/edit', {
+    const response = await apiClient.patch("/user/edit", {
       imageUrl: uploadConfig.data.key,
     });
 

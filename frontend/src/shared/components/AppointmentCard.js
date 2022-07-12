@@ -216,7 +216,7 @@ const AppointmentCard = ({
           color="primary"
           size="large"
           onClick={() => handleCardButton(id)}
-          disabled={appointmentBooked}
+          disabled={role === "consultant" && appointmentBooked}
         >
           {buttonLabel}
         </Button>

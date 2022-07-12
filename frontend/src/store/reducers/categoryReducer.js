@@ -1,5 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getCategories, getConsultantsWithinCategory } from '../../api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getCategories, getConsultantsWithinCategory } from "../../api";
+import { showAlertMessage } from "./alertReducer";
 
 const categoryState = {
   categoryList: [],
@@ -9,29 +10,34 @@ const categoryState = {
 };
 
 export const category = createAsyncThunk(
-  'category/getCategory',
+  "category/getCategory",
   async (thunkApi) => {
     const response = await getCategories();
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
-    // console.log(response.data.categoryList);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
     return response.data.categoryList;
   }
 );
 
 export const getUsersWithinCategory = createAsyncThunk(
-  'category/getUsersWithinCategory',
+  "category/getUsersWithinCategory",
   async (categoryName, thunkApi) => {
     const response = await getConsultantsWithinCategory(categoryName);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data.data;
   }
 );
 
 const categorySlice = createSlice({
-  name: 'category',
+  name: "category",
   initialState: categoryState,
   reducers: {
     updateSelectedCategory: (state, action) => {

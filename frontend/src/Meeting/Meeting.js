@@ -1,81 +1,88 @@
-import React from 'react';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { io } from 'socket.io-client';
-import VideoFrame from './VideoFrame';
-
+import React from "react";
+import { useEffect, useRef } from "react";
+import { io } from "socket.io-client";
+import { useHistory } from "react-router-dom";
 const Meeting = ({ meetingId }) => {
-  const socket = io('http://localhost:5002');
+  const socket = io("http://localhost:5002");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
-
+  const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
-  const peerConnectionRef = useRef(null);
-
+  let peerConnectionRef;
+  let peerVideo;
+  let video;
   useEffect(() => {
-    console.log('PEERCONNECTIONREF', peerConnectionRef);
+    console.log("PEERCONNECTIONREF", peerConnectionRef);
 
-    peerConnectionRef.current = new RTCPeerConnection();
-    peerConnectionRef.current.addEventListener('icecandidate', handleIce);
-    peerConnectionRef.current.addEventListener('addstream', handleAddStream);
+    peerConnectionRef = new RTCPeerConnection();
+    peerConnectionRef.addEventListener("icecandidate", handleIce);
+    peerConnectionRef.addEventListener("addstream", handleAddStream);
 
-    socket.on('check-if-user-was-here');
-
-    socket.on('welcome', async () => {
+    socket.on("welcome", async () => {
       try {
-        console.log('Sending offer');
-        const offer = await peerConnectionRef.current?.createOffer();
+        console.log("Sending offer");
+        const offer = await peerConnectionRef?.createOffer({
+          iceRestart: true,
+        });
 
-        await peerConnectionRef.current?.setLocalDescription(offer);
-        socket.emit('offer', offer, meetingId);
+        await peerConnectionRef?.setLocalDescription(offer);
+        socket.emit("offer", offer, meetingId);
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on('offer', async (offer) => {
+    socket.on("offer", async (offer) => {
       try {
-        await peerConnectionRef.current?.setRemoteDescription(offer);
+        await peerConnectionRef?.setRemoteDescription(offer);
 
-        const answer = await peerConnectionRef.current?.createAnswer();
+        const answer = await peerConnectionRef?.createAnswer();
 
-        console.log('Received offer');
-        await peerConnectionRef.current?.setLocalDescription(answer);
+        console.log("Received offer");
+        await peerConnectionRef?.setLocalDescription(answer);
 
-        console.log('Sending answer');
-        socket.emit('answer', answer, meetingId);
+        console.log("Sending answer");
+        socket.emit("answer", answer, meetingId);
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on('answer', async (answer) => {
+    socket.on("answer", async (answer) => {
       try {
-        console.log('Received answer');
+        console.log("Received answer");
         console.log(answer);
-        await peerConnectionRef.current?.setRemoteDescription(answer);
+
+        await peerConnectionRef?.setRemoteDescription(answer);
       } catch (error) {
         console.log(error);
+        socket.emit("leave", meetingId);
+        window.location.replace("/dashboard");
       }
     });
 
-    socket.on('ice', async (ice) => {
+    socket.on("ice", async (ice) => {
       try {
-        console.log('received candidate');
-        await peerConnectionRef.current?.addIceCandidate(ice);
+        console.log("received candidate", ice);
+        if (!ice.candidate) {
+          window.location.replace("/dashboard");
+        }
+        await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
         console.log(error);
       }
     });
-
     init();
 
     return () => {
       // socket.emit('disconnect-meeting', meetingId);
       // socket.off();
+      peerConnectionRef?.close();
+      peerConnectionRef = null;
       socket.close();
-      peerConnectionRef.current?.close();
-      peerConnectionRef.current = null;
+      video = null;
+      socket.removeAllListeners();
     };
   }, [meetingId, init]);
 
@@ -91,11 +98,6 @@ const Meeting = ({ meetingId }) => {
       );
       console.log(myStream);
       myFace.srcObject = myStream;
-
-      // myFace.onloadedmetadata = () => {
-      //   myFace.play();
-      // };
-
       return myStream;
     } catch (err) {
       console.log(err);
@@ -103,31 +105,29 @@ const Meeting = ({ meetingId }) => {
   };
 
   function handleIce(data) {
-    console.log('sent candidate');
-    socket.emit('ice', data.candidate, meetingId);
+    console.log("sent candidate");
+    socket.emit("ice", data.candidate, meetingId);
   }
 
   function handleAddStream(data) {
-    console.log('DATA FROM ADD STREAM:', data);
-    let peerVideo = peerVideoRef.current;
-    console.log('PEER VIDEO REF', peerVideo);
+    console.log("DATA FROM ADD STREAM:", data);
+    peerVideo = peerVideoRef.current;
+    console.log("PEER VIDEO REF", peerVideo);
 
     peerVideo.srcObject = data.stream;
   }
 
   async function init() {
-    let video = videoRef.current;
-    console.log('MY FACE VIDEO REF', video);
+    video = videoRef.current;
+    console.log("MY FACE VIDEO REF", video);
 
-    socket.emit('join_room', meetingId);
+    socket.emit("join_room", meetingId);
 
     const myStreamResult = await getCamera(video);
 
     myStreamResult
       .getTracks()
-      .forEach((track) =>
-        peerConnectionRef.current?.addTrack(track, myStreamResult)
-      );
+      .forEach((track) => peerConnectionRef?.addTrack(track, myStreamResult));
   }
 
   return (
@@ -136,8 +136,8 @@ const Meeting = ({ meetingId }) => {
         ref={videoRef}
         autoPlay
         playsInline
-        width={'400px'}
-        height={'400px'}
+        width={"400px"}
+        height={"400px"}
       ></video>
 
       <h2>This is video 1</h2>
@@ -146,8 +146,8 @@ const Meeting = ({ meetingId }) => {
         ref={peerVideoRef}
         autoPlay
         playsInline
-        width={'200px'}
-        height={'200px'}
+        width={"200px"}
+        height={"200px"}
       ></video>
       <h2>This is video 2</h2>
 

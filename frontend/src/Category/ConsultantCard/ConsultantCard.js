@@ -11,7 +11,8 @@ import DialogPopUp from "../../shared/components/DialogPopUp";
 import { useDispatch } from "react-redux";
 import { clearAppointmentsList } from "../../store/reducers/scheduleReducer";
 import { red } from "@mui/material/colors";
-
+import AlertNotification from "../../shared/components/AlertNotification";
+import { Alert } from "@mui/material";
 const CategoryCard = ({
   consultantId,
   firstName,
@@ -22,10 +23,16 @@ const CategoryCard = ({
   price,
 }) => {
   const dispatch = useDispatch();
+  let scheduler;
+
   const handleClick = () => {
+    if (!user) {
+      alert("Please login to book an appointment");
+    }
     handleClickOpen();
   };
   const [open, setOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
   const handleClickOpen = () => {
     setOpen(true);
   };

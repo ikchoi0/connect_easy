@@ -7,7 +7,7 @@ const DialogPopUp = ({ open, onClose, children }) => {
   return (
     <Dialog
       fullWidth={true}
-      maxWidth="md"
+      maxWidth="lg"
       open={open}
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"

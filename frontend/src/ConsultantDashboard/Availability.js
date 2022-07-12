@@ -110,7 +110,7 @@ export default function Availability() {
       key,
       consultant: consultantId,
       date: moment(date)
-        .utcOffset(0)
+        // .utcOffset(0)
         .hours(0)
         .minutes(0)
         .seconds(0)

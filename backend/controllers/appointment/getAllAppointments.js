@@ -17,7 +17,7 @@ const getAllAppointments = async (req, res) => {
     } else if (req.user.role === "client") {
       appointments = await Appointment.find({
         consultant: Types.ObjectId(consultantId),
-        // appointmentBooked: false,
+        appointmentBooked: false,
       })
         .populate("client")
         .populate("consultant");

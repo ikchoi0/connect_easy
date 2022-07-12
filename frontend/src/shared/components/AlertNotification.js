@@ -14,7 +14,7 @@ export const AlertNotification = () => {
   return (
     <div>
       <Snackbar
-        anchorOrigin={{ vertical: "center", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={showNotification}
         onClose={handleClose}
         autoHideDuration={6000}

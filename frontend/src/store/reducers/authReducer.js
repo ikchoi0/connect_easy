@@ -26,7 +26,10 @@ export const register = createAsyncThunk(
   async ({ userDetails, dispatch }, thunkApi) => {
     const response = await api.register(userDetails, dispatch);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }

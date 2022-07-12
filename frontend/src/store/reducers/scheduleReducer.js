@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../api";
+import { showAlertMessage } from "./alertReducer";
 
 const schedulerState = {
   openingAppointmentsList: [],
@@ -12,7 +13,10 @@ export const createOpenAppointments = createAsyncThunk(
   "schedule/createOpenAppointments",
   async (openAppointmentsList, thunkApi) => {
     const response = await api.setOpenAppointments(openAppointmentsList);
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
     return response.data;
   }
 );
@@ -22,7 +26,10 @@ export const getAllAppointments = createAsyncThunk(
   async (consultantId, thunkApi) => {
     const response = await api.getAllAppointments(consultantId);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }
@@ -33,7 +40,10 @@ export const getAppointmentsForClientId = createAsyncThunk(
   async (clientId, thunkApi) => {
     const response = await api.getAppointmentsForClientId(clientId);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }
@@ -47,7 +57,10 @@ export const getAppointmentsForTheDay = createAsyncThunk(
       date
     );
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }
@@ -58,8 +71,10 @@ export const deleteOneAppointment = createAsyncThunk(
   async (appointmentId, thunkApi) => {
     const response = await api.deleteOneAppointmentById(appointmentId);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
-
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
     return response.data;
   }
 );
@@ -70,6 +85,7 @@ export const bookAppointment = createAsyncThunk(
     const response = await api.bookAppointment(appointmentData);
 
     if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     } else {
       history.push("/clientDashboard");
@@ -84,7 +100,10 @@ export const appointmentBookingCancel = createAsyncThunk(
     console.log("appointmentId", appointmentId);
     const response = await api.cancelBookedAppointment({ appointmentId });
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }

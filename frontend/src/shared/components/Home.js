@@ -13,6 +13,7 @@ import { updateSelectedNavigatorItem } from "../../store/reducers/dashboardReduc
 import { updateMeetingId } from "../../store/reducers/meetingReducer";
 import moment from "moment";
 import { updateSelectedStatusFilter } from "../../store/reducers/appointmentReducer";
+import { filterAppointments } from "../utils/filterAppointments";
 
 export default function Home({
   getAppointmentAction,
@@ -49,43 +50,8 @@ export default function Home({
     dispatch(updateMeetingId(meetingId));
     dispatch(updateSelectedNavigatorItem("Meeting"));
   };
-  let filteredAppointmentsList;
-  switch (selectedStatusFilter) {
-    case "Upcoming":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        if (
-          appointment.appointmentBooked &&
-          !appointment.hasOwnProperty("videoEndTime")
-        ) {
-          return appointment;
-        }
-      });
-      break;
-    case "Unbooked":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        if (
-          !appointment.appointmentBooked &&
-          !appointment.hasOwnProperty("videoEndTime")
-        ) {
-          return appointment;
-        }
-      });
-      break;
-    case "Canceled":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        if (appointment.appointmentCancel) {
-          return appointment;
-        }
-      });
-      break;
-    case "Past":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        if (appointment.hasOwnProperty("videoEndTime")) {
-          return appointment;
-        }
-      });
-      break;
-  }
+  const filteredAppointmentsList = filterAppointments(appointments, selectedStatusFilter);
+  
 
 
   // MAPPED appointments for the user:  scheduler.appointments

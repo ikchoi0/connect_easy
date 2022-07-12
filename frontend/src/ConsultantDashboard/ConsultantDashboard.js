@@ -85,6 +85,7 @@ const ClientDashboard = () => {
                   "Unbooked",
                   "Canceled",
                   "Past",
+                  "Show All",
                 ]}
                 buttonLabel="Delete"
                 handleCardButton={handleCardButton}

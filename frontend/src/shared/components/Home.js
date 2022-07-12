@@ -12,6 +12,7 @@ import { handleAuth } from "../utils/auth";
 import { updateSelectedNavigatorItem } from "../../store/reducers/dashboardReducer";
 import { updateMeetingId } from "../../store/reducers/meetingReducer";
 import moment from "moment";
+import { updateSelectedStatusFilter } from "../../store/reducers/appointmentReducer";
 
 export default function Home({
   getAppointmentAction,
@@ -20,24 +21,22 @@ export default function Home({
   handleCardButton,
 }) {
   handleAuth();
-  // Grab the all appointments for the user above from the store:
+  // GRAB the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
   const userDetails = JSON.parse(localStorage.getItem("user"));
-  // Filter menu for appointment status types:
-  const [filterStatus, setFilterStatus] = React.useState("");
+
+  // FILTER menu for appointment status types:
+  const selectedStatusFilter = useSelector(
+    (state) => state.appointment.selectedStatusFilter
+  );
   const dispatch = useDispatch();
   const handleChange = (event) => {
-    setFilterStatus(event.target.value);
+    dispatch(updateSelectedStatusFilter(event.target.value));
   };
 
   useEffect(() => {
     dispatch(getAppointmentAction(userDetails.userId));
   }, [dispatch]);
-
-  // // Delete an appointment:
-  // const handleDeleteAppointmentOnClick = (id) => {
-  //   dispatch(deleteOneAppointment(id));
-  // };
 
   const menuItem = appointmentStatusFilterOptionList.map((option, idx) => {
     return (
@@ -50,43 +49,82 @@ export default function Home({
     dispatch(updateMeetingId(meetingId));
     dispatch(updateSelectedNavigatorItem("Meeting"));
   };
+  let filteredAppointmentsList;
+  switch (selectedStatusFilter) {
+    case "Upcoming":
+      filteredAppointmentsList = appointments.filter((appointment) => {
+        if (
+          appointment.appointmentBooked &&
+          !appointment.hasOwnProperty("videoEndTime")
+        ) {
+          return appointment;
+        }
+      });
+      break;
+    case "Unbooked":
+      filteredAppointmentsList = appointments.filter((appointment) => {
+        if (
+          !appointment.appointmentBooked &&
+          !appointment.hasOwnProperty("videoEndTime")
+        ) {
+          return appointment;
+        }
+      });
+      break;
+    case "Canceled":
+      filteredAppointmentsList = appointments.filter((appointment) => {
+        if (appointment.appointmentCancel) {
+          return appointment;
+        }
+      });
+      break;
+    case "Past":
+      filteredAppointmentsList = appointments.filter((appointment) => {
+        if (appointment.hasOwnProperty("videoEndTime")) {
+          return appointment;
+        }
+      });
+      break;
+  }
 
-  // Mapped appointments for the user:  scheduler.appointments
-  const mappedAppointments = appointments.map((appointment, index) => {
-    return (
-      <AppointmentCard
-        role={JSON.parse(localStorage.getItem("user")).role}
-        clientName={appointment.client}
-        consultantName={appointment.consultant}
-        key={index}
-        id={appointment.appointmentId}
-        description={appointment.description}
-        date={appointment.date}
-        startTime={moment(appointment.start).format("HH:mm A")}
-        endTime={moment(appointment.end).format("HH:mm A")}
-        // onDelete={handleDeleteAppointmentOnClick}
-        buttonLabel={buttonLabel}
-        handleCardButton={handleCardButton}
-        appointmentBooked={appointment.appointmentBooked}
-      >
-        <Button
-          sx={{
-            ml: "5px",
-            mr: "5px",
-            flexGrow: 1,
-          }}
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => handleJoinMeetingButton(appointment.appointmentId)}
-          // 🚨 when appointment is not close, disable the button
-          // disabled={appointmentBooked}
+
+  // MAPPED appointments for the user:  scheduler.appointments
+  const mappedAppointments = filteredAppointmentsList.map(
+    (appointment, index) => {
+      return (
+        <AppointmentCard
+          role={JSON.parse(localStorage.getItem("user")).role}
+          clientName={appointment.client}
+          consultantName={appointment.consultant}
+          key={index}
+          id={appointment.appointmentId}
+          description={appointment.description}
+          date={appointment.date}
+          startTime={moment(appointment.start).format("HH:mm A")}
+          endTime={moment(appointment.end).format("HH:mm A")}
+          buttonLabel={buttonLabel}
+          handleCardButton={handleCardButton}
+          appointmentBooked={appointment.appointmentBooked}
         >
-          Join meeting
-        </Button>
-      </AppointmentCard>
-    );
-  });
+          <Button
+            sx={{
+              ml: "5px",
+              mr: "5px",
+              flexGrow: 1,
+            }}
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => handleJoinMeetingButton(appointment.appointmentId)}
+            // 🚨 when appointment is not close, disable the button
+            // disabled={appointmentBooked}
+          >
+            Join meeting
+          </Button>
+        </AppointmentCard>
+      );
+    }
+  );
 
   return (
     <Box
@@ -115,7 +153,7 @@ export default function Home({
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={filterStatus}
+          value={selectedStatusFilter}
           label="Appointment Status"
           onChange={handleChange}
         >

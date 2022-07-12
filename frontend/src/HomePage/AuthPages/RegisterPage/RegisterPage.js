@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import HomePageAppBar from '../../HomePageAppBar/HomePageAppBar';
-import { useHistory } from 'react-router-dom';
-import { ButtonBase } from '@mui/material';
-import RegisterPageInputs from './RegisterPageInputs';
-import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../../store/reducers/authReducer';
+import React, { useState, useEffect } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import HomePageAppBar from "../../HomePageAppBar/HomePageAppBar";
+import { useHistory } from "react-router-dom";
+import { ButtonBase } from "@mui/material";
+import RegisterPageInputs from "./RegisterPageInputs";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../../store/reducers/authReducer";
 
 const theme = createTheme();
 
@@ -22,17 +22,17 @@ export default function RegisterPage() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [consultantCheck, setConsultantCheck] = useState(false);
-  const [consultantCategoryId, setConsultantCategoryId] = useState('');
+  const [consultantCategoryId, setConsultantCategoryId] = useState("");
 
   useEffect(() => {
     if (user.isLoggedIn) {
-      localStorage.setItem('user', JSON.stringify(user.userDetails));
-      history.push('/clientDashboard');
+      localStorage.setItem("user", JSON.stringify(user.userDetails));
+      history.push("/clientDashboard");
     }
   }, [user.isLoggedIn]);
 
@@ -47,11 +47,11 @@ export default function RegisterPage() {
       consultantCheck,
       consultantCategoryId,
     };
-    dispatch(register({ userDetails, history }));
+    dispatch(register({ userDetails, history, dispatch }));
   };
 
   const handleSignInOnClick = () => {
-    history.push('/login');
+    history.push("/login");
   };
 
   return (
@@ -62,12 +62,12 @@ export default function RegisterPage() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -103,7 +103,7 @@ export default function RegisterPage() {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <ButtonBase onClick={handleSignInOnClick}>
-                  <Typography variant="body2" color={'primary.main'}>
+                  <Typography variant="body2" color={"primary.main"}>
                     Already have an account? Login here
                   </Typography>
                 </ButtonBase>

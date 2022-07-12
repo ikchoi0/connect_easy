@@ -13,6 +13,8 @@ import Category from "./Category/Category";
 import Dashboard from "./Dashboard/Dashboard";
 import ClientDashboard from "./ClientDashboard/ClientDashboard";
 import ConsultantDashboard from "./ConsultantDashboard/ConsultantDashboard";
+import Meeting from "./Meeting/Meeting";
+import { AlertNotification } from "./shared/components/AlertNotification";
 
 /**
  *
@@ -49,10 +51,14 @@ function App() {
           <Route path="/clientDashboard">
             <ClientDashboard />
           </Route>
+          <Route path="/meeting">
+            <Meeting />
+          </Route>
           <Route path="/">
             <Redirect to="/" />
           </Route>
         </Switch>
+        <AlertNotification />
       </Router>
     </>
   );

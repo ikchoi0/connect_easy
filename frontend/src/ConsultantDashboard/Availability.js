@@ -94,7 +94,7 @@ export default function Availability() {
         date={appointment.date}
         startTime={moment(appointment.appointmentStartTime).format("HH:mm A")}
         endTime={moment(appointment.appointmentEndTime).format("HH:mm A")}
-        onDelete={handleDeleteAppointmentOnClick}
+        handleCardButton={handleDeleteAppointmentOnClick}
         buttonLabel={"Delete"}
       />
     );
@@ -110,7 +110,7 @@ export default function Availability() {
       key,
       consultant: consultantId,
       date: moment(date)
-        .utcOffset(0)
+        // .utcOffset(0)
         .hours(0)
         .minutes(0)
         .seconds(0)

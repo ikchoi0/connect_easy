@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-import * as api from '../../api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { showAlertMessage } from "./alertReducer";
+import * as api from "../../api";
 
 const authState = {
   userDetails: null,
@@ -8,29 +8,35 @@ const authState = {
 };
 
 export const login = createAsyncThunk(
-  'auth/login',
-  async ({ userDetails }, thunkApi) => {
-    const response = await api.login(userDetails);
+  "auth/login",
+  async ({ userDetails, history }, thunkApi) => {
+    const response = await api.login(userDetails, thunkApi.dispatch);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }
 );
 
 export const register = createAsyncThunk(
-  'auth/register',
-  async ({ userDetails }, thunkApi) => {
-    const response = await api.register(userDetails);
+  "auth/register",
+  async ({ userDetails, dispatch }, thunkApi) => {
+    const response = await api.register(userDetails, dispatch);
 
-    if (response.error) return thunkApi.rejectWithValue(response.message);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response.message);
+    }
 
     return response.data;
   }
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: authState,
   reducers: {
     setUser: (state, action) => {
@@ -51,7 +57,7 @@ const authSlice = createSlice({
       state.userDetails = action.payload.userDetails;
       state.isLoggedIn = true;
     },
-    [login.rejected]: (state, _) => {
+    [login.rejected]: (state, action) => {
       // handle rejected
       state.isLoggedIn = false;
     },

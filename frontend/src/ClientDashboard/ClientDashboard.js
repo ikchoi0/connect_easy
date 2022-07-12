@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Navigator from '../shared/components/Navigator';
 import Scheduler from '../Scheduler/Scheduler';
+import Meeting from '../Meeting/Meeting';
 import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../shared/components/theme';
 import Copyright from '../shared/components/Copyright';
@@ -14,6 +15,7 @@ import Home from '../shared/components/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
 import { useHistory } from 'react-router-dom';
 import { handleAuth, handleUserRole } from '../shared/utils/auth';
 import {
@@ -31,6 +33,7 @@ const menuItems = [
   },
   { id: 'Calendar', icon: <CalendarMonthIcon /> },
   { id: 'Payments', icon: <PaymentIcon /> },
+  { id: 'Meeting', icon: <VideoCameraFrontIcon /> },
 ];
 // const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];
 
@@ -43,12 +46,14 @@ const ClientDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
+    console.log('CLIENT DASHBOARD USER', meetingId);
     if (user.role !== 'client') {
       history.push('/consultantDashboard');
     }
   }, []);
 
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
+  const { meetingId } = useSelector((state) => state.meeting);
 
   const handleCardButton = (appointmentId) => {
     dispatch(appointmentBookingCancel(appointmentId));
@@ -76,6 +81,7 @@ const ClientDashboard = () => {
                   'Past',
                   'Canceled',
                   'Upcoming',
+                  'Show All',
                 ]}
                 buttonLabel="Cancel"
                 handleCardButton={handleCardButton}
@@ -83,6 +89,9 @@ const ClientDashboard = () => {
             )}
             {selectedNavigatorItem === 'Schedule' && <>Schedule</>}
             {selectedNavigatorItem === 'Payments' && <>payments</>}
+            {selectedNavigatorItem === 'Meeting' && (
+              <Meeting meetingId={meetingId} />
+            )}
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
             <Copyright />

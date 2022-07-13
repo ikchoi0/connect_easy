@@ -248,8 +248,7 @@ const CategorySeedDB = (userData) => [
     name: "Developers",
     description:
       "Meet local and international software developers that can help creating the app of your dreams.",
-    pictureUrl:
-      "https://cdn-icons.flaticon.com/png/512/2721/premium/2721688.png?token=exp=1657526001~hmac=8cd362465d03b52612be6a032bf6f0d2",
+    pictureUrl: "https://cdn-icons-png.flaticon.com/512/977/977597.png",
     users: [userData[3]._id],
   },
   {

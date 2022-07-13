@@ -25,7 +25,7 @@ const AppointmentCard = ({
   let clientEmailString = "";
   let consultantEmailString = "";
   let inquiry = "Inquiry: ";
-
+ 
   if (appointmentBooked) {
     inquiry = inquiry;
     body = description;
@@ -39,7 +39,7 @@ const AppointmentCard = ({
       email = email;
     }
   } else {
-    title = "UNBOOKED";
+    title = "Unbooked";
     email = "";
     name = "";
     inquiry = "";
@@ -48,29 +48,30 @@ const AppointmentCard = ({
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }
     : { backgroundColor: "#dbdbdb" };
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        border: "3px solid #ccc",
-        borderRadius: "5px",
-        marginY: "15px",
-        maxWidth: "100%",
-        ...styles,
-      }}
-    >
-      <Box
+
+  const unbooked = (
+    <>
+      <Typography
         sx={{
-          flexGrow: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "left",
-          marginLeft: "20px",
+          my: 5,
+          wordWrap: "break-word",
+          width: "300px",
+
         }}
-        minHeight="100px"
+        color="text.primary"
+        align="left"
+        justifyContent="center"
+        variant="body1"
+        maxWidth={"300px"}
+        flexWrap
+        fontWeight="bold"
       >
-        <Typography
+        Unbooked
+      </Typography>
+    </>
+  );
+  const bodyContent = <>
+  <Typography
           sx={{
             my: 5,
             wordWrap: "break-word",
@@ -176,6 +177,33 @@ const AppointmentCard = ({
         >
           {email}
         </Typography>
+        </>
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        border: "3px solid #ccc",
+        borderRadius: "5px",
+        marginY: "15px",
+        maxWidth: "100%",
+        ...styles,
+      }}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "left",
+          alignContent: "space-center",
+          justifyContent: "center",
+          marginLeft: "20px",
+        }}
+        minHeight="100px"
+      >
+        {appointmentBooked ? bodyContent : unbooked}
       </Box>
 
       <Box

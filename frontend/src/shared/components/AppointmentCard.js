@@ -56,6 +56,7 @@ const AppointmentCard = ({
         border: "3px solid #ccc",
         borderRadius: "5px",
         marginY: "15px",
+        maxWidth: "100%",
         ...styles,
       }}
     >

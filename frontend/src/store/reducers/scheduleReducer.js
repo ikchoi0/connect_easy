@@ -25,15 +25,14 @@ export const getAllAppointments = createAsyncThunk(
   "schedule/getAppointments",
   async (consultantId, thunkApi) => {
     const response = await api.getAllAppointments(consultantId);
-
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
-
     return response.data;
   }
 );
+
 // get appointments using client id
 export const getAppointmentsForClientId = createAsyncThunk(
   "schedule/getAppointmentsForClientId",

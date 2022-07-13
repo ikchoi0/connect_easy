@@ -96,7 +96,7 @@ export default function Home({
   return (
     <Box
       sx={{
-        maxWidth: "100%",
+        maxWidth: "70%",
         minHeight: "50vh",
         padding: "20px",
         height: "auto",
@@ -104,6 +104,9 @@ export default function Home({
         display: "flex",
         flexDirection: "column",
         borderRadius: "5px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        
       }}
     >
       <Typography variant="h4" component="h1" mb={"30px"}>

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
+import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -9,25 +11,20 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HomePageAppBar from "../../HomePageAppBar/HomePageAppBar";
-import { useHistory } from "react-router-dom";
 import { ButtonBase } from "@mui/material";
-import RegisterPageInputs from "./RegisterPageInputs";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../../store/reducers/authReducer";
-
+import { resetPasswordLink } from "../../../store/reducers/authReducer";
+import ResetPasswordPageInputs from "../ResetPasswordPage/ResetPasswordPageInputs";
+import GetEmailPageInputs from "./GetEmailPageInputs";
 const theme = createTheme();
 
-export default function RegisterPage() {
+export default function GetEmailPage() {
   const user = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [consultantCheck, setConsultantCheck] = useState(false);
-  const [consultantCategoryId, setConsultantCategoryId] = useState("");
 
   useEffect(() => {
     if (user.isLoggedIn) {
@@ -36,28 +33,22 @@ export default function RegisterPage() {
     }
   }, [user.isLoggedIn]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: dispatch(register)
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const userDetails = {
-      firstName,
-      lastName,
       email,
-      password,
-      consultantCheck,
-      consultantCategoryId,
     };
-    dispatch(register({ userDetails, history, dispatch }));
+    dispatch(resetPasswordLink({ userDetails, history }));
   };
 
-  const handleSignInOnClick = () => {
-    history.push("/login");
+  const handleRegisterOnClick = () => {
+    history.push("/register");
   };
 
   return (
     <ThemeProvider theme={theme}>
       <HomePageAppBar />
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
         <CssBaseline />
         <Box
           sx={{
@@ -71,41 +62,36 @@ export default function RegisterPage() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Register
+            Reset Password
           </Typography>
           <Box
             component="form"
-            noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            noValidate
+            sx={{ mt: 1 }}
           >
-            <RegisterPageInputs
-              firstName={firstName}
-              setFirstName={setFirstName}
-              lastName={lastName}
-              setLastName={setLastName}
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-              consultantCheck={consultantCheck}
-              setConsultantCheck={setConsultantCheck}
-              setConsultantCategoryId={setConsultantCategoryId}
-            />
+            <GetEmailPageInputs email={email} setEmail={setEmail} />
+
             <Button
               type="submit"
-              fullWidth
               onClick={(e) => handleSubmit(e)}
+              fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Register
+              Reset Password
             </Button>
-            <Grid container justifyContent="flex-end">
+            {/* fix the width */}
+            <Grid container minWidth={"400px"}>
+              <Grid item xs>
+                <Link href="/login" variant="body2">
+                  Already registered?
+                </Link>
+              </Grid>
               <Grid item>
-                <ButtonBase onClick={handleSignInOnClick}>
+                <ButtonBase onClick={handleRegisterOnClick}>
                   <Typography variant="body2" color={"primary.main"}>
-                    Already have an account? Login here
+                    {"Don't have an account? Register here"}
                   </Typography>
                 </ButtonBase>
               </Grid>

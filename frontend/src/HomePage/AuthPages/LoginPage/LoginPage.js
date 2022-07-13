@@ -48,6 +48,9 @@ export default function Login() {
   const handleRegisterOnClick = () => {
     history.push("/register");
   };
+  const handleLoginOnClick = () => {
+    history.push("/login");
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -93,16 +96,21 @@ export default function Login() {
             >
               Login
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+            <Grid
+              container
+              sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Grid item>
+                <ButtonBase onClick={handleLoginOnClick}>
+                  <Typography variant="body2" color={"primary.main"}>
+                    {"Are you registed? Login"}
+                  </Typography>
+                </ButtonBase>
               </Grid>
               <Grid item>
                 <ButtonBase onClick={handleRegisterOnClick}>
                   <Typography variant="body2" color={"primary.main"}>
-                    {"Don't have an account? Register here"}
+                    {"Don't have an account? Register"}
                   </Typography>
                 </ButtonBase>
               </Grid>

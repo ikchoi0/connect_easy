@@ -1,11 +1,52 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { showAlertMessage } from "./alertReducer";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 import * as api from "../../api";
 
 const authState = {
   userDetails: null,
   isLoggedIn: false,
+  isTokenValid: null,
 };
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ userDetails, history }, thunkApi) => {
+    const response = await api.resetPassword(userDetails);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response);
+    }
+
+    thunkApi.dispatch(showSuccessMessage(response.data));
+    return response.data;
+  }
+);
+export const resetPasswordLink = createAsyncThunk(
+  "auth/resetPasswordLink",
+  async ({ userDetails }, thunkApi) => {
+    const response = await api.resetPasswordLink(userDetails);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response);
+    }
+    thunkApi.dispatch(showSuccessMessage(response.data));
+    return response.data;
+  }
+);
+
+export const checkTokenForPasswordReset = createAsyncThunk(
+  "auth/checkTokenForPasswordReset",
+  async (userDetails, thunkApi) => {
+    const response = await api.checkTokenForPasswordReset(userDetails);
+    if (response.error) {
+      // token is invalid or has expired, redirect to login page
+      // history.push("/login");
+      return thunkApi.rejectWithValue(response);
+    }
+    // thunkApi.dispatch(showSuccessMessage(response.data));
+    return response.data;
+  }
+);
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -16,7 +57,6 @@ export const login = createAsyncThunk(
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
-
     return response.data;
   }
 );
@@ -60,6 +100,27 @@ const authSlice = createSlice({
     [login.rejected]: (state, action) => {
       // handle rejected
       state.isLoggedIn = false;
+    },
+    [resetPasswordLink.fulfilled]: (state, action) => {},
+    [resetPasswordLink.rejected]: (state, action) => {
+      // handle rejected
+    },
+    [resetPassword.fulfilled]: (state, action) => {
+      alert("Password has been reset. Please log in with your new password.");
+      window.location.href = "/login";
+    },
+    [resetPassword.rejected]: (state, action) => {
+      // handle rejected
+    },
+    [checkTokenForPasswordReset.fulfilled]: (state, action) => {
+      state.isTokenValid = true;
+    },
+    [checkTokenForPasswordReset.rejected]: (state, action) => {
+      alert(
+        "Token is invalid. Please try again with the valid token to reset password."
+      );
+      window.location.href = "/login";
+      state.isTokenValid = false;
     },
   },
 });

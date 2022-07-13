@@ -24,9 +24,35 @@ apiClient.interceptors.request.use(
   }
 );
 
+// checks token again and resets password if valid
 export const resetPassword = async (data) => {
   try {
-    return await apiClient.post("/auth/resetPassword", data);
+    return await apiClient.post("/password/reset", data);
+  } catch (exception) {
+    console.log(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
+// sends email address to backend to send reset password link
+export const resetPasswordLink = async (data) => {
+  try {
+    return await apiClient.post("/password", data);
+  } catch (exception) {
+    console.log(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+// checks if token is valid before resetting password
+export const checkTokenForPasswordReset = async ({ email, token }) => {
+  try {
+    return await apiClient.get(`/password/${email}/${token}`);
   } catch (exception) {
     console.log(exception);
     return {

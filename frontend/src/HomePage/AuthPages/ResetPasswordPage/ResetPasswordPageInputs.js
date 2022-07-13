@@ -1,21 +1,38 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import TextFieldWithLabel from "../../../shared/components/TextFieldWithLabel";
+import { FormLabel, Stack, Typography } from "@mui/material";
 
-function PasswordResetPageInputs({ email, setEmail }) {
+function PasswordResetPageInputs({
+  password1,
+  setPassword1,
+  password2,
+  setPassword2,
+}) {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
+    <Stack spacing={2}>
+      <Grid item xs={6}>
         <TextFieldWithLabel
-          id="email"
-          label="Email Address"
-          value={email}
-          setValue={setEmail}
+          id="password1"
+          label="Password"
+          value={password1}
+          setValue={setPassword1}
           autoFocus={true}
-          autoComplete="email"
+          autoComplete="password"
+          type="password"
         />
       </Grid>
-    </Grid>
+      <Grid item xs={6}>
+        <TextFieldWithLabel
+          id="password2"
+          label="Re-enter Password"
+          value={password2}
+          setValue={setPassword2}
+          autoComplete="password"
+          type="password"
+        />
+      </Grid>
+    </Stack>
   );
 }
 

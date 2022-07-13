@@ -12,30 +12,56 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HomePageAppBar from "../../HomePageAppBar/HomePageAppBar";
 import { ButtonBase } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetPassword } from "../../../store/reducers/authReducer";
+import {
+  showAlertMessage,
+  closeAlertMessage,
+} from "../../../store/reducers/alertReducer";
+import {
+  resetPassword,
+  checkTokenForPasswordReset,
+} from "../../../store/reducers/authReducer";
 import ResetPasswordPageInputs from "./ResetPasswordPageInputs";
+
 const theme = createTheme();
 
 export default function ResetPasswordPage() {
-  const user = useSelector((state) => state.auth);
+  const { email, token } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+  const user = useSelector((state) => state.auth);
 
-  const [email, setEmail] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [password1, setPassword1] = useState("");
+  const [password2, setPassword2] = useState("");
+  // If we want to create password validation, we can use this:
+  const [passwordError, setPasswordError] = useState("");
+  useEffect(() => {
+    if (password1 !== "") {
+      if (password1 === password2) {
+        setIsFormValid(true);
+      } else {
+      }
+    } else {
+      setIsFormValid(false);
+    }
+  }, [password1, password2]);
 
   useEffect(() => {
+    dispatch(checkTokenForPasswordReset({ email, token }));
+
     if (user.isLoggedIn) {
       localStorage.setItem("user", JSON.stringify(user.userDetails));
       history.push("/clientDashboard");
     }
-  }, [user.isLoggedIn]);
+  }, [user.isLoggedIn, dispatch, user.isTokenValid]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const userDetails = {
-      email,
+      token,
+      password: password1,
     };
     dispatch(resetPassword({ userDetails, history }));
   };
@@ -43,61 +69,71 @@ export default function ResetPasswordPage() {
   const handleRegisterOnClick = () => {
     history.push("/register");
   };
+  const handleLoginOnClick = () => {
+    history.push("/login");
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <HomePageAppBar />
-      <Container component="main">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Reset Password
-          </Typography>
+      {user.isTokenValid && (
+        <Container component="main">
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <ResetPasswordPageInputs email={email} setEmail={setEmail} />
+            <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Enter a new Password
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 1 }} minWidth="400px">
+              <ResetPasswordPageInputs
+                password1={password1}
+                password2={password2}
+                setPassword1={setPassword1}
+                setPassword2={setPassword2}
+              />
 
-            <Button
-              type="submit"
-              onClick={(e) => handleSubmit(e)}
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Reset Password
-            </Button>
-            {/* fix the width */}
-            <Grid container minWidth={"400px"}>
-              <Grid item xs>
-                <Link href="/login" variant="body2">
-                  Already registered?
-                </Link>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disabled={!isFormValid}
+              >
+                Reset Password
+              </Button>
+              {/* fix the width */}
+              <Grid
+                container
+                sx={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Grid item>
+                  <ButtonBase onClick={handleLoginOnClick}>
+                    <Typography variant="body2" color={"primary.main"}>
+                      {"Are you registed? Login"}
+                    </Typography>
+                  </ButtonBase>
+                </Grid>
+                <Grid item>
+                  <ButtonBase onClick={handleRegisterOnClick}>
+                    <Typography variant="body2" color={"primary.main"}>
+                      {"Don't have an account? Register"}
+                    </Typography>
+                  </ButtonBase>
+                </Grid>
               </Grid>
-              <Grid item>
-                <ButtonBase onClick={handleRegisterOnClick}>
-                  <Typography variant="body2" color={"primary.main"}>
-                    {"Don't have an account? Register here"}
-                  </Typography>
-                </ButtonBase>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      )}
     </ThemeProvider>
   );
 }

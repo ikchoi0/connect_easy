@@ -12,6 +12,7 @@ const Meeting = ({ meetingId }) => {
   let peerConnectionRef;
   let peerVideo;
   let video;
+
   useEffect(() => {
     console.log("PEERCONNECTIONREF", peerConnectionRef);
 
@@ -58,21 +59,30 @@ const Meeting = ({ meetingId }) => {
       } catch (error) {
         console.log(error);
         socket.emit("leave", meetingId);
-        window.location.replace("/dashboard");
+        // window.location.replace("/dashboard");
       }
     });
 
     socket.on("ice", async (ice) => {
       try {
         console.log("received candidate", ice);
-        if (!ice.candidate) {
-          window.location.replace("/dashboard");
+        // if (!ice.candidate) {
+        //   window.location.replace("/dashboard");
+        // }
+        if (ice?.candidate) {
+          await peerConnectionRef?.addIceCandidate(ice);
         }
-        await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
         console.log(error);
       }
+      socket.on("someone_left", async (ice) => {
+        peerConnectionRef = new RTCPeerConnection();
+        peerConnectionRef.addEventListener("icecandidate", handleIce);
+        peerConnectionRef.addEventListener("addstream", handleAddStream);
+        peerVideo.srcObject = null;
+      });
     });
+
     init();
 
     return () => {

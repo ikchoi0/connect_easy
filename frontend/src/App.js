@@ -15,6 +15,7 @@ import ClientDashboard from "./ClientDashboard/ClientDashboard";
 import ConsultantDashboard from "./ConsultantDashboard/ConsultantDashboard";
 import Meeting from "./Meeting/Meeting";
 import { AlertNotification } from "./shared/components/AlertNotification";
+import ResetPasswordPage from "./HomePage/AuthPages/ResetPasswordPage/ResetPasswordPage";
 
 /**
  *
@@ -35,6 +36,9 @@ function App() {
           </Route>
           <Route exact path="/login">
             <LoginPage />
+          </Route>
+          <Route exact path="/resetPassword">
+            <ResetPasswordPage />
           </Route>
           <Route exact path="/calendar">
             <Scheduler />

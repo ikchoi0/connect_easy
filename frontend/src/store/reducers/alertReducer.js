@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const alertState = {
   showNotification: false,
   alertMessageContent: null,
+  severityWarning: "warning",
 };
 
 const alertSlice = createSlice({
@@ -13,12 +14,19 @@ const alertSlice = createSlice({
       state.showNotification = true;
       state.alertMessageContent = action.payload;
     },
+    showSuccessMessage: (state, action) => {
+      state.showNotification = true;
+      state.alertMessageContent = action.payload;
+      state.severityWarning = "success";
+    },
     closeAlertMessage: (state, action) => {
       state.showNotification = false;
       state.alertMessageContent = null;
+      state.severityWarning = "warning";
     },
   },
 });
 
 export default alertSlice.reducer;
-export const { showAlertMessage, closeAlertMessage } = alertSlice.actions;
+export const { showAlertMessage, closeAlertMessage, showSuccessMessage } =
+  alertSlice.actions;

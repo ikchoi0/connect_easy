@@ -24,6 +24,18 @@ apiClient.interceptors.request.use(
   }
 );
 
+export const resetPassword = async (data) => {
+  try {
+    return await apiClient.post("/auth/resetPassword", data);
+  } catch (exception) {
+    console.log(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
 export const login = async (data) => {
   try {
     return await apiClient.post("/auth/login", data);

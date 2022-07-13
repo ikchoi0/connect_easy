@@ -1,11 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { showAlertMessage } from "./alertReducer";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 import * as api from "../../api";
 
 const authState = {
   userDetails: null,
   isLoggedIn: false,
 };
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ userDetails }, thunkApi) => {
+    const response = await api.resetPassword(userDetails);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.message));
+      return thunkApi.rejectWithValue(response);
+    }
+    thunkApi.dispatch(showSuccessMessage(response.data));
+    return response.data;
+  }
+);
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -16,7 +29,6 @@ export const login = createAsyncThunk(
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
-
     return response.data;
   }
 );
@@ -60,6 +72,10 @@ const authSlice = createSlice({
     [login.rejected]: (state, action) => {
       // handle rejected
       state.isLoggedIn = false;
+    },
+    [resetPassword.fulfilled]: (state, action) => {},
+    [resetPassword.rejected]: (state, action) => {
+      // handle rejected
     },
   },
 });

@@ -20,6 +20,10 @@ const loginSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 router.post(
   "/register",
   validator.body(registerSchema),
@@ -30,6 +34,12 @@ router.post(
   "/login",
   validator.body(loginSchema),
   authController.controllers.postLogin
+);
+
+router.post(
+  "/resetPassword",
+  validator.body(emailSchema),
+  authController.controllers.postResetPassword
 );
 
 module.exports = router;

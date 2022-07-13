@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeAlertMessage } from "../../store/reducers/alertReducer";
 export const AlertNotification = () => {
   const dispatch = useDispatch();
-  const { showNotification, alertMessageContent } = useSelector(
+  const { showNotification, alertMessageContent, severity } = useSelector(
     (state) => state.alert
   );
   function handleClose() {
@@ -19,7 +19,7 @@ export const AlertNotification = () => {
         onClose={handleClose}
         autoHideDuration={6000}
       >
-        <Alert severity="warning">{alertMessageContent}</Alert>
+        <Alert severity={severity}>{alertMessageContent}</Alert>
       </Snackbar>
     </div>
   );

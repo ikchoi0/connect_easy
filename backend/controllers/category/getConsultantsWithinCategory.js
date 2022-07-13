@@ -3,6 +3,7 @@ const Category = require('../../models/category');
 const getConsultantsWithinCategory = async (req, res) => {
   try {
     const { categoryName } = req.params;
+
     console.log(categoryName);
 
     if (!categoryName) {

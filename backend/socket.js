@@ -29,8 +29,9 @@ const socketHandler = (wsServer) => {
       socket.to(roomName).emit("ice", ice);
     });
 
-    socket.on("disconnect", (roomName) => {
+    socket.on("disconnect", () => {
       console.log("Client disconnected");
+      socket.emit("someone_left");
     });
   });
 };

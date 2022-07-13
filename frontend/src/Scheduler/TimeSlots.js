@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -6,30 +6,32 @@ import {
   Typography,
   ButtonGroup,
   Paper,
-} from "@mui/material";
-import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAppointmentsForTheDay } from "../store/reducers/scheduleReducer";
-import moment from "moment";
-import SchedulerDetailsInputs from "./SchedulerDetailsInputs";
-import { bookAppointment } from "../store/reducers/scheduleReducer";
-import { useHistory } from "react-router-dom";
+} from '@mui/material';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppointmentsForTheDay } from '../store/reducers/scheduleReducer';
+import moment from 'moment';
+import SchedulerDetailsInputs from './SchedulerDetailsInputs';
+import { bookAppointment } from '../store/reducers/scheduleReducer';
+import { useHistory } from 'react-router-dom';
+import DialogPopUp from '../shared/components/DialogPopUp';
+import ConfirmModal from '../shared/components/ConfirmModal';
 
 const Item = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: "center",
+  textAlign: 'center',
   color: theme.palette.text.secondary,
-  border: "2px solid #e0e0e0",
+  border: '2px solid #e0e0e0',
 }));
 
 export default function TimeSlots(props) {
-  const [description, setDescription] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
+  const [confirm, setConfirm] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -37,10 +39,11 @@ export default function TimeSlots(props) {
   const appointmentsForDay = useSelector(
     (state) => state.scheduler.appointmentsForSelectedDate
   );
+
   useEffect(() => {
     setSelectedDate(props.selectedDate.toLocaleDateString());
 
-    const date = moment(props.selectedDate).format("YYYY-MM-DD");
+    const date = moment(props.selectedDate).format('YYYY-MM-DD');
 
     dispatch(
       getAppointmentsForTheDay({ consultantId: props.consultantId, date })
@@ -48,13 +51,21 @@ export default function TimeSlots(props) {
   }, [props.selectedDate, dispatch]);
 
   const handleDismissOnClick = () => {
-    setSelectedAppointmentId("");
+    setSelectedAppointmentId('');
   };
 
   const handledBookingAppointment = () => {
-    const appointmentData = { description, selectedAppointmentId };
+    setConfirm(true);
+  };
 
-    dispatch(bookAppointment({ appointmentData, history }));
+  const handleConfirmClose = () => {
+    const appointmentData = {
+      description: props.description,
+      selectedAppointmentId,
+    };
+
+    // dispatch(bookAppointment({ appointmentData, history }));
+    setConfirm(false);
   };
 
   const items = appointmentsForDay.map((item) => (
@@ -63,42 +74,28 @@ export default function TimeSlots(props) {
         onClick={() => setSelectedAppointmentId(item.appointmentId)}
         value={item.appointmentId}
       >
-        <Grid container spacing={1}>
-          <Grid item xs={4}>
-            <Typography variant="subtitle1">
-              {moment(item.start).format("HH:mm")}
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography variant="subtitle1">- </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography variant="subtitle1">
-              {moment(item.end).format("HH:mm")}
-            </Typography>
-          </Grid>
-        </Grid>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <Typography variant="subtitle1">
+            {moment(item.start).format('HH:mm')}
+          </Typography>
+
+          <Typography variant="subtitle1">-</Typography>
+
+          <Typography variant="subtitle1">
+            {moment(item.end).format('HH:mm')}
+          </Typography>
+        </Box>
       </div>
-      {/* <Grid container spacing={1}>
-        <Grid item xs={4}>
-          <Typography variant="subtitle1">{item.start}</Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography variant="subtitle1">- </Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography variant="subtitle1">{item.end}</Typography>
-        </Grid>
-      </Grid> */}
     </Item>
   ));
+
   return (
     <Box
       sx={{
-        width: "20%",
+        width: '20%',
         marginLeft: 3,
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <Typography variant="h6" gutterBottom>
@@ -106,23 +103,29 @@ export default function TimeSlots(props) {
       </Typography>
 
       <Stack spacing={2}>
+        {/* {items} */}
         {!selectedAppointmentId ? (
           items
         ) : (
           <>
             <SchedulerDetailsInputs
-              description={description}
-              setDescription={setDescription}
+              description={props.description}
+              setDescription={props.setDescription}
             />
           </>
         )}
         {appointmentsForDay.length > 0 && (
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button onClick={handleDismissOnClick}>Dismiss</Button>
             <Button onClick={handledBookingAppointment}>Book</Button>
           </Box>
         )}
       </Stack>
+      {confirm && (
+        <DialogPopUp open={confirm}>
+          <ConfirmModal onConfirm={handleConfirmClose} />
+        </DialogPopUp>
+      )}
     </Box>
   );
 }

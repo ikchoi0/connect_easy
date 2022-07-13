@@ -67,11 +67,9 @@ const Meeting = ({ meetingId }) => {
       try {
         console.log("received candidate", ice);
         // if (!ice.candidate) {
-        //   window.location.replace("/dashboard");
+        //   window.location.replace('/dashboard');
         // }
-        if (ice?.candidate) {
-          await peerConnectionRef?.addIceCandidate(ice);
-        }
+        await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
         console.log(error);
       }
@@ -116,6 +114,7 @@ const Meeting = ({ meetingId }) => {
 
   function handleIce(data) {
     console.log("sent candidate");
+    console.log("#######ICE########", data);
     socket.emit("ice", data.candidate, meetingId);
   }
 

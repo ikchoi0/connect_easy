@@ -19,8 +19,9 @@ export default function CategoryContainer() {
     }
   }, []);
 
-  const consultantCards = category.usersWithinCategory.map(
-    (consultant, index) => {
+  const consultantCards =
+    category &&
+    category.usersWithinCategory.map((consultant, index) => {
       return (
         <Grid item key={index} xs={12} sm={6} lg={4}>
           <ConsultantCard
@@ -28,15 +29,16 @@ export default function CategoryContainer() {
             consultantId={consultant._id}
             firstName={consultant.firstName}
             lastName={consultant.lastName}
-            profilePicture={consultant.options.profilePicture}
-            description={consultant.options.description}
-            rating={consultant.options.rating}
-            price={consultant.options.price}
+            profilePicture={
+              consultant.options && consultant.options.profilePicture
+            }
+            description={consultant.options && consultant.options.description}
+            rating={consultant.options && consultant.options.rating}
+            price={consultant.options && consultant.options.price}
           />
         </Grid>
       );
-    }
-  );
+    });
 
   return (
     <Container maxWidth="lg" color="primary.main">

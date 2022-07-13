@@ -1,6 +1,6 @@
-import React from "react";
-import TextField from "@mui/material/TextField";
-import { FormControl } from "@mui/material";
+import React from 'react';
+import TextField from '@mui/material/TextField';
+import { FormControl } from '@mui/material';
 
 const TextFieldWithLabel = ({
   id,
@@ -9,7 +9,8 @@ const TextFieldWithLabel = ({
   autoFocus = false,
   value,
   setValue,
-  type = "",
+  type = '',
+  disabled = false,
 }) => {
   const handleValueChange = (e) => {
     setValue(e.target.value);
@@ -17,6 +18,7 @@ const TextFieldWithLabel = ({
   return (
     <FormControl fullWidth>
       <TextField
+        disabled={disabled}
         id={id}
         name={id}
         label={label}

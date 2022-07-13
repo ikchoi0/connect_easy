@@ -187,7 +187,32 @@ export const getUserProfile = async () => {
 // update user profile
 export const updateUserProfile = async (userData) => {
   try {
-    return await apiClient.patch('/user/profile', userData);
+    // if imageFile is not null, then upload image
+    if (userData.imageFile) {
+      // issue GET request to get the presigned image url
+      const uploadConfig = await apiClient.get(
+        'http://localhost:5002/api/upload'
+      );
+
+      /**
+       * uploadConfig.data.url is the presigned image url
+       * data:
+            key: "62c9b78173c3d270c8046ccc/b11f7144-fc10-457b-a49a-2d55ada2bd74.jpeg"
+            url: "https://connect-easy-images.s3.amazonaws.com/62c9b78173c3d270c8046ccc/b11f7144-fc10-457b-a49a-2d55ada2bd74.jpeg?AWSAccessKeyId=AKIATQQMCFC4KW5T66WC&Content-Type=jpeg&Expires=1657444177&Signature=D%2FbILCtNDjOHvTyCP092fzawplk%3D"
+            [[Prototype]]: Object
+      */
+
+      // upload image to the presigned url
+      await axios.put(uploadConfig.data.url, userData.imageFile, {
+        headers: {
+          'Content-Type': userData.imageFile.type, // specify the content type of the file for the security.
+        },
+      });
+
+      userData.imageUrl = uploadConfig.data.key;
+    }
+
+    return await apiClient.patch('/user/edit', userData);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -198,14 +223,13 @@ export const updateUserProfile = async (userData) => {
 };
 
 // avatar upload
-export const submitImage = async (formData, imageFile, history) => {
+export const submitImage = async (imageFile) => {
   try {
     // issue GET request to get the presigned image url
     const uploadConfig = await apiClient.get(
       'http://localhost:5002/api/upload'
     );
 
-    console.log(uploadConfig);
     /**
      * uploadConfig.data.url is the presigned image url
      * data:

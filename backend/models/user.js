@@ -12,11 +12,13 @@ const userSchema = new Schema(
       enum: ['admin', 'client', 'consultant'],
       default: 'client',
     },
+    category: { type: Schema.Types.ObjectId, ref: 'Category' },
     options: {
       description: { type: String },
       price: { type: Number },
       rating: { type: Number },
       profilePicture: { type: String },
+      street: { type: String },
       city: { type: String },
       state: { type: String },
       country: { type: String },

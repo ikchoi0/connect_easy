@@ -7,6 +7,7 @@ const userState = {
   lastName: '',
   email: '',
   description: '',
+  city: '',
   street: '',
   state: '',
   country: '',
@@ -15,7 +16,7 @@ const userState = {
   category: '',
   profilePicture: '',
   imageFile: '',
-  imageName: '',
+
   previewImage: '',
   available: false,
 };
@@ -47,43 +48,23 @@ export const updateUserProfile = createAsyncThunk(
 const userSlice = createSlice({
   name: 'userProfile',
   initialState: userState,
-  reducers: {
-    setProfile: (state, action) => {
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
-      state.email = action.payload.email;
-      state.description = action.payload.description;
-      state.street = action.payload.street;
-      state.state = action.payload.state;
-      state.country = action.payload.country;
-      state.postalCode = action.payload.postalCode;
-      state.price = action.payload.price;
-      state.category = action.payload.category;
-      state.profilePicture = action.payload.profilePicture;
-      state.imageFile = action.payload.imageFile;
-      state.imageName = action.payload.imageName;
-      state.previewImage = action.payload.previewImage;
-      state.available = action.payload.available;
-    },
-  },
+
   extraReducers: {
     [getUserProfile.fulfilled]: (state, action) => {
       console.log(action.payload);
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
-      state.email = action.payload.email;
-      state.description = action.payload.options?.description;
-      state.street = action.payload.options?.street;
-      state.state = action.payload.options?.state;
-      state.country = action.payload.options?.country;
-      state.postalCode = action.payload.options?.postalCode;
-      state.price = action.payload.options?.price;
-      state.category = action.payload.category;
-      state.profilePicture = action.payload.options?.profilePicture;
-      state.imageFile = action.payload.imageFile;
-      state.imageName = action.payload.imageName;
-      state.previewImage = action.payload.previewImage;
-      state.available = action.payload.options?.available;
+      state.firstName = action.payload.user.firstName;
+      state.lastName = action.payload.user.lastName;
+      state.email = action.payload.user.email;
+      state.description = action.payload.user.options?.description || '';
+      state.street = action.payload.user.options?.street || '';
+      state.city = action.payload.user.options?.city || '';
+      state.state = action.payload.user.options?.state || '';
+      state.country = action.payload.user.options?.country || '';
+      state.postalCode = action.payload.user.options?.postalCode || '';
+      state.price = action.payload.user.options?.price || '';
+      state.category = action.payload.categoryId;
+      state.profilePicture = action.payload.user.options?.profilePicture || '';
+      state.available = action.payload.user.options?.available || '';
     },
   },
 });

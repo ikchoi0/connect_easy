@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+
 import {
   FormControl,
   MenuItem,
@@ -17,15 +17,17 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Avatar } from '@mui/material';
 import TextFieldWithLabel from '../components/TextFieldWithLabel';
-import { submitImage } from '../../api';
+
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  setProfile,
   getUserProfile,
+  updateUserProfile,
 } from '../../store/reducers/userProfileReducer';
+import { category } from '../../store/reducers/categoryReducer';
 
 const ProfilePage = () => {
-  const history = useHistory();
+  const userProfile = useSelector((state) => state.userProfile);
+  const { categoryList } = useSelector((state) => state.category);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -36,8 +38,8 @@ const ProfilePage = () => {
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  const [price, setPrice] = useState(0);
-  const [category, setCategory] = useState('');
+  const [price, setPrice] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [originalImage, setOriginalImage] = useState('');
   const [imageFile, setImageFile] = useState('');
   const [previewImage, setPreviewImage] = useState('');
@@ -54,50 +56,49 @@ const ProfilePage = () => {
     setCountry(userProfile.country);
     setPostalCode(userProfile.postalCode);
     setPrice(userProfile.price);
-    setCategory(userProfile.category);
+    setSelectedCategory('');
     setOriginalImage(userProfile.profilePicture);
+    setSelectedCategory(userProfile.category);
+  };
 
-    // const data = {
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   description,
-    //   street,
-    //   city,
-    //   state,
-    //   country,
-    //   postalCode,
-    //   price,
-    //   category,
-    //   imageFile,
-    // };
-    // console.log(data);
-    // dispatch(setProfile(data));
+  const handleCategoryOnChange = (event) => {
+    setSelectedCategory(event.target.value);
   };
 
   const imageSelectHandler = (e) => {
     setImageFile(e.target.files[0]);
     setPreviewImage(URL.createObjectURL(e.target.files[0]));
   };
+
   const handleOnSaveButtonClick = () => {
-    submitImage('', imageFile, history);
+    const data = {
+      firstName,
+      lastName,
+      email,
+      description,
+      street,
+      city,
+      state,
+      country,
+      postalCode,
+      price,
+      selectedCategory,
+      imageFile,
+    };
+
+    dispatch(updateUserProfile(data));
   };
 
   const dispatch = useDispatch();
-  const userProfile = useSelector((state) => state.userProfile);
 
   useEffect(() => {
     dispatch(getUserProfile());
+    dispatch(category());
 
     if (userProfile) {
       loadProfilesToState(userProfile);
     }
-
-    // getUserProfile().then((res) => {
-    //   console.log(res.data);
-    //   setOriginalImage(res.data.options.profilePicture);
-    // });
-  }, []);
+  }, [userProfile]);
 
   return (
     <>
@@ -117,17 +118,33 @@ const ProfilePage = () => {
               alignItems: 'center',
             }}
           >
-            <Avatar
-              sx={{ width: '100px', height: '100px' }}
-              src={
-                originalImage
-                  ? 'https://connect-easy-images.s3.us-west-2.amazonaws.com/' +
-                    originalImage
-                  : previewImage
-              }
-            >
-              {!previewImage && 'DK'}
-            </Avatar>
+            {originalImage && !previewImage && (
+              <Avatar
+                sx={{ width: '100px', height: '100px' }}
+                src={
+                  'https://connect-easy-images.s3.us-west-2.amazonaws.com/' +
+                  originalImage
+                }
+              ></Avatar>
+            )}
+            {!originalImage && !previewImage && (
+              <Avatar sx={{ width: '100px', height: '100px' }}>
+                {firstName.substring(0, 2)}
+              </Avatar>
+            )}
+            {previewImage && (
+              <Avatar
+                sx={{ width: '100px', height: '100px' }}
+                src={
+                  originalImage || previewImage
+                    ? previewImage
+                      ? previewImage
+                      : 'https://connect-easy-images.s3.us-west-2.amazonaws.com/' +
+                        originalImage
+                    : null
+                }
+              ></Avatar>
+            )}
             <Box>
               <Button
                 variant="contained"
@@ -148,6 +165,7 @@ const ProfilePage = () => {
 
           <Box sx={{ display: 'flex' }}>
             <TextFieldWithLabel
+              disabled={true}
               type="email"
               label="email"
               value={email}
@@ -229,38 +247,37 @@ const ProfilePage = () => {
               value={price}
               setValue={setPrice}
             />
-            <FormControl>
+            {/* <FormControl>
               <InputLabel id="Availability">Availability</InputLabel>
               <Switch
                 label="Availability"
                 defaultValue="category"
                 onChange={(e) => {
-                  setCategory(e.target.value);
+                  setSelectedCategory(e.target.value);
                 }}
               >
                 <MenuItem value="1">Available</MenuItem>
                 <MenuItem value="2">Off</MenuItem>
               </Switch>
               <FormHelperText>Required</FormHelperText>
-            </FormControl>
+            </FormControl> */}
           </Box>
 
           <FormControl>
             <InputLabel id="category">Category</InputLabel>
             <Select
               label="Category"
-              value={category ? category : ''}
-              defaultValue="category"
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
+              value={selectedCategory}
+              onChange={handleCategoryOnChange}
             >
-              <MenuItem value="1">Sales</MenuItem>
-              <MenuItem value="2">Therapists</MenuItem>
-              <MenuItem value="3">Lawyers</MenuItem>
-              <MenuItem value="4">Developers</MenuItem>
-              <MenuItem value="5">Mortgage</MenuItem>
-              <MenuItem value="6">Doctors</MenuItem>
+              {categoryList &&
+                categoryList.map((category) => {
+                  return (
+                    <MenuItem key={category.id} value={category.id}>
+                      {category.name}
+                    </MenuItem>
+                  );
+                })}
             </Select>
             <FormHelperText>Required</FormHelperText>
           </FormControl>
@@ -272,10 +289,10 @@ const ProfilePage = () => {
               color="secondary"
               startIcon={<CancelIcon />}
             >
-              Save
+              Cancel
             </Button>
             <Button
-              // onClick={}
+              onClick={handleOnSaveButtonClick}
               variant="contained"
               type="submit"
               color="primary"

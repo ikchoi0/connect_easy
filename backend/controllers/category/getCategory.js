@@ -8,7 +8,7 @@ const getCategory = async (req, res) => {
         id: category._id,
         name: category.name,
         description: category.description,
-        pictureUr: category.pictureUrl,
+        pictureUrl: category.pictureUrl,
       };
     });
     return res.status(200).send({ categoryList });

@@ -18,7 +18,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
 });
 
 router.get('/profile', auth(['consultant']), async (req, res) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id).select('-password');
 
   if (!user) {
     return res.status(404).send('User not found');

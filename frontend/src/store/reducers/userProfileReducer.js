@@ -42,6 +42,9 @@ export const updateUserProfile = createAsyncThunk(
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
+
+    // SHOW SUCCESS MESSAGE
+    thunkApi.dispatch(showAlertMessage(response.message));
   }
 );
 

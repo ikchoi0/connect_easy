@@ -51,7 +51,6 @@ export default function CategoryContainer() {
           justifyContent: 'flex-start',
           textTransform: 'none',
           position: 'relative',
-          backgroundColor: '#E2D1F9',
           borderRadius: '5px',
           padding: '20px',
         }}

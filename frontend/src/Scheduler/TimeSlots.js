@@ -66,7 +66,7 @@ export default function TimeSlots(props) {
         <Grid container spacing={1}>
           <Grid item xs={4}>
             <Typography variant="subtitle1">
-              {moment(item.start).format("HH:mm A")}
+              {moment(item.start).format("HH:mm")}
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -74,7 +74,7 @@ export default function TimeSlots(props) {
           </Grid>
           <Grid item xs={4}>
             <Typography variant="subtitle1">
-              {moment(item.end).format("HH:mm A")}
+              {moment(item.end).format("HH:mm")}
             </Typography>
           </Grid>
         </Grid>

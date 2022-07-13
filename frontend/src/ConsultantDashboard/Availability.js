@@ -47,6 +47,8 @@ export default function Availability() {
       endTime
     ) {
       setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
     }
     const handleCreateAppointmentCheck = () => {
       setIsNewAppointmentValid(date && startTime && endTime ? true : false);

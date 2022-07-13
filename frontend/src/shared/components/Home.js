@@ -115,9 +115,9 @@ export default function Home({
     alignItems: 'center',
     flexWrap: 'wrap',
 }}>
-        <Typography variant="h4" component="h1" mb={"40px"}>
+        <Typography variant="h5" mb={"40px"}>
           Welcome,
-          <Typography variant="h4" component="h1" mb={"40px"} fontStyle="italic" >
+          <Typography mb={"40px"} fontStyle="italic" fontWeight={"600"} fontSize={"1.5rem"}>
             {userDetails && userDetails.firstName}{" "}
             {userDetails && userDetails.lastName}!
           </Typography>

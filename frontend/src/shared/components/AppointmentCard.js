@@ -25,7 +25,7 @@ const AppointmentCard = ({
   let clientEmailString = "";
   let consultantEmailString = "";
   let inquiry = "Inquiry: ";
-
+ 
   if (appointmentBooked) {
     inquiry = inquiry;
     body = description;
@@ -39,7 +39,7 @@ const AppointmentCard = ({
       email = email;
     }
   } else {
-    title = "UNBOOKED";
+    title = "Unbooked";
     email = "";
     name = "";
     inquiry = "";
@@ -48,6 +48,103 @@ const AppointmentCard = ({
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }
     : { backgroundColor: "#dbdbdb" };
+
+  const typographyStyle = {my: 5,
+    wordWrap: "break-word",
+    width: "300px",
+    mr: "5px"}
+  const typographyProps = {
+    color:"text.primary",
+        align:"left",
+        variant:"body1",
+        maxWidth:"300px",
+        
+  }
+  
+  const unbooked = (
+    <>
+      <Typography
+        sx={{
+          my: 5,
+          wordWrap: "break-word",
+          width: "300px",
+
+        }}
+       {...typographyProps}
+        fontWeight="bold"
+      >
+        Unbooked
+      </Typography>
+    </>
+  );
+  const bodyContent = (
+    <>
+      <Typography
+        sx={{
+          ...typographyStyle,
+          mt: "15px",
+          mb: "2px",
+        }}
+        {...typographyProps}
+        fontWeight="bold"
+      >
+        {title}
+      </Typography>
+      <Typography
+        sx={{
+          ...typographyStyle,
+          mt: "2px",
+          mb: "15px",
+        }}
+        {...typographyProps}
+      >
+        {name}
+      </Typography>
+      <Typography
+        sx={{
+          ...typographyStyle,
+          mt: "2px",
+          mb: "2px",
+        }}
+        {...typographyProps}
+        fontWeight="bold"
+      >
+        {inquiry}
+      </Typography>
+      <Typography
+        sx={{
+          ...typographyStyle,
+          mt: "2px",
+          mb: "15px",
+        }}
+        {...typographyProps}
+      >
+        {body}
+      </Typography>
+      <Typography
+        sx={{
+          ...typographyStyle,
+          mt: "2px",
+          mb: "2px",
+        }}
+        {...typographyProps}
+        fontWeight="bold"
+      >
+        {clientEmailString || consultantEmailString}
+      </Typography>
+      <Typography
+        sx={{
+          ...typographyStyle,
+          mt: "2px",
+          mb: "15px",
+        }}
+        {...typographyProps}
+      >
+        {email}
+      </Typography>
+    </>
+  );
+
   return (
     <Box
       sx={{
@@ -56,6 +153,7 @@ const AppointmentCard = ({
         border: "3px solid #ccc",
         borderRadius: "5px",
         marginY: "15px",
+        maxWidth: "100%",
         ...styles,
       }}
     >
@@ -65,116 +163,13 @@ const AppointmentCard = ({
           display: "flex",
           flexDirection: "column",
           alignItems: "left",
+          alignContent: "space-center",
+          justifyContent: "center",
           marginLeft: "20px",
         }}
         minHeight="100px"
       >
-        <Typography
-          sx={{
-            my: 5,
-            wordWrap: "break-word",
-            width: "300px",
-            mr: "5px",
-            mt: "15px",
-            mb: "2px",
-          }}
-          color="text.primary"
-          align="left"
-          justifyContent="center"
-          variant="body1"
-          maxWidth={"300px"}
-          flexWrap
-          fontWeight="bold"
-        >
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            my: 5,
-            wordWrap: "break-word",
-            width: "300px",
-            mr: "5px",
-            mt: "2px",
-            mb: "15px",
-          }}
-          color="text.primary"
-          align="left"
-          variant="body1"
-          maxWidth={"300px"}
-          flexWrap
-        >
-          {name}
-        </Typography>
-        <Typography
-          sx={{
-            my: 5,
-            wordWrap: "break-word",
-            width: "300px",
-            mr: "5px",
-            mt: "2px",
-            mb: "2px",
-          }}
-          color="text.primary"
-          align="left"
-          variant="body1"
-          maxWidth={"300px"}
-          flexWrap
-          fontWeight="bold"
-        >
-          {inquiry}
-        </Typography>
-        <Typography
-          sx={{
-            my: 5,
-            wordWrap: "break-word",
-            width: "300px",
-            mr: "5px",
-            mt: "2px",
-            mb: "15px",
-          }}
-          color="text.primary"
-          align="left"
-          variant="body1"
-          maxWidth={"300px"}
-          flexWrap
-        >
-          {body}
-        </Typography>
-        <Typography
-          sx={{
-            my: 5,
-            wordWrap: "break-word",
-            width: "300px",
-            mr: "5px",
-            mt: "2px",
-            mb: "2px",
-          }}
-          color="text.primary"
-          align="left"
-          variant="body1"
-          maxWidth={"300px"}
-          flexWrap
-          fontWeight="bold"
-        >
-          {clientEmailString || consultantEmailString}
-        </Typography>
-        <Typography
-          sx={{
-            my: 5,
-            wordWrap: "break-word",
-            width: "300px",
-            mr: "5px",
-            mt: "2px",
-            mb: "15px",
-          }}
-          color="text.primary"
-          align="left"
-          variant="body1"
-          maxWidth={"300px"}
-          flexWrap
-        >
-          {email}
-        </Typography>
+        {appointmentBooked ? bodyContent : unbooked}
       </Box>
 
       <Box

@@ -1,275 +1,190 @@
-const ConsultantSeedDB = [
-  {
-    roles: 'consultant',
-    firstName: 'Don',
-    lastName: 'Kim',
-    email: 'd@d.com',
-    password: '1234',
+const { faker } = require("@faker-js/faker");
+
+// const randomName = faker.name.findName(); // Rowan Nikolaus
+// const randomName1 = faker.name.findName(); // Rowan Nikolaus
+const NUMBER_OF_USER = 60;
+const ConsultantSeedDB = [];
+for (let i = 0; i < NUMBER_OF_USER; i++) {
+  ConsultantSeedDB.push({
+    role: "consultant",
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email().toLowerCase(),
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
     options: {
-      country: 'Canada',
-      state: 'British Columbia',
-      city: 'Vancouver',
-      zip: 'ABC123',
-      price: 1500,
-      rating: 5,
-      description: 'I offer web development services',
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '1111111111',
+      country: faker.address.country(),
+      state: faker.address.state(),
+      city: faker.address.city(),
+      postalCode: faker.address.zipCode(),
+      price: faker.commerce.price(100, 200),
+      rating: Math.ceil(Math.random() * 5),
+      description: faker.company.catchPhrase(),
+      profilePicture: faker.image.people(640, 480, true),
+      phone: faker.phone.number(),
     },
-    nameOfBusiness: 'DonLimited',
-    license: 'license test',
-    verified: true,
+  });
+}
+
+const ClientSeeds = [
+  {
+    role: "client",
+    firstName: "Rafael",
+    lastName: "Nóbrega",
+    email: "raf@client.com",
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
   {
-    roles: 'consultant',
-    firstName: 'Iksung',
-    lastName: 'Choi',
-    email: 'i@i.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'Ontario',
-      city: 'Toronto',
-      zip: 'ABC123',
-      price: 1400,
-      description: 'I offer therapy sessions for web developers',
-      rating: 4,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '2222222222',
-    },
-    nameOfBusiness: 'IkLimited',
-    license: 'license test',
-    verified: true,
+    role: "client",
+    firstName: "Dongwan",
+    lastName: "Kim",
+    email: "donkim@client.com",
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
   {
-    roles: 'consultant',
-    firstName: 'Raf',
-    lastName: 'Nobrega',
-    email: 'n@n.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'Columbia',
-      city: 'Vancouver',
-      zip: 'ABC123',
-      price: 1300,
-      description: 'I offer web development services',
-      rating: 4,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '3333333333',
-    },
-    nameOfBusiness: 'RafLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'consultant',
-    firstName: 'Don2',
-    lastName: 'Kim2',
-    email: 'd2@d2.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'British Columbia',
-      city: 'Vancouver',
-      zip: 'ABC123',
-      price: 1500,
-      description: 'I offer web development services',
-      rating: 5,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '1111111111',
-    },
-    nameOfBusiness: 'DonLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'consultant',
-    firstName: 'Iksung2',
-    lastName: 'Choi2',
-    email: 'i2@i2.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'Ontario',
-      city: 'Toronto',
-      zip: 'ABC123',
-      price: 1400,
-      description: 'I offer therapy sessions for web developers',
-      rating: 4,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '2222222222',
-    },
-    nameOfBusiness: 'IkLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'consultant',
-    firstName: 'Raf2',
-    lastName: 'Nobrega2',
-    email: 'n2@n2.com',
-    password: '1234',
-    options: {
-      price: 1300,
-      country: 'Canada',
-      state: 'Columbia',
-      city: 'Vancouver',
-      zip: 'ABC123',
-      description: 'I offer web development services',
-      rating: 4,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '3333333333',
-    },
-    nameOfBusiness: 'RafLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'consultant',
-    firstName: 'Don3',
-    lastName: 'Kim3',
-    email: 'd3@d3.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'British Columbia',
-      city: 'Vancouver',
-      zip: 'ABC123',
-      price: 1500,
-      description: 'I offer web development services',
-      rating: 5,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '1111111111',
-    },
-    nameOfBusiness: 'DonLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'consultant',
-    firstName: 'Iksung3',
-    lastName: 'Choi3',
-    email: 'i3@i3.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'Ontario',
-      city: 'Toronto',
-      zip: 'ABC123',
-      price: 1400,
-      description: 'I offer therapy sessions for web developers',
-      rating: 4,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '2222222222',
-    },
-    nameOfBusiness: 'IkLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'consultant',
-    firstName: 'Raf3',
-    lastName: 'Nobrega3',
-    email: 'n3@n3.com',
-    password: '1234',
-    options: {
-      country: 'Canada',
-      state: 'Columbia',
-      city: 'Vancouver',
-      zip: 'ABC123',
-      price: 1300,
-      description: 'I offer web development services',
-      rating: 4,
-      profilePicture:
-        'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
-      phone: '3333333333',
-    },
-    nameOfBusiness: 'RafLimited',
-    license: 'license test',
-    verified: true,
-  },
-  {
-    roles: 'client',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'j@j.com',
-    password: '1234',
-  },
-  {
-    roles: 'client',
-    firstName: 'Lone',
-    lastName: 'Doe',
-    email: 'l@l.com',
-    password: '1234',
+    role: "client",
+    firstName: "Ik Sung",
+    lastName: "Choi",
+    email: "ikchoi@client.com",
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
 ];
 
-const category = [
-  'Sales',
-  'Therapists',
-  'Lawyers',
-  'Developers',
-  'Mortgage',
-  'Doctors',
-];
+// const category = [
+//   {Sales: "Revenue generation experts can guide you in the right direction of your business and sales quotas."},
+//   {Therapists: "Revenue generation experts can guide you in the right direction of your business and sales quotas."},
+//   {Lawyers: "Using a secure and private virtual space, lessen the back and forth and manage your legal schedule."},
+//   {Developers: "Meet local and international software developers that can help creating the app of your dreams."},
+//   {Mortgage: "An excellent opportunity to introduce yourself to your valued mortgage broker."},
+//   {Doctors: "Consult with a doctor privately anytime. No office visit required."}
+// ];
 
-const CategorySeedDB = (userData) => [
+// //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/1389/1389079.png”,
+// //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/2913/2913000.png”,
+// //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/2811/2811156.png”,
+// //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/977/977597.png”,
+// //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/243/243224.png”,
+// //     pictureUrl: “https://cdn-icons-png.flaticon.com/128/809/809957.png”,
+
+// const CategorySeedDB = [];
+// category.forEach((item) => {
+//   const entries = Object.entries(item);
+//   CategorySeedDB.push({
+//         name: entries[0][0],
+//         description:entries[0][1],
+//         pictureUrl: "https://cdn-icons-png.flaticon.com/512/1389/1389079.png",
+//         users: [],
+//       }
+//   );
+// })
+
+const CategorySeedDB = (ConsultantSeedDB) => [
   {
     name: "Sales",
     description:
       "Revenue generation experts can guide you in the right direction of your business and sales quotas.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/512/1389/1389079.png",
-    users: [userData[0]._id],
+    users: [
+      ConsultantSeedDB[1]._id,
+      ConsultantSeedDB[2]._id,
+      ConsultantSeedDB[3]._id,
+      ConsultantSeedDB[4]._id,
+      ConsultantSeedDB[5]._id,
+      ConsultantSeedDB[6]._id,
+      ConsultantSeedDB[7]._id,
+      ConsultantSeedDB[8]._id,
+      ConsultantSeedDB[9]._id,
+    ],
   },
   {
     name: "Therapists",
     description:
       "It's simple to schedule appointments for individual or group therapy sessions.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/512/2913/2913000.png",
-    users: [userData[1]._id],
+    users: [
+      ConsultantSeedDB[10]._id,
+      ConsultantSeedDB[11]._id,
+      ConsultantSeedDB[12]._id,
+      ConsultantSeedDB[13]._id,
+      ConsultantSeedDB[14]._id,
+      ConsultantSeedDB[15]._id,
+      ConsultantSeedDB[16]._id,
+      ConsultantSeedDB[17]._id,
+      ConsultantSeedDB[18]._id,
+    ],
   },
   {
     name: "Lawyers",
     description:
       "Using a secure and private virtual space, lessen the back and forth and manage your legal schedule.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/512/2811/2811156.png",
-    users: [userData[2]._id],
+    users: [
+      ConsultantSeedDB[19]._id,
+      ConsultantSeedDB[20]._id,
+      ConsultantSeedDB[21]._id,
+      ConsultantSeedDB[22]._id,
+      ConsultantSeedDB[23]._id,
+      ConsultantSeedDB[24]._id,
+      ConsultantSeedDB[25]._id,
+      ConsultantSeedDB[26]._id,
+      ConsultantSeedDB[27]._id,
+    ],
   },
   {
     name: "Developers",
     description:
       "Meet local and international software developers that can help creating the app of your dreams.",
-    pictureUrl:
-      "https://cdn-icons.flaticon.com/png/512/2721/premium/2721688.png?token=exp=1657526001~hmac=8cd362465d03b52612be6a032bf6f0d2",
-    users: [userData[3]._id],
+    pictureUrl: "https://cdn-icons-png.flaticon.com/512/977/977597.png",
+    users: [
+      ConsultantSeedDB[28]._id,
+      ConsultantSeedDB[29]._id,
+      ConsultantSeedDB[30]._id,
+      ConsultantSeedDB[31]._id,
+      ConsultantSeedDB[32]._id,
+      ConsultantSeedDB[33]._id,
+      ConsultantSeedDB[34]._id,
+      ConsultantSeedDB[35]._id,
+      ConsultantSeedDB[36]._id,
+    ],
   },
   {
     name: "Mortgage",
     description:
       "An excellent opportunity to introduce yourself to your valued mortgage broker.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/512/243/243224.png",
-    users: [userData[4]._id],
+    users: [
+      ConsultantSeedDB[37]._id,
+      ConsultantSeedDB[38]._id,
+      ConsultantSeedDB[39]._id,
+      ConsultantSeedDB[40]._id,
+      ConsultantSeedDB[41]._id,
+      ConsultantSeedDB[42]._id,
+      ConsultantSeedDB[43]._id,
+      ConsultantSeedDB[44]._id,
+      ConsultantSeedDB[45]._id,
+    ],
   },
   {
     name: "Doctors",
     description:
       "Consult with a doctor privately anytime. No office visit required.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/128/809/809957.png",
-    users: [userData[5]._id],
+    users: [
+      ConsultantSeedDB[46]._id,
+      ConsultantSeedDB[47]._id,
+      ConsultantSeedDB[48]._id,
+      ConsultantSeedDB[49]._id,
+      ConsultantSeedDB[50]._id,
+      ConsultantSeedDB[51]._id,
+      ConsultantSeedDB[52]._id,
+      ConsultantSeedDB[53]._id,
+      ConsultantSeedDB[54]._id,
+    ],
   },
 ];
 module.exports = {
   ConsultantSeedDB,
   CategorySeedDB,
+  ClientSeeds,
 };
 /*
   name: { type: String },

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, Grid, Typography, ButtonGroup } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  ButtonGroup,
+  Paper,
+} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { useEffect } from "react";
@@ -52,7 +59,7 @@ export default function TimeSlots(props) {
 
   const items = appointmentsForDay.map((item) => (
     <Item key={item.appointmentId}>
-      <Button
+      <div
         onClick={() => setSelectedAppointmentId(item.appointmentId)}
         value={item.appointmentId}
       >
@@ -71,7 +78,7 @@ export default function TimeSlots(props) {
             </Typography>
           </Grid>
         </Grid>
-      </Button>
+      </div>
       {/* <Grid container spacing={1}>
         <Grid item xs={4}>
           <Typography variant="subtitle1">{item.start}</Typography>

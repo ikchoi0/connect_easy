@@ -47,6 +47,8 @@ export default function Availability() {
       endTime
     ) {
       setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
     }
     const handleCreateAppointmentCheck = () => {
       setIsNewAppointmentValid(date && startTime && endTime ? true : false);
@@ -84,14 +86,13 @@ export default function Availability() {
   const handleDeleteAppointmentOnClick = (key) => {
     dispatch(deleteOneOpeningAppointment(key));
   };
-
   const appointmentCards = openingAppointmentsList.map((appointment) => {
     return (
       <AppointmentCard
         key={appointment.key}
         id={appointment.key}
         // description={appointment.description}
-        date={appointment.date}
+        date={moment.utc(appointment.date).local().format()}
         startTime={moment(appointment.appointmentStartTime).format("HH:mm A")}
         endTime={moment(appointment.appointmentEndTime).format("HH:mm A")}
         handleCardButton={handleDeleteAppointmentOnClick}
@@ -110,7 +111,7 @@ export default function Availability() {
       key,
       consultant: consultantId,
       date: moment(date)
-        // .utcOffset(0)
+        .utcOffset(0)
         .hours(0)
         .minutes(0)
         .seconds(0)

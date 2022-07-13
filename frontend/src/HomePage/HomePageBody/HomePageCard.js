@@ -9,7 +9,6 @@ import { useHistory } from "react-router-dom";
 import { updateSelectedCategory } from "../../store/reducers/categoryReducer";
 import { useDispatch } from "react-redux";
 
-
 const HomePageCard = ({ name, description, pictureUrl }) => {
   const dispatch = useDispatch();
   const history = useHistory();

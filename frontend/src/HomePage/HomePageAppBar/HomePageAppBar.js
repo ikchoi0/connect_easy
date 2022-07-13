@@ -13,7 +13,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme();
 
 const companyName = 'Connect Easy';
@@ -80,10 +80,10 @@ const HomePageAppBar = () => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Toolbar
             disableGutters
-            sx={{ display: "flex", justifyContent: "space-between" }}
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
           >
             <Logo
               name={companyName}
@@ -92,7 +92,7 @@ const HomePageAppBar = () => {
               handleLogoOnClick={handleLogoOnClick}
             />
 
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -113,17 +113,17 @@ const HomePageAppBar = () => {
 
             <Box sx={{ flexGrow: 0 }}>
               {userDetails &&
-              (userDetails.role === "client" || " consultant") ? (
+              (userDetails.role === 'client' || ' consultant') ? (
                 <>
                   <Button
-                    sx={{ color: "white" }}
+                    sx={{ color: 'white' }}
                     startIcon={<DashboardIcon />}
                     onClick={handleDashBoardOnClick}
                   >
                     DashBoard
                   </Button>
                   <Button
-                    sx={{ color: "white" }}
+                    sx={{ color: 'white' }}
                     startIcon={<LogoutIcon />}
                     onClick={handleLogoutOnClick}
                   >
@@ -133,14 +133,14 @@ const HomePageAppBar = () => {
               ) : (
                 <>
                   <Button
-                    sx={{ color: "white" }}
+                    sx={{ color: 'white' }}
                     startIcon={<LockOpenIcon />}
                     onClick={handleRegisterOnClick}
                   >
                     Register
                   </Button>
                   <Button
-                    sx={{ color: "white" }}
+                    sx={{ color: 'white' }}
                     startIcon={<LoginIcon />}
                     onClick={handleLoginOnClick}
                   >

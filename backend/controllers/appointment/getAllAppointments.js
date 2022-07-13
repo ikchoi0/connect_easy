@@ -46,8 +46,8 @@ const getAllAppointments = async (req, res) => {
       const newEndTime = moment(newDate + " " + endTime).format(
         "YYYY-MM-DD HH:mm"
       );
-      const titleStartTime = moment(newDate + " " + startTime).format("HH:mmA");
-      const titleEndTime = moment(newDate + " " + endTime).format("HH:mmA");
+      const titleStartTime = moment(newDate + " " + startTime).format("HH:mm");
+      const titleEndTime = moment(newDate + " " + endTime).format("HH:mm");
 
       return {
         consultant:
@@ -66,6 +66,8 @@ const getAllAppointments = async (req, res) => {
         allDay: false,
         resource: appointment.client,
         appointmentBooked: appointment.appointmentBooked,
+        consultantEmail: appointment.consultant.email,
+        clientEmail: appointment.client?.email || "",
       };
     });
 

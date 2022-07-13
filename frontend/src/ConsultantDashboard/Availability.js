@@ -93,8 +93,8 @@ export default function Availability() {
         id={appointment.key}
         // description={appointment.description}
         date={moment.utc(appointment.date).local().format()}
-        startTime={moment(appointment.appointmentStartTime).format("HH:mm A")}
-        endTime={moment(appointment.appointmentEndTime).format("HH:mm A")}
+        startTime={moment(appointment.appointmentStartTime).format("HH:mm")}
+        endTime={moment(appointment.appointmentEndTime).format("HH:mm")}
         handleCardButton={handleDeleteAppointmentOnClick}
         buttonLabel={"Delete"}
       />

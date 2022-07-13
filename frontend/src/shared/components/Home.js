@@ -14,6 +14,7 @@ import { updateMeetingId } from "../../store/reducers/meetingReducer";
 import moment from "moment";
 import { updateSelectedStatusFilter } from "../../store/reducers/appointmentReducer";
 import { filterAppointments } from "../utils/filterAppointments";
+import Grid from "@mui/material/Grid";
 
 export default function Home({
   getAppointmentAction,
@@ -50,9 +51,10 @@ export default function Home({
     dispatch(updateMeetingId(meetingId));
     dispatch(updateSelectedNavigatorItem("Meeting"));
   };
-  const filteredAppointmentsList = filterAppointments(appointments, selectedStatusFilter);
-  
-
+  const filteredAppointmentsList = filterAppointments(
+    appointments,
+    selectedStatusFilter
+  );
 
   // MAPPED appointments for the user:  scheduler.appointments
   const mappedAppointments = filteredAppointmentsList.map(
@@ -96,7 +98,7 @@ export default function Home({
   return (
     <Box
       sx={{
-        maxWidth: "100%",
+        maxWidth: "70%",
         minHeight: "50vh",
         padding: "20px",
         height: "auto",
@@ -104,12 +106,23 @@ export default function Home({
         display: "flex",
         flexDirection: "column",
         borderRadius: "5px",
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
-      <Typography variant="h4" component="h1" mb={"30px"}>
-        Welcome, {userDetails && userDetails.firstName}{" "}
-        {userDetails && userDetails.lastName}!
-      </Typography>
+      <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+}}>
+        <Typography variant="h4" component="h1" mb={"40px"}>
+          Welcome,
+          <Typography variant="h4" component="h1" mb={"40px"} fontStyle="italic" >
+            {userDetails && userDetails.firstName}{" "}
+            {userDetails && userDetails.lastName}!
+          </Typography>
+        </Typography>
+      </div>
 
       <FormControl
         sx={{

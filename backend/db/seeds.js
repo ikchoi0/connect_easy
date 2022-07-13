@@ -1,11 +1,10 @@
-const {faker} = require('@faker-js/faker');
+const { faker } = require("@faker-js/faker");
 
 // const randomName = faker.name.findName(); // Rowan Nikolaus
 // const randomName1 = faker.name.findName(); // Rowan Nikolaus
 const NUMBER_OF_USER = 60;
 const ConsultantSeedDB = [];
 for (let i = 0; i < NUMBER_OF_USER; i++) {
-
   ConsultantSeedDB.push({
     role: "consultant",
     firstName: faker.name.firstName(),
@@ -27,21 +26,27 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
 }
 
 const ClientSeeds = [
-{ role: "client",
-firstName: "Rafael",
-lastName: "Nóbrega",
-email: "raf@client.com",
-password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",},
-{ role: "client",
-firstName: "Dongwan",
-lastName: "Kim",
-email: "donkim@client.com",
-password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",},
-{ role: "client",
-firstName: "Ik Sung",
-lastName: "Choi",
-email: "ikchoi@client.com",
-password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",}
+  {
+    role: "client",
+    firstName: "Rafael",
+    lastName: "Nóbrega",
+    email: "raf@client.com",
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
+  },
+  {
+    role: "client",
+    firstName: "Dongwan",
+    lastName: "Kim",
+    email: "donkim@client.com",
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
+  },
+  {
+    role: "client",
+    firstName: "Ik Sung",
+    lastName: "Choi",
+    email: "ikchoi@client.com",
+    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
+  },
 ];
 
 // const category = [
@@ -71,8 +76,6 @@ password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",}
 //       }
 //   );
 // })
-
-
 
 const CategorySeedDB = (ConsultantSeedDB) => [
   {
@@ -181,7 +184,7 @@ const CategorySeedDB = (ConsultantSeedDB) => [
 module.exports = {
   ConsultantSeedDB,
   CategorySeedDB,
-  ClientSeeds
+  ClientSeeds,
 };
 /*
   name: { type: String },

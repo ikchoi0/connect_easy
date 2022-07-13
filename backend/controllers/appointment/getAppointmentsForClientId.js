@@ -51,6 +51,8 @@ const getAppointmentsForClientId = async (req, res) => {
         allDay: false,
         resource: appointment.client,
         appointmentBooked: appointment.appointmentBooked,
+        consultantEmail: appointment.consultant.email,
+        clientEmail: appointment.client.email,
       };
     });
 

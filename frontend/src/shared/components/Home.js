@@ -64,16 +64,18 @@ export default function Home({
           role={JSON.parse(localStorage.getItem('user')).role}
           clientName={appointment.client}
           consultantName={appointment.consultant}
+          // email={userDetails.email}
           key={index}
-          email={userDetails.email}
           id={appointment.appointmentId}
           description={appointment.description}
           date={appointment.date}
-          startTime={moment(appointment.start).format('HH:mm A')}
-          endTime={moment(appointment.end).format('HH:mm A')}
+          startTime={moment(appointment.start).format('HH:mm')}
+          endTime={moment(appointment.end).format('HH:mm')}
           buttonLabel={buttonLabel}
           handleCardButton={handleCardButton}
           appointmentBooked={appointment.appointmentBooked}
+          clientEmail={appointment.clientEmail}
+          consultantEmail={appointment.consultantEmail}
         >
           <Button
             sx={{

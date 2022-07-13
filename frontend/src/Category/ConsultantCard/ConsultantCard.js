@@ -70,7 +70,7 @@ const CategoryCard = ({
           </Typography>
 
           <Typography variant="body2" color="text.secondary" component="div">
-            Price per hour: {price}
+            Price per hour: ${price}
           </Typography>
         </CardContent>
       </Card>

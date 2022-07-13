@@ -6,6 +6,7 @@ import {
   Typography,
   ButtonGroup,
   Paper,
+  listItemSecondaryActionClasses,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
@@ -103,8 +104,8 @@ export default function TimeSlots(props) {
       </Typography>
 
       <Stack spacing={2}>
-        {/* {items} */}
-        {!selectedAppointmentId ? (
+        {items && items}
+        {/* {!selectedAppointmentId ? (
           items
         ) : (
           <>
@@ -119,7 +120,7 @@ export default function TimeSlots(props) {
             <Button onClick={handleDismissOnClick}>Dismiss</Button>
             <Button onClick={handledBookingAppointment}>Book</Button>
           </Box>
-        )}
+        )} */}
       </Stack>
       {confirm && (
         <DialogPopUp open={confirm}>

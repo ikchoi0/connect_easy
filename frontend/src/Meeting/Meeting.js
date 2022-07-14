@@ -3,15 +3,12 @@ import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { updateAppointmentVideoStartTime } from '../store/reducers/meetingReducer';
-import VideoCall from './VideoCall';
-
+import { postStartMeeting } from '../store/reducers/meetingReducer';
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
+  // const socket = io('http://localhost:5002');
 
-  // const socket = io('https://connect-easy-rid.herokuapp.com');
-  const socket = io('http://localhost:5002');
-
+  const socket = io('https://connect-easy-rid.herokuapp.com');
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
   const history = useHistory();
@@ -88,10 +85,14 @@ const Meeting = ({ meetingId }) => {
       try {
         // console.log("received candidate", ice);
         if (ice) {
+          const userId = JSON.parse(localStorage.getItem('user')).userId;
           // update video start time here
           dispatch(
-            updateAppointmentVideoStartTime({
-              appointmentData: { appointmentId: meetingId },
+            postStartMeeting({
+              appointmentData: {
+                appointmentId: meetingId,
+                userId: userId,
+              },
               history,
             })
           );

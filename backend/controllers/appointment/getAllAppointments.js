@@ -61,7 +61,6 @@ const getAllAppointments = async (req, res) => {
         }
       }
 
-      console.log(color);
       return {
         consultant:
           appointment.consultant.firstName +
@@ -83,6 +82,7 @@ const getAllAppointments = async (req, res) => {
         consultantEmail: appointment.consultant.email,
         appointmentCancel: appointment.appointmentCancel,
         clientEmail: appointment.client?.email || "",
+        // isMeetingLive: appointment.isMeetingLive,
       };
     });
 

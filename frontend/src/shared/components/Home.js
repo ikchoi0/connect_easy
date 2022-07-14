@@ -55,10 +55,14 @@ export default function Home({
     appointments,
     selectedStatusFilter
   );
-
   // MAPPED appointments for the user:  scheduler.appointments
   const mappedAppointments = filteredAppointmentsList.map(
     (appointment, index) => {
+      // disable all of the meeting buttons except the active one if the any meeting is active
+      // let disableJoinMeeting= false;
+      // if (appointment.isMeetingLive){
+      //   if (appointment.)
+      // }
       return (
         <AppointmentCard
           role={JSON.parse(localStorage.getItem("user")).role}

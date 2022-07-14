@@ -80,7 +80,7 @@ export const deleteOneAppointment = createAsyncThunk(
 );
 
 export const bookAppointment = createAsyncThunk(
-  "schedule/boAppointment",
+  "schedule/bookAppointment",
   async ({ appointmentData, history }, thunkApi) => {
     const response = await api.bookAppointment(appointmentData);
 

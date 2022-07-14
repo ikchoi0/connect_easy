@@ -2,7 +2,10 @@ import React from "react";
 import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
 const Meeting = ({ meetingId }) => {
+  const dispatch = useDispatch();
   const socket = io("http://localhost:5002");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
@@ -15,7 +18,7 @@ const Meeting = ({ meetingId }) => {
   let video;
 
   useEffect(() => {
-    console.log("PEERCONNECTIONREF", peerConnectionRef);
+    // console.log("PEERCONNECTIONREF", peerConnectionRef);
 
     peerConnectionRef = new RTCPeerConnection();
     peerConnectionRef.addEventListener("icecandidate", handleIce);
@@ -23,7 +26,7 @@ const Meeting = ({ meetingId }) => {
 
     socket.on("welcome", async () => {
       try {
-        console.log("Sending offer");
+        // console.log("Sending offer");
         const offer = await peerConnectionRef?.createOffer({
           iceRestart: true,
         });
@@ -41,10 +44,10 @@ const Meeting = ({ meetingId }) => {
 
         const answer = await peerConnectionRef?.createAnswer();
 
-        console.log("Received offer");
+        // console.log("Received offer");
         await peerConnectionRef?.setLocalDescription(answer);
 
-        console.log("Sending answer");
+        // console.log("Sending answer");
         socket.emit("answer", answer, meetingId);
       } catch (error) {
         console.log(error);
@@ -53,8 +56,8 @@ const Meeting = ({ meetingId }) => {
 
     socket.on("answer", async (answer) => {
       try {
-        console.log("Received answer");
-        console.log(answer);
+        // console.log("Received answer");
+        // console.log(answer);
 
         await peerConnectionRef?.setRemoteDescription(answer);
       } catch (error) {
@@ -66,17 +69,24 @@ const Meeting = ({ meetingId }) => {
 
     socket.on("ice", async (ice) => {
       try {
-        console.log("received candidate", ice);
-        // if (!ice.candidate) {
-        //   window.location.replace('/dashboard');
-        // }
+        // console.log("received candidate", ice);
+        if (ice) {
+          // update video start time here
+          dispatch(
+            updateAppointmentVideoStartTime({
+              appointmentData: { appointmentId: meetingId },
+              history,
+            })
+          );
+          // console.log("connected !!");
+        }
         await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     });
     socket.on("peer_left", async (ice) => {
-      console.log("Peer left, closing connection");
+      // console.log("Peer left, closing connection");
       peerConnectionRef?.close();
       peerConnectionRef = new RTCPeerConnection();
       peerConnectionRef.addEventListener("icecandidate", handleIce);
@@ -106,31 +116,31 @@ const Meeting = ({ meetingId }) => {
       myStream.current = await navigator.mediaDevices.getUserMedia(
         initialConstraints
       );
-      console.log(myStream.current);
+      // console.log(myStream.current);
       myFace.srcObject = myStream.current;
       return myStream.current;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
   function handleIce(data) {
-    console.log("sent candidate");
-    console.log("#######ICE########", data);
+    // console.log("sent candidate");
+    // console.log("#######ICE########", data);
     socket.emit("ice", data.candidate, meetingId);
   }
 
   function handleAddStream(data) {
-    console.log("DATA FROM ADD STREAM:", data);
+    // console.log("DATA FROM ADD STREAM:", data);
     peerVideo = peerVideoRef.current;
-    console.log("PEER VIDEO REF", peerVideo);
+    // console.log("PEER VIDEO REF", peerVideo);
 
     peerVideo.srcObject = data.stream;
   }
 
   async function init() {
     video = videoRef.current;
-    console.log("MY FACE VIDEO REF", video);
+    // console.log("MY FACE VIDEO REF", video);
 
     socket.emit("join_room", meetingId);
 

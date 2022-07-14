@@ -1,25 +1,34 @@
 const Appointment = require("../../models/appointment");
+const User = require("../../models/user");
 const Types = require("mongoose").Types;
-const updateAppointmentVideoStartTime = async (req, res) => {
+
+const postStartMeeting = async (req, res) => {
   try {
-    // console.log(appointmentId);
-    const { appointmentId } = req.body;
-    console.log(appointmentId);
+    const { appointmentId, userId } = req.body;
     const appointment = await Appointment.findById(
       Types.ObjectId(appointmentId)
     );
+    const user = await User.findById(Types.ObjectId(userId));
     if (!appointment) {
       return res.status(404).send("Appointment not found");
+    }
+    if (!user) {
+      return res.status(404).send("User not found");
     }
     if (!appointment.hasOwnProperty("videoStartTime")) {
       await appointment.updateOne({
         videoStartTime: new Date(),
       });
     }
+    await user.updateOne({
+      options: {
+        hasActiveMeeting: true,
+        activeMeetingId: appointmentId,
+      },
+    });
 
-    console.log("Video call started", appointment);
     return res.status(200).send({
-      data: appointment,
+      data: { appointment, user },
       message: "Video call start time updated",
       error: false,
     });
@@ -28,4 +37,4 @@ const updateAppointmentVideoStartTime = async (req, res) => {
   }
 };
 
-module.exports = updateAppointmentVideoStartTime;
+module.exports = postStartMeeting;

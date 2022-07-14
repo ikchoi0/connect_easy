@@ -8,7 +8,10 @@ import VideoCall from './VideoCall';
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  const socket = io('http://localhost:5002');
+
+  const socket = io('https://connect-easy-rid.herokuapp.com');
+  // const socket = io('http://localhost:5002');
+
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
   const history = useHistory();
@@ -22,7 +25,19 @@ const Meeting = ({ meetingId }) => {
   useEffect(() => {
     // console.log("PEERCONNECTIONREF", peerConnectionRef);
 
-    peerConnectionRef = new RTCPeerConnection();
+    peerConnectionRef = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: [
+            'stun:stun.l.google.com:19302',
+            'stun:stun1.l.google.com:19302',
+            'stun:stun2.l.google.com:19302',
+            'stun:stun3.l.google.com:19302',
+            'stun:stun4.l.google.com:19302',
+          ],
+        },
+      ],
+    });
     peerConnectionRef.addEventListener('icecandidate', handleIce);
     peerConnectionRef.addEventListener('addstream', handleAddStream);
 
@@ -89,11 +104,27 @@ const Meeting = ({ meetingId }) => {
     });
     socket.on('peer_left', async (ice) => {
       // console.log("Peer left, closing connection");
-      peerConnectionRef?.close();
-      peerConnectionRef = new RTCPeerConnection();
-      peerConnectionRef.addEventListener('icecandidate', handleIce);
-      peerConnectionRef.addEventListener('addstream', handleAddStream);
-      init();
+      // if user has active meeting
+      if (false) {
+      } else {
+        peerConnectionRef?.close();
+        peerConnectionRef = new RTCPeerConnection({
+          iceServers: [
+            {
+              urls: [
+                'stun:stun.l.google.com:19302',
+                'stun:stun1.l.google.com:19302',
+                'stun:stun2.l.google.com:19302',
+                'stun:stun3.l.google.com:19302',
+                'stun:stun4.l.google.com:19302',
+              ],
+            },
+          ],
+        });
+        peerConnectionRef.addEventListener('icecandidate', handleIce);
+        peerConnectionRef.addEventListener('addstream', handleAddStream);
+        init();
+      }
     });
 
     init();
@@ -111,7 +142,7 @@ const Meeting = ({ meetingId }) => {
   const getCamera = async (myFace) => {
     try {
       const initialConstraints = {
-        audio: false,
+        audio: true,
         video: true,
       };
 

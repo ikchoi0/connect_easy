@@ -31,6 +31,7 @@ export default function Home({
     (state) => state.appointment.selectedStatusFilter
   );
   const dispatch = useDispatch();
+
   const handleChange = (event) => {
     dispatch(updateSelectedStatusFilter(event.target.value));
   };
@@ -109,6 +110,44 @@ export default function Home({
         marginRight: "auto",
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Typography variant="h5" mb={"40px"}>
+          Welcome,
+          <Typography
+            mb={"40px"}
+            fontStyle="italic"
+            fontWeight={"600"}
+            fontSize={"1.5rem"}
+          >
+            {userDetails && userDetails.firstName}{" "}
+            {userDetails && userDetails.lastName}!
+          </Typography>
+        </Typography>
+      </div>
+
+      <FormControl
+        sx={{
+          maxWidth: "30%",
+        }}
+      >
+        <InputLabel id="demo-simple-select-label">Filter by Status</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={selectedStatusFilter}
+          label="Appointment Status"
+          onChange={handleChange}
+        >
+          {menuItem}
+        </Select>
+      </FormControl>
+
       <Box
         sx={{
           marginTop: "20px",
@@ -121,45 +160,6 @@ export default function Home({
           borderRadius: "5px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "top",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="h5" mb={"40px"}>
-            Welcome,
-            <Typography
-              // mb={"40px"}
-              fontStyle="italic"
-              fontWeight={"600"}
-              fontSize={"1.5rem"}
-            >
-              {userDetails && userDetails.firstName}{" "}
-              {userDetails && userDetails.lastName}!
-            </Typography>
-          </Typography>
-          <FormControl
-            sx={{
-              maxWidth: "30%",
-            }}
-          >
-            <InputLabel id="demo-simple-select-label">
-              Filter by Status
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={selectedStatusFilter}
-              label="Appointment Status"
-              onChange={handleChange}
-            >
-              {menuItem}
-            </Select>
-          </FormControl>
-        </div>
         <Typography variant="h4" component="h1" mb={"30px"}>
           {mappedAppointments.length ? mappedAppointments : "No appointments"}
         </Typography>

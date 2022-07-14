@@ -20,6 +20,7 @@ const AppointmentCard = ({
   handleCardButton,
   appointmentBooked,
   children,
+  unbookedString = "Unbooked",
 }) => {
   let title = "Meeting with: ";
   let name = "";
@@ -185,11 +186,25 @@ const AppointmentCard = ({
           )}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", mt: "16px" }}>
+      <Box
+        component="div"
+        whiteSpace="normal"
+        sx={{ display: "flex", mt: "16px" }}
+      >
         <Typography {...typographyProps} fontWeight="bold">
           {inquiry} &nbsp;
         </Typography>
-        <Typography>{body}</Typography>
+        <Typography
+          textOverflow={"ellipsis"}
+          // noWrap
+          sx={{
+            width: "350px",
+            wordWrap: "break-word",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {body}
+        </Typography>
       </Box>
     </>
   );

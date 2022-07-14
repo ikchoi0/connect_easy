@@ -9,8 +9,8 @@ import VideoCall from './VideoCall';
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
 
-  const socket = io('https://connect-easy-rid.herokuapp.com');
-  // const socket = io('http://localhost:5002');
+  // const socket = io('https://connect-easy-rid.herokuapp.com');
+  const socket = io('http://localhost:5002');
 
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);

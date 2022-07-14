@@ -68,8 +68,6 @@ const AppointmentCard = ({
     <>
       <Box
         sx={{
-          minWidth: "600px",
-
           display: "flex",
           alignItems: "baseline",
           justifyContent: "space-between",

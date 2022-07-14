@@ -1,1 +1,15 @@
-@import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+@import "../../node_modules/react-big-calendar/lib/css/react-big-calendar.css";
+.rbc-toolbar .rbc-toolbar-label {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 32px;
+}
+
+.rbc-btn-group {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+}

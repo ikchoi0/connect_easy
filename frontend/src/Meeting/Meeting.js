@@ -9,6 +9,7 @@ const Meeting = ({ meetingId }) => {
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
+  const myStream = useRef(null);
   let peerConnectionRef;
   let peerVideo;
   let video;
@@ -73,19 +74,20 @@ const Meeting = ({ meetingId }) => {
       } catch (error) {
         console.log(error);
       }
-      socket.on("someone_left", async (ice) => {
-        peerConnectionRef = new RTCPeerConnection();
-        peerConnectionRef.addEventListener("icecandidate", handleIce);
-        peerConnectionRef.addEventListener("addstream", handleAddStream);
-        peerVideo.srcObject = null;
-      });
+    });
+    socket.on("peer_left", async (ice) => {
+      console.log("Peer left, closing connection");
+      peerConnectionRef?.close();
+      peerConnectionRef = new RTCPeerConnection();
+      peerConnectionRef.addEventListener("icecandidate", handleIce);
+      peerConnectionRef.addEventListener("addstream", handleAddStream);
+      init();
     });
 
     init();
 
     return () => {
-      // socket.emit('disconnect-meeting', meetingId);
-      // socket.off();
+      myStream.current?.getTracks().forEach((track) => track.stop());
       peerConnectionRef?.close();
       peerConnectionRef = null;
       socket.close();
@@ -101,12 +103,12 @@ const Meeting = ({ meetingId }) => {
         video: true,
       };
 
-      const myStream = await navigator.mediaDevices.getUserMedia(
+      myStream.current = await navigator.mediaDevices.getUserMedia(
         initialConstraints
       );
-      console.log(myStream);
-      myFace.srcObject = myStream;
-      return myStream;
+      console.log(myStream.current);
+      myFace.srcObject = myStream.current;
+      return myStream.current;
     } catch (err) {
       console.log(err);
     }

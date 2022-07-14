@@ -5,7 +5,8 @@ export const filterAppointments = (appointments, selectedStatusFilter) => {
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (
           appointment.appointmentBooked &&
-          !appointment.hasOwnProperty("videoEndTime")
+          !appointment.hasOwnProperty("videoEndTime") &&
+          !appointment.appointmentCancel
         ) {
           return appointment;
         }
@@ -23,7 +24,7 @@ export const filterAppointments = (appointments, selectedStatusFilter) => {
       break;
     case "Canceled":
       filteredAppointmentsList = appointments.filter((appointment) => {
-        if (appointment.hasOwnProperty("appointmentCancel")) {
+        if (appointment.appointmentCancel) {
           return appointment;
         }
       });
@@ -36,7 +37,11 @@ export const filterAppointments = (appointments, selectedStatusFilter) => {
       });
       break;
     default:
-      filteredAppointmentsList = appointments;
+      filteredAppointmentsList = appointments.filter((appointment) => {
+        if (!appointment.appointmentCancel) {
+          return appointment;
+        }
+      });
   }
   return filteredAppointmentsList;
 };

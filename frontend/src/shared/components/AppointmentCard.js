@@ -3,9 +3,6 @@ import { Box, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 
-
-
-
 const AppointmentCard = ({
   role,
   clientName,
@@ -31,9 +28,6 @@ const AppointmentCard = ({
   let clientEmailString = "";
   let consultantEmailString = "";
   let inquiry = "Inquiry: ";
-  
-
-  
 
   if (appointmentBooked) {
     inquiry = inquiry;
@@ -53,8 +47,6 @@ const AppointmentCard = ({
     name = "";
     inquiry = "";
   }
-
-
 
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }
@@ -78,9 +70,36 @@ const AppointmentCard = ({
         sx={{
           display: "flex",
           alignItems: "baseline",
+          justifyContent: "space-between",
         }}
       >
-        <Typography variant="subtitle1">
+        <Box>
+          <Typography {...typographyProps} fontWeight="bold">
+            {name}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="subtitle1">
+              {moment(date).format("MMM Do, YYYY")} &nbsp;
+            </Typography>
+            <Typography color="text.secondary" align="center">
+              {startTime}
+            </Typography>
+            <Typography sx={{ marginX: 1 }} align="center">
+              -
+            </Typography>
+            <Typography color="text.secondary" align="center">
+              {endTime}
+            </Typography>
+          </Box>
+          <Typography {...typographyProps}>{email}</Typography>
+        </Box>
+
+        {/* <Typography variant="subtitle1">
           {moment(date).format("MMM Do, YYYY")} &nbsp;
         </Typography>
         <Typography color="text.secondary" align="center">
@@ -91,18 +110,18 @@ const AppointmentCard = ({
         </Typography>
         <Typography color="text.secondary" align="center">
           {endTime}
-        </Typography>
+        </Typography> */}
 
         <Typography
           sx={{
             my: 5,
             wordWrap: "break-word",
-            width: "300px",
           }}
           {...typographyProps}
           fontWeight="bold"
+          textAlign="center"
         >
-          &nbsp; &nbsp;{unbookedString}
+          Unbooked
         </Typography>
         <Button
           variant="contained"
@@ -177,7 +196,6 @@ const AppointmentCard = ({
         </Typography>
         <Typography
           textOverflow={"ellipsis"}
-     
           // noWrap
           sx={{
             width: "350px",
@@ -185,7 +203,6 @@ const AppointmentCard = ({
             textOverflow: "ellipsis",
           }}
         >
-          
           {body}
         </Typography>
       </Box>

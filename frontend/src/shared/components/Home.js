@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import AppointmentCard from './AppointmentCard';
-import Button from '@mui/material/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteOneAppointment } from '../../store/reducers/scheduleReducer';
-import { handleAuth } from '../utils/auth';
-import { updateSelectedNavigatorItem } from '../../store/reducers/dashboardReducer';
-import { updateMeetingId } from '../../store/reducers/meetingReducer';
-import moment from 'moment';
-import { updateSelectedStatusFilter } from '../../store/reducers/appointmentReducer';
-import { filterAppointments } from '../utils/filterAppointments';
+import React, { useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import AppointmentCard from "./AppointmentCard";
+import Button from "@mui/material/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteOneAppointment } from "../../store/reducers/scheduleReducer";
+import { handleAuth } from "../utils/auth";
+import { updateSelectedNavigatorItem } from "../../store/reducers/dashboardReducer";
+import { updateMeetingId } from "../../store/reducers/meetingReducer";
+import moment from "moment";
+import { updateSelectedStatusFilter } from "../../store/reducers/appointmentReducer";
+import { filterAppointments } from "../utils/filterAppointments";
 
 export default function Home({
   getAppointmentAction,
@@ -79,8 +79,6 @@ export default function Home({
         >
           <Button
             sx={{
-              ml: "5px",
-              mr: "5px",
               flexGrow: 1,
             }}
             variant="contained"

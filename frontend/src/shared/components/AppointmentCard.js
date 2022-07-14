@@ -20,6 +20,7 @@ const AppointmentCard = ({
   handleCardButton,
   appointmentBooked,
   children,
+  unbookedString = "Unbooked",
 }) => {
   let title = "Meeting with: ";
   let name = "";
@@ -27,9 +28,6 @@ const AppointmentCard = ({
   let clientEmailString = "";
   let consultantEmailString = "";
   let inquiry = "Inquiry: ";
-
-
-  
 
   if (appointmentBooked) {
     inquiry = inquiry;
@@ -72,9 +70,36 @@ const AppointmentCard = ({
         sx={{
           display: "flex",
           alignItems: "baseline",
+          justifyContent: "space-between",
         }}
       >
-        <Typography variant="subtitle1">
+        <Box>
+          <Typography {...typographyProps} fontWeight="bold">
+            {name}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="subtitle1">
+              {moment(date).format("MMM Do, YYYY")} &nbsp;
+            </Typography>
+            <Typography color="text.secondary" align="center">
+              {startTime}
+            </Typography>
+            <Typography sx={{ marginX: 1 }} align="center">
+              -
+            </Typography>
+            <Typography color="text.secondary" align="center">
+              {endTime}
+            </Typography>
+          </Box>
+          <Typography {...typographyProps}>{email}</Typography>
+        </Box>
+
+        {/* <Typography variant="subtitle1">
           {moment(date).format("MMM Do, YYYY")} &nbsp;
         </Typography>
         <Typography color="text.secondary" align="center">
@@ -85,21 +110,20 @@ const AppointmentCard = ({
         </Typography>
         <Typography color="text.secondary" align="center">
           {endTime}
-        </Typography>
+        </Typography> */}
 
         <Typography
           sx={{
             my: 5,
             wordWrap: "break-word",
-            width: "300px",
           }}
           {...typographyProps}
           fontWeight="bold"
+          textAlign="center"
         >
-          &nbsp; &nbsp;Unbooked
+          Unbooked
         </Typography>
         <Button
-        
           variant="contained"
           color="error"
           size="large"
@@ -162,11 +186,25 @@ const AppointmentCard = ({
           )}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", mt: "16px" }}>
+      <Box
+        component="div"
+        whiteSpace="normal"
+        sx={{ display: "flex", mt: "16px" }}
+      >
         <Typography {...typographyProps} fontWeight="bold">
           {inquiry} &nbsp;
         </Typography>
-        <Typography>{body}</Typography>
+        <Typography
+          textOverflow={"ellipsis"}
+          // noWrap
+          sx={{
+            width: "350px",
+            wordWrap: "break-word",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {body}
+        </Typography>
       </Box>
     </>
   );

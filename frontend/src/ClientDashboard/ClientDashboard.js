@@ -24,7 +24,12 @@ import {
   deleteOneAppointment,
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
-
+const filterLists = [
+  { name: "Show All", color: "#191970" },
+  { name: "Upcoming", color: "#4682B4" },
+  { name: "Past", color: "#778899" },
+  // { name: "Canceled", color: "#FA8072" },
+];
 const drawerWidth = 300;
 const menuItems = [
   {
@@ -87,7 +92,9 @@ const ClientDashboard = () => {
                 handleCardButton={handleCardButton}
               />
             )}
-            {selectedNavigatorItem === "Schedule" && <>Schedule</>}
+            {selectedNavigatorItem === "Calendar" && (
+              <Scheduler filterLists={filterLists} />
+            )}
             {selectedNavigatorItem === "Payments" && <>payments</>}
             {selectedNavigatorItem === "Meeting" && (
               <Meeting meetingId={meetingId} />

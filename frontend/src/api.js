@@ -1,15 +1,15 @@
-import axios from 'axios';
-import { logout } from './shared/utils/auth';
-import { showAlertMessage } from './store/reducers/alertReducer';
+import axios from "axios";
+import { logout } from "./shared/utils/auth";
+import { showAlertMessage } from "./store/reducers/alertReducer";
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5002/api',
+  baseURL: "http://localhost:5002/api",
   timeout: 1000,
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    const userDetails = localStorage.getItem('user');
+    const userDetails = localStorage.getItem("user");
 
     if (userDetails) {
       const token = JSON.parse(userDetails).token;
@@ -64,7 +64,7 @@ export const checkTokenForPasswordReset = async ({ email, token }) => {
 
 export const login = async (data) => {
   try {
-    return await apiClient.post('/auth/login', data);
+    return await apiClient.post("/auth/login", data);
   } catch (exception) {
     return {
       error: true,
@@ -75,7 +75,7 @@ export const login = async (data) => {
 
 export const register = async (data) => {
   try {
-    return await apiClient.post('/auth/register', data);
+    return await apiClient.post("/auth/register", data);
   } catch (exception) {
     return {
       error: true,
@@ -97,7 +97,7 @@ const checkResponseCode = (error) => {
 // queries category list
 export const getCategories = async () => {
   try {
-    return await apiClient.get('/category');
+    return await apiClient.get("/category");
   } catch (exception) {
     return {
       error: true,
@@ -121,7 +121,7 @@ export const getConsultantsWithinCategory = async (categoryName) => {
 // create open appointments
 export const setOpenAppointments = async (openAppointmentsList) => {
   try {
-    return await apiClient.post('/appointment', openAppointmentsList);
+    return await apiClient.post("/appointment", openAppointmentsList);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -212,7 +212,7 @@ export const cancelBookedAppointment = async (appointmentId) => {
 // get user profile
 export const getUserProfile = async () => {
   try {
-    return await apiClient.get('/user/profile');
+    return await apiClient.get("/user/profile");
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -229,7 +229,7 @@ export const updateUserProfile = async (userData) => {
     if (userData.imageFile) {
       // issue GET request to get the presigned image url
       const uploadConfig = await apiClient.get(
-        'http://localhost:5002/api/upload'
+        "http://localhost:5002/api/upload"
       );
 
       /**
@@ -243,14 +243,14 @@ export const updateUserProfile = async (userData) => {
       // upload image to the presigned url
       await axios.put(uploadConfig.data.url, userData.imageFile, {
         headers: {
-          'Content-Type': userData.imageFile.type, // specify the content type of the file for the security.
+          "Content-Type": userData.imageFile.type, // specify the content type of the file for the security.
         },
       });
 
       userData.imageUrl = uploadConfig.data.key;
     }
 
-    return await apiClient.patch('/user/edit', userData);
+    return await apiClient.patch("/user/edit", userData);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -265,7 +265,7 @@ export const submitImage = async (imageFile) => {
   try {
     // issue GET request to get the presigned image url
     const uploadConfig = await apiClient.get(
-      'http://localhost:5002/api/upload'
+      "http://localhost:5002/api/upload"
     );
 
     /**
@@ -279,12 +279,12 @@ export const submitImage = async (imageFile) => {
     // upload image to the presigned url
     await axios.put(uploadConfig.data.url, imageFile, {
       headers: {
-        'Content-Type': imageFile.type, // specify the content type of the file for the security.
+        "Content-Type": imageFile.type, // specify the content type of the file for the security.
       },
     });
 
     // update user profile with the image url
-    const response = await apiClient.patch('/user/edit', {
+    const response = await apiClient.patch("/user/edit", {
       imageUrl: uploadConfig.data.key,
     });
 
@@ -292,6 +292,21 @@ export const submitImage = async (imageFile) => {
 
     // issue POST request to upload the image to the presigned url
     // if anything goes wrong, redirect to error page
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
+export const updateAppointmentVideoStartTime = async (appointmentData) => {
+  try {
+    return await apiClient.patch(
+      `/appointment/videoStartTime`,
+      appointmentData
+    );
   } catch (exception) {
     checkResponseCode(exception);
     return {

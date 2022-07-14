@@ -10,7 +10,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Stack from "@mui/material/Stack";
-import TextFieldWithLabel from "../shared/components/TextFieldWithLabel";
 import moment from "moment";
 import AppointmentCard from "../shared/components/AppointmentCard";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,8 +31,6 @@ export default function Availability() {
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isTimeValid, setIsTimeValid] = useState(false);
-  // const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(null);
@@ -44,13 +41,7 @@ export default function Availability() {
    */
 
   useEffect(() => {
-    if (
-      openingAppointmentsList.length &&
-      // description &&
-      date &&
-      startTime &&
-      endTime
-    ) {
+    if (openingAppointmentsList.length && date && startTime && endTime) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
@@ -59,14 +50,7 @@ export default function Availability() {
       setIsNewAppointmentValid(date && startTime && endTime ? true : false);
     };
     handleCreateAppointmentCheck();
-  }, [
-    openingAppointmentsList,
-    setIsFormValid,
-    // description,
-    date,
-    startTime,
-    endTime,
-  ]);
+  }, [openingAppointmentsList, setIsFormValid, date, startTime, endTime]);
 
   const parseDate = (value, setValue) => {
     const time = moment(value).format("HH:mm");
@@ -161,13 +145,6 @@ export default function Availability() {
             Create New Time Slot
           </Button>
 
-          {/* <TextFieldWithLabel
-            id="description"
-            label="Description"
-            autoFocus={true}
-            value={description}
-            setValue={setDescription}
-          /> */}
           <Grid
             sx={{
               display: "flex",

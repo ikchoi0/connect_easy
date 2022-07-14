@@ -49,6 +49,19 @@ const getAllAppointments = async (req, res) => {
       const titleStartTime = moment(newDate + " " + startTime).format("HH:mm");
       const titleEndTime = moment(newDate + " " + endTime).format("HH:mm");
 
+      let color = "#778899";
+      // color = appointment["videoEndTime"] && "#778899";
+      if (!appointment.appointmentBooked) {
+        color = "#90EE90";
+      } else {
+        if (!appointment.appointmentCancel) {
+          color = "#4682B4";
+        } else {
+          color = "#FA8072";
+        }
+      }
+
+      console.log(color);
       return {
         consultant:
           appointment.consultant.firstName +
@@ -64,10 +77,11 @@ const getAllAppointments = async (req, res) => {
         end: newEndTime,
         title: `${titleStartTime} - ${titleEndTime}`,
         allDay: false,
-        color: appointment.appointmentBooked ? "#778899" : "#90EE90",
+        color: color,
         resource: appointment.client,
         appointmentBooked: appointment.appointmentBooked,
         consultantEmail: appointment.consultant.email,
+        appointmentCancel: appointment.appointmentCancel,
         clientEmail: appointment.client?.email || "",
       };
     });

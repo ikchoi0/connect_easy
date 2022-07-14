@@ -1,14 +1,14 @@
-import React from "react";
-import { useEffect, useRef } from "react";
-import { io } from "socket.io-client";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
-import VideoCall from "./VideoCall";
+import React from 'react';
+import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateAppointmentVideoStartTime } from '../store/reducers/meetingReducer';
+import VideoCall from './VideoCall';
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  const socket = io("http://localhost:5002");
+  const socket = io('http://localhost:5002');
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
   const history = useHistory();
@@ -23,10 +23,10 @@ const Meeting = ({ meetingId }) => {
     // console.log("PEERCONNECTIONREF", peerConnectionRef);
 
     peerConnectionRef = new RTCPeerConnection();
-    peerConnectionRef.addEventListener("icecandidate", handleIce);
-    peerConnectionRef.addEventListener("addstream", handleAddStream);
+    peerConnectionRef.addEventListener('icecandidate', handleIce);
+    peerConnectionRef.addEventListener('addstream', handleAddStream);
 
-    socket.on("welcome", async () => {
+    socket.on('welcome', async () => {
       try {
         // console.log("Sending offer");
         const offer = await peerConnectionRef?.createOffer({
@@ -34,13 +34,13 @@ const Meeting = ({ meetingId }) => {
         });
 
         await peerConnectionRef?.setLocalDescription(offer);
-        socket.emit("offer", offer, meetingId);
+        socket.emit('offer', offer, meetingId);
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on("offer", async (offer) => {
+    socket.on('offer', async (offer) => {
       try {
         await peerConnectionRef?.setRemoteDescription(offer);
 
@@ -50,13 +50,13 @@ const Meeting = ({ meetingId }) => {
         await peerConnectionRef?.setLocalDescription(answer);
 
         // console.log("Sending answer");
-        socket.emit("answer", answer, meetingId);
+        socket.emit('answer', answer, meetingId);
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on("answer", async (answer) => {
+    socket.on('answer', async (answer) => {
       try {
         // console.log("Received answer");
         // console.log(answer);
@@ -64,12 +64,12 @@ const Meeting = ({ meetingId }) => {
         await peerConnectionRef?.setRemoteDescription(answer);
       } catch (error) {
         console.log(error);
-        socket.emit("leave", meetingId);
+        socket.emit('leave', meetingId);
         // window.location.replace("/dashboard");
       }
     });
 
-    socket.on("ice", async (ice) => {
+    socket.on('ice', async (ice) => {
       try {
         // console.log("received candidate", ice);
         if (ice) {
@@ -87,12 +87,12 @@ const Meeting = ({ meetingId }) => {
         // console.log(error);
       }
     });
-    socket.on("peer_left", async (ice) => {
+    socket.on('peer_left', async (ice) => {
       // console.log("Peer left, closing connection");
       peerConnectionRef?.close();
       peerConnectionRef = new RTCPeerConnection();
-      peerConnectionRef.addEventListener("icecandidate", handleIce);
-      peerConnectionRef.addEventListener("addstream", handleAddStream);
+      peerConnectionRef.addEventListener('icecandidate', handleIce);
+      peerConnectionRef.addEventListener('addstream', handleAddStream);
       init();
     });
 
@@ -129,7 +129,7 @@ const Meeting = ({ meetingId }) => {
   function handleIce(data) {
     // console.log("sent candidate");
     // console.log("#######ICE########", data);
-    socket.emit("ice", data.candidate, meetingId);
+    socket.emit('ice', data.candidate, meetingId);
   }
 
   function handleAddStream(data) {
@@ -144,7 +144,7 @@ const Meeting = ({ meetingId }) => {
     video = videoRef.current;
     // console.log("MY FACE VIDEO REF", video);
 
-    socket.emit("join_room", meetingId);
+    socket.emit('join_room', meetingId);
 
     const myStreamResult = await getCamera(video);
 
@@ -155,13 +155,12 @@ const Meeting = ({ meetingId }) => {
 
   return (
     <>
-    
       <video
         ref={videoRef}
         autoPlay
         playsInline
-        width={"400px"}
-        height={"400px"}
+        width={'400px'}
+        height={'400px'}
       ></video>
 
       <h2>This is video 1</h2>
@@ -170,8 +169,8 @@ const Meeting = ({ meetingId }) => {
         ref={peerVideoRef}
         autoPlay
         playsInline
-        width={"400px"}
-        height={"400px"}
+        width={'400px'}
+        height={'400px'}
       ></video>
       <h2>This is video 2</h2>
 

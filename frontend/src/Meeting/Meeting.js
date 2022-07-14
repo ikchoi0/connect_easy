@@ -4,11 +4,21 @@ import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
-import VideoCall from "./VideoCall";
+import VideoCallButtons from "./VideoCallButtons";
+import {
+  Box,
+  Container,
+  Typography,
+  CardMedia,
+  Grid,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  const socket = io("http://localhost:5002");
+  // const socket = io("http://localhost:5002");
+  const socket = io("https://connect-easy-rid.herokuapp.com");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
   const history = useHistory();
@@ -22,7 +32,20 @@ const Meeting = ({ meetingId }) => {
   useEffect(() => {
     // console.log("PEERCONNECTIONREF", peerConnectionRef);
 
-    peerConnectionRef = new RTCPeerConnection();
+    peerConnectionRef = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: [
+            "stun:stun.l.google.com:19302",
+            "stun:stun1.l.google.com:19302",
+            "stun:stun2.l.google.com:19302",
+            "stun:stun3.l.google.com:19302",
+            "stun:stun4.l.google.com:19302",
+          ],
+        },
+      ],
+    });
+
     peerConnectionRef.addEventListener("icecandidate", handleIce);
     peerConnectionRef.addEventListener("addstream", handleAddStream);
 
@@ -90,7 +113,19 @@ const Meeting = ({ meetingId }) => {
     socket.on("peer_left", async (ice) => {
       // console.log("Peer left, closing connection");
       peerConnectionRef?.close();
-      peerConnectionRef = new RTCPeerConnection();
+      peerConnectionRef = new RTCPeerConnection({
+        iceServers: [
+          {
+            urls: [
+              "stun:stun.l.google.com:19302",
+              "stun:stun1.l.google.com:19302",
+              "stun:stun2.l.google.com:19302",
+              "stun:stun3.l.google.com:19302",
+              "stun:stun4.l.google.com:19302",
+            ],
+          },
+        ],
+      });
       peerConnectionRef.addEventListener("icecandidate", handleIce);
       peerConnectionRef.addEventListener("addstream", handleAddStream);
       init();
@@ -155,28 +190,82 @@ const Meeting = ({ meetingId }) => {
 
   return (
     <>
-    
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        width={"400px"}
-        height={"400px"}
-      ></video>
+      <Container
+        maxWidth="lg"
+        color="primary.main"
+        sx={{
+          backgroundColor: "pink",
+        }}
+        display="flex"
+      >
+        <Grid container spacing={2} sx={{}}>
+          <Grid item md={8} sx={{ padding: 0 }}>
+            {/* 🎃 VIDEO 1 */}
+            <CardMedia
+              component="video"
+              ref={videoRef}
+              autoPlay
+              playsInline
+              width={"100%"}
+              height={"100%"}
+            ></CardMedia>
+          </Grid>
+          <Grid
+            item
+            md={4}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* 🎃 MEETING DETAILS */}
+            <Box
+              sx={{
+                height: "20%",
+                backgroundColor: "yellow",
+              }}
+            >
+              <Typography>Client: John Doe</Typography>
+              <Typography>Consultant: Jane Smith</Typography>
+              <Typography>Time elapsed</Typography>
+              <Typography>Description:</Typography>
+            </Box>
 
-      <h2>This is video 1</h2>
+            {/* 🎃 CHAT MESSAGES */}
+            <Box
+              sx={{
+                height: "70%",
+                backgroundColor: "white",
+              }}
+            >
+              Chat text here........
+            </Box>
+            <TextField
+              sx={
+                {
+                  // height: "20%",
+                }
+              }
+            ></TextField>
+            <Button variant="contained">Contained</Button>
+          </Grid>
 
-      <video
-        ref={peerVideoRef}
-        autoPlay
-        playsInline
-        width={"400px"}
-        height={"400px"}
-      ></video>
-      <h2>This is video 2</h2>
+          {/* 🎃 ICONS */}
+          <VideoCallButtons/>
 
-      {/* <VideoFrame setVideoRef={setVideoRef} />
-      <VideoFrame setVideoRef={setPeerVideoRef} /> */}
+          {/* 🎃 VIDEO 2 */}
+          <Grid item md={4}>
+            <CardMedia
+              component="video"
+              ref={peerVideoRef}
+              autoPlay
+              playsInline
+              width={"300px"}
+              height={"300px"}
+            ></CardMedia>
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 };

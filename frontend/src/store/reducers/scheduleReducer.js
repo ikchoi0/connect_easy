@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as api from "../../api";
-import { showAlertMessage } from "./alertReducer";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as api from '../../api';
+import { showAlertMessage } from './alertReducer';
 
 const schedulerState = {
   openingAppointmentsList: [],
@@ -10,7 +10,7 @@ const schedulerState = {
 };
 
 export const createOpenAppointments = createAsyncThunk(
-  "schedule/createOpenAppointments",
+  'schedule/createOpenAppointments',
   async (openAppointmentsList, thunkApi) => {
     const response = await api.setOpenAppointments(openAppointmentsList);
     if (response.error) {
@@ -22,9 +22,10 @@ export const createOpenAppointments = createAsyncThunk(
 );
 
 export const getAllAppointments = createAsyncThunk(
-  "schedule/getAppointments",
+  'schedule/getAppointments',
   async (consultantId, thunkApi) => {
     const response = await api.getAllAppointments(consultantId);
+
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
@@ -35,7 +36,7 @@ export const getAllAppointments = createAsyncThunk(
 
 // get appointments using client id
 export const getAppointmentsForClientId = createAsyncThunk(
-  "schedule/getAppointmentsForClientId",
+  'schedule/getAppointmentsForClientId',
   async (clientId, thunkApi) => {
     const response = await api.getAppointmentsForClientId(clientId);
 
@@ -49,7 +50,7 @@ export const getAppointmentsForClientId = createAsyncThunk(
 );
 
 export const getAppointmentsForTheDay = createAsyncThunk(
-  "schedule/getAppointmentsForTheDay",
+  'schedule/getAppointmentsForTheDay',
   async ({ consultantId, date }, thunkApi) => {
     const response = await api.getAppointmentsForConsultantsByDate(
       consultantId,
@@ -66,7 +67,7 @@ export const getAppointmentsForTheDay = createAsyncThunk(
 );
 
 export const deleteOneAppointment = createAsyncThunk(
-  "schedule/deleteOneAppointment",
+  'schedule/deleteOneAppointment',
   async (appointmentId, thunkApi) => {
     const response = await api.deleteOneAppointmentById(appointmentId);
 
@@ -79,7 +80,7 @@ export const deleteOneAppointment = createAsyncThunk(
 );
 
 export const bookAppointment = createAsyncThunk(
-  "schedule/boAppointment",
+  'schedule/boAppointment',
   async ({ appointmentData, history }, thunkApi) => {
     const response = await api.bookAppointment(appointmentData);
 
@@ -87,16 +88,16 @@ export const bookAppointment = createAsyncThunk(
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     } else {
-      history.push("/clientDashboard");
+      history.push('/clientDashboard');
       return response.data;
     }
   }
 );
 
 export const appointmentBookingCancel = createAsyncThunk(
-  "schedule/appointmentBookingCancel",
+  'schedule/appointmentBookingCancel',
   async (appointmentId, thunkApi) => {
-    console.log("appointmentId", appointmentId);
+    console.log('appointmentId', appointmentId);
     const response = await api.cancelBookedAppointment({ appointmentId });
 
     if (response.error) {
@@ -109,7 +110,7 @@ export const appointmentBookingCancel = createAsyncThunk(
 );
 
 const schedulerSlice = createSlice({
-  name: "scheduler",
+  name: 'scheduler',
   initialState: schedulerState,
 
   reducers: {
@@ -130,17 +131,17 @@ const schedulerSlice = createSlice({
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
-      console.log("create fulfilled", action.payload);
+      console.log('create fulfilled', action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {
-      console.log("create rejected", action.payload);
+      console.log('create rejected', action.payload);
     },
     [getAllAppointments.fulfilled]: (state, action) => {
-      console.log("get appointments fulfilled", action.payload);
+      console.log('get appointments fulfilled', action.payload);
       state.appointments = action.payload;
     },
     [getAllAppointments.rejected]: (state, action) => {
-      console.log("get rejected", action.payload);
+      console.log('get rejected', action.payload);
     },
     [deleteOneAppointment.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
@@ -149,28 +150,28 @@ const schedulerSlice = createSlice({
     },
     [getAppointmentsForTheDay.fulfilled]: (state, action) => {
       state.appointmentsForSelectedDate = action.payload;
-      console.log("get appointments for the day", action.payload);
+      console.log('get appointments for the day', action.payload);
     },
     [bookAppointment.pending]: (state, action) => {
       state.booked = false;
-      console.log("appointment booked PENDING", action.payload);
+      console.log('appointment booked PENDING', action.payload);
     },
     [bookAppointment.fulfilled]: (state, action) => {
       state.booked = true;
-      console.log("appointment booked FULFILLED", action.payload);
+      console.log('appointment booked FULFILLED', action.payload);
     },
     [bookAppointment.rejected]: (state, action) => {
-      console.log("BOOKget rejected", action.payload);
+      console.log('BOOKget rejected', action.payload);
     },
     [getAppointmentsForClientId.pending]: (state, action) => {
-      console.log("get appointments for client fulfilled", action.payload);
+      console.log('get appointments for client fulfilled', action.payload);
     },
     [getAppointmentsForClientId.fulfilled]: (state, action) => {
-      console.log("get appointments for client fulfilled", action.payload);
+      console.log('get appointments for client fulfilled', action.payload);
       state.appointments = action.payload;
     },
     [getAppointmentsForClientId.rejected]: (state, action) => {
-      console.log("get appointments for client rejected", action.payload);
+      console.log('get appointments for client rejected', action.payload);
     },
     [appointmentBookingCancel.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {

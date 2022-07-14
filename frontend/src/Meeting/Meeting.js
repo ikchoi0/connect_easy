@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateAppointmentVideoStartTime } from '../store/reducers/meetingReducer';
 import VideoCallButtons from './VideoCallButtons';
 import {
@@ -15,9 +15,13 @@ import {
   Button,
 } from '@mui/material';
 import { postStartMeeting } from '../store/reducers/meetingReducer';
+import { getMe } from '../store/reducers/authReducer';
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
+  // get current userDetails
+  const userDetails = useSelector((state) => state.auth.userDetails);
+
   // const socket = io("http://localhost:5002");
   const socket = io('https://connect-easy-rid.herokuapp.com');
   // const [videoRef, setVideoRef] = useState(null);
@@ -31,6 +35,8 @@ const Meeting = ({ meetingId }) => {
   let video;
 
   useEffect(() => {
+    // get me
+    dispatch(getMe());
     // console.log("PEERCONNECTIONREF", peerConnectionRef);
 
     peerConnectionRef = new RTCPeerConnection({
@@ -98,6 +104,7 @@ const Meeting = ({ meetingId }) => {
         // console.log("received candidate", ice);
         if (ice) {
           const user = JSON.parse(localStorage.getItem('user'));
+          console.log(userDetails);
           // console.log('!!!!!!!activeMeetingId!!!!!!', user.activeMeetingId);
           // console.log('!!!!!!!hasActiveMeeting!!!!!!', user.hasActiveMeeting);
           // update video start time here

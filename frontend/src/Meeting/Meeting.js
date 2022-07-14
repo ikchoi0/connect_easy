@@ -14,6 +14,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { postStartMeeting } from "../store/reducers/meetingReducer";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
@@ -96,10 +97,14 @@ const Meeting = ({ meetingId }) => {
       try {
         // console.log("received candidate", ice);
         if (ice) {
+          const userId = JSON.parse(localStorage.getItem("user")).userId;
           // update video start time here
           dispatch(
-            updateAppointmentVideoStartTime({
-              appointmentData: { appointmentId: meetingId },
+            postStartMeeting({
+              appointmentData: {
+                appointmentId: meetingId,
+                userId: userId,
+              },
               history,
             })
           );

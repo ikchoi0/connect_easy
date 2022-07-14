@@ -11,13 +11,10 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const userDetails = localStorage.getItem("user");
-
     if (userDetails) {
       const token = JSON.parse(userDetails).token;
-
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (err) => {
@@ -302,12 +299,24 @@ export const submitImage = async (imageFile) => {
   }
 };
 
-export const updateAppointmentVideoStartTime = async (appointmentData) => {
+export const postStartMeeting = async (appointmentData) => {
   try {
-    return await apiClient.patch(
-      `/appointment/videoStartTime`,
+    return await apiClient.post(
+      `/appointment/postStartMeeting`,
       appointmentData
     );
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
+export const postEndMeeting = async (appointmentData) => {
+  try {
+    return await apiClient.post(`/appointment/postEndMeeting`, appointmentData);
   } catch (exception) {
     checkResponseCode(exception);
     return {

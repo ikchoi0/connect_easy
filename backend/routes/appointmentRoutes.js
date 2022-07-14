@@ -77,9 +77,16 @@ router.patch(
   appointmentController.controllers.updateAppointmentBookedStatus
 );
 
-router.patch(
-  "/videoStartTime",
+router.post(
+  "/postStartMeeting",
   auth(["client", "consultant"]),
-  appointmentController.controllers.updateAppointmentVideoStartTime
+  appointmentController.controllers.postStartMeeting
+);
+module.exports = router;
+
+router.post(
+  "/postEndMeeting",
+  auth(["client", "consultant"]),
+  appointmentController.controllers.postEndMeeting
 );
 module.exports = router;

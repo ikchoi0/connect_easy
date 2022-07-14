@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  ButtonGroup,
-  Paper,
-} from '@mui/material';
-import Stack from '@mui/material/Stack';
+import { Box, Button, Typography } from '@mui/material';
+
 import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,8 +22,9 @@ const Item = styled(Button)(({ theme }) => ({
 }));
 
 export default function TimeSlots(props) {
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
+  const [selectedDateText, setSelectedDateText] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+
   const [confirm, setConfirm] = useState(false);
 
   const dispatch = useDispatch();
@@ -41,7 +35,7 @@ export default function TimeSlots(props) {
   );
 
   useEffect(() => {
-    setSelectedDate(props.selectedDate.toLocaleDateString());
+    setSelectedDateText(props.selectedDate.toLocaleDateString());
 
     const date = moment(props.selectedDate).format('YYYY-MM-DD');
 
@@ -51,7 +45,9 @@ export default function TimeSlots(props) {
   }, [props.selectedDate, dispatch]);
 
   const handleDismissOnClick = () => {
-    setSelectedAppointmentId('');
+    props.setSelectedAppointmentId('');
+    props.setDescription('');
+    setConfirm(false);
   };
 
   const handledBookingAppointment = () => {
@@ -61,17 +57,27 @@ export default function TimeSlots(props) {
   const handleConfirmClose = () => {
     const appointmentData = {
       description: props.description,
-      selectedAppointmentId,
+      selectedAppointmentId: props.selectedAppointmentId,
     };
+    console.log(appointmentData);
 
-    // dispatch(bookAppointment({ appointmentData, history }));
+    dispatch(bookAppointment({ appointmentData, history }));
     setConfirm(false);
   };
 
   const items = appointmentsForDay.map((item) => (
-    <Item key={item.appointmentId}>
-      <div
-        onClick={() => setSelectedAppointmentId(item.appointmentId)}
+    <div key={item.appointmentId}>
+      <Button
+        onClick={() => {
+          // console.log(item);
+          const start = moment(item.start).format('HH:mm');
+          const end = moment(item.end).format('HH:mm');
+          const timeSlot = `${start} - ${end}`;
+
+          setSelectedTimeSlot(timeSlot);
+          props.setSelectedAppointmentId(item.appointmentId);
+        }}
+        variant="contained"
         value={item.appointmentId}
       >
         <Box sx={{ display: 'flex', gap: '1rem' }}>
@@ -85,8 +91,8 @@ export default function TimeSlots(props) {
             {moment(item.end).format('HH:mm')}
           </Typography>
         </Box>
-      </div>
-    </Item>
+      </Button>
+    </div>
   ));
 
   return (
@@ -99,31 +105,40 @@ export default function TimeSlots(props) {
       }}
     >
       <Typography variant="h6" gutterBottom>
-        {selectedDate}
+        {selectedDateText}
       </Typography>
 
-      <Stack spacing={2}>
-        {/* {items} */}
-        {!selectedAppointmentId ? (
-          items
-        ) : (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {items && items}
+        {items.length > 0 && props.selectedAppointmentId && (
           <>
-            <SchedulerDetailsInputs
-              description={props.description}
-              setDescription={props.setDescription}
-            />
+            <Box sx={{ marginTop: '2rem' }}>
+              <Typography variant="subtitle1" gutterBottom>
+                For: {selectedTimeSlot}
+              </Typography>
+              <SchedulerDetailsInputs
+                description={props.description}
+                setDescription={props.setDescription}
+              />
+              {props.description.length > 0 && (
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Button onClick={handleDismissOnClick}>Dismiss</Button>
+                  <Button onClick={handledBookingAppointment}>Book</Button>
+                </Box>
+              )}
+            </Box>
           </>
         )}
-        {appointmentsForDay.length > 0 && (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button onClick={handleDismissOnClick}>Dismiss</Button>
-            <Button onClick={handledBookingAppointment}>Book</Button>
-          </Box>
-        )}
-      </Stack>
+      </Box>
       {confirm && (
         <DialogPopUp open={confirm}>
-          <ConfirmModal onConfirm={handleConfirmClose} />
+          <ConfirmModal
+            onConfirm={handleConfirmClose}
+            timeSlot={selectedTimeSlot}
+            selectedDate={selectedDateText}
+            consultantInfo={props.consultantInfo}
+            onCancel={handleDismissOnClick}
+          />
         </DialogPopUp>
       )}
     </Box>

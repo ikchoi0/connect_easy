@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
+import { Accordion } from "@mui/material";
+
 
 const AppointmentCard = ({
   role,
@@ -164,11 +166,25 @@ const AppointmentCard = ({
           )}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", mt: "16px" }}>
+      <Box
+        component="div"
+        whiteSpace="normal"
+        sx={{ display: "flex", mt: "16px" }}
+      >
         <Typography {...typographyProps} fontWeight="bold">
           {inquiry} &nbsp;
         </Typography>
-        <Typography>{body}</Typography>
+        <Typography
+          noWrap
+          sx={{
+            width: "300px",
+            wordWrap: "break-word",
+            textOverflow: "ellipsis",
+          }}
+        >
+          
+          {body}
+        </Typography>
       </Box>
     </>
   );

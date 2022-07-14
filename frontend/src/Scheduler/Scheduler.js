@@ -21,22 +21,25 @@ export default function Scheduler({ selectable = true, consultantId }) {
 
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [description, setDescription] = React.useState('');
+  const [selectedAppointmentId, setSelectedAppointmentId] = React.useState('');
 
   const scheduler = useSelector((state) => state.scheduler);
   const role = JSON.parse(localStorage.getItem('user')).role;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(consultantId);
+    console.log(scheduler);
     if (consultantId) {
       dispatch(getAllAppointments(consultantId));
     }
   }, [dispatch]);
 
   const handleOpenTimeSlots = (e) => {
+    setSelectedAppointmentId('');
     setDescription('');
     setSelectedDate(e.start);
   };
+
   return (
     <>
       <Container
@@ -68,9 +71,11 @@ export default function Scheduler({ selectable = true, consultantId }) {
             consultantId={consultantId}
             description={description}
             setDescription={setDescription}
+            selectedAppointmentId={selectedAppointmentId}
+            setSelectedAppointmentId={setSelectedAppointmentId}
+            consultantInfo={scheduler ? scheduler.appointments[0] : null}
           />
         )}
-        {/* <TimeSlots selectedDate={selectedDate} consultantId={consultantId} /> */}
       </Container>
     </>
   );

@@ -2,7 +2,8 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
-import { Accordion } from "@mui/material";
+
+
 
 
 const AppointmentCard = ({
@@ -175,9 +176,11 @@ const AppointmentCard = ({
           {inquiry} &nbsp;
         </Typography>
         <Typography
-          noWrap
+          textOverflow={"ellipsis"}
+     
+          // noWrap
           sx={{
-            width: "300px",
+            width: "350px",
             wordWrap: "break-word",
             textOverflow: "ellipsis",
           }}

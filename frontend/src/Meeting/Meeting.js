@@ -4,6 +4,8 @@ import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
+import VideoCall from "./VideoCall";
+
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
   const socket = io("http://localhost:5002");
@@ -153,6 +155,7 @@ const Meeting = ({ meetingId }) => {
 
   return (
     <>
+    
       <video
         ref={videoRef}
         autoPlay
@@ -167,8 +170,8 @@ const Meeting = ({ meetingId }) => {
         ref={peerVideoRef}
         autoPlay
         playsInline
-        width={"200px"}
-        height={"200px"}
+        width={"400px"}
+        height={"400px"}
       ></video>
       <h2>This is video 2</h2>
 

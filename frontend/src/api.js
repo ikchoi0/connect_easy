@@ -3,7 +3,7 @@ import { logout } from './shared/utils/auth';
 import { showAlertMessage } from './store/reducers/alertReducer';
 
 const apiClient = axios.create({
-  // baseURL: 'http://localhost:5002',
+  // baseURL: "http://localhost:5002/api",
   baseURL: 'https://connect-easy-rid.herokuapp.com/api',
   timeout: 1000,
 });

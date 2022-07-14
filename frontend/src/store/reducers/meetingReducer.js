@@ -1,20 +1,42 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../api";
-import { showAlertMessage } from "./alertReducer";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 
 const meetingState = {
   meetingId: "",
 };
 
-export const updateVideoStatusActive = createAsyncThunk(
-  "schedule/updateVideoStatusActive",
+// updates video start time in appointment table
+// updates hasActiveMeeting, activeMeetingId in user table
+export const postStartMeeting = createAsyncThunk(
+  "schedule/postStartMeeting",
   async ({ appointmentData, history }, thunkApi) => {
-    // console.log(appointmentData);
-    const response = await api.updateVideoStatusActive(appointmentData);
+    // pass the appointmentData, userId
+    const response = await api.postStartMeeting(appointmentData);
     if (response.error) {
-      thunkApi.dispatch(showAlertMessage(response.message));
+      thunkApi.dispatch(showAlertMessage(response.data.message));
       return thunkApi.rejectWithValue(response);
     } else {
+      thunkApi.dispatch(
+        showSuccessMessage("Your are now connected to the meeting")
+      );
+      return response.data;
+    }
+  }
+);
+// updates video end time in appointment table
+// updates hasActiveMeeting, activeMeetingId in user table
+export const postEndMeeting = createAsyncThunk(
+  "schedule/postEndMeeting",
+  async ({ appointmentData, history }, thunkApi) => {
+    // pass appointmentId to backend
+    const response = await api.postEndMeeting(appointmentData);
+    if (response.error) {
+      thunkApi.dispatch(showAlertMessage(response.data.message));
+      return thunkApi.rejectWithValue(response);
+    } else {
+      console.log(response);
+      thunkApi.dispatch(showSuccessMessage("Thank you! Meeting ended"));
       return response.data;
     }
   }
@@ -30,12 +52,19 @@ const meetingSlice = createSlice({
     },
   },
   extraReducers: {
-    [updateVideoStatusActive.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      console.log("updateVideoStartTime fulfilled");
+    [postStartMeeting.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      console.log("Meeting started successfully.");
     },
-    [updateVideoStatusActive.rejected]: (state, action) => {
-      console.log("updateVideoStartTime rejected");
+    [postStartMeeting.rejected]: (state, action) => {
+      console.log("postStartMeeting rejected");
+    },
+    [postEndMeeting.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      console.log("Meeting ended successfully.");
+    },
+    [postEndMeeting.rejected]: (state, action) => {
+      console.log("postEndMeeting rejected");
     },
   },
 });

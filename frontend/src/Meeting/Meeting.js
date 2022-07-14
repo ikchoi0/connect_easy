@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { updateVideoStatusActive } from "../store/reducers/meetingReducer";
+import { postStartMeeting } from "../store/reducers/meetingReducer";
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
   const socket = io("http://localhost:5002");
@@ -76,7 +76,7 @@ const Meeting = ({ meetingId }) => {
           const userId = JSON.parse(localStorage.getItem("user")).userId;
           // update video start time here
           dispatch(
-            updateVideoStatusActive({
+            postStartMeeting({
               appointmentData: {
                 appointmentId: meetingId,
                 userId: userId,

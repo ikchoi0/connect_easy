@@ -1,7 +1,8 @@
 const Appointment = require("../../models/appointment");
 const User = require("../../models/user");
 const Types = require("mongoose").Types;
-const updateVideoStatusActive = async (req, res) => {
+
+const postStartMeeting = async (req, res) => {
   try {
     const { appointmentId, userId } = req.body;
     const appointment = await Appointment.findById(
@@ -36,4 +37,4 @@ const updateVideoStatusActive = async (req, res) => {
   }
 };
 
-module.exports = updateVideoStatusActive;
+module.exports = postStartMeeting;

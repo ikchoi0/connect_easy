@@ -300,12 +300,24 @@ export const submitImage = async (imageFile) => {
   }
 };
 
-export const updateVideoStatusActive = async (appointmentData) => {
+export const postStartMeeting = async (appointmentData) => {
   try {
-    return await apiClient.patch(
-      `/appointment/updateVideoStatusActive`,
+    return await apiClient.post(
+      `/appointment/postStartMeeting`,
       appointmentData
     );
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
+export const postEndMeeting = async (appointmentData) => {
+  try {
+    return await apiClient.post(`/appointment/postEndMeeting`, appointmentData);
   } catch (exception) {
     checkResponseCode(exception);
     return {

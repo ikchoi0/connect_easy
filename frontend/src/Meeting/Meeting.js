@@ -97,18 +97,20 @@ const Meeting = ({ meetingId }) => {
       try {
         // console.log("received candidate", ice);
         if (ice) {
-          const userId = JSON.parse(localStorage.getItem('user')).userId;
+          const user = JSON.parse(localStorage.getItem('user'));
+          // console.log('!!!!!!!activeMeetingId!!!!!!', user.activeMeetingId);
+          // console.log('!!!!!!!hasActiveMeeting!!!!!!', user.hasActiveMeeting);
           // update video start time here
 
-          // dispatch(
-          //   postStartMeeting({
-          //     appointmentData: {
-          //       appointmentId: meetingId,
-          //       userId: userId,
-          //     },
-          //     history,
-          //   })
-          // );
+          dispatch(
+            postStartMeeting({
+              appointmentData: {
+                appointmentId: meetingId,
+                userId: user.userId,
+              },
+              history,
+            })
+          );
           console.log('connected !!');
         }
         await peerConnectionRef?.addIceCandidate(ice);

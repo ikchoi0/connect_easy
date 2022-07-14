@@ -33,8 +33,6 @@ const postLogin = async (req, res) => {
           role: user.role,
           firstName: user.firstName,
           lastName: user.lastName,
-          activeMeetingId: user.options.activeMeetingId,
-          hasActiveMeeting: user.options.hasActiveMeeting,
         },
       });
     }

@@ -1,9 +1,9 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const authController = require("../controllers/auth/authController");
-const Joi = require("joi");
-const validator = require("express-joi-validation").createValidator({});
-Joi.objectId = require("joi-objectid")(Joi);
+const authController = require('../controllers/auth/authController');
+const Joi = require('joi');
+const validator = require('express-joi-validation').createValidator({});
+Joi.objectId = require('joi-objectid')(Joi);
 
 // const auth = require("../middleware/auth");
 const registerSchema = Joi.object({
@@ -20,14 +20,16 @@ const loginSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+router.get('/getMe', authController.controllers.getUserMeetingStatus);
+
 router.post(
-  "/register",
+  '/register',
   validator.body(registerSchema),
   authController.controllers.postRegister
 );
 
 router.post(
-  "/login",
+  '/login',
   validator.body(loginSchema),
   authController.controllers.postLogin
 );

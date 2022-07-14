@@ -22,12 +22,22 @@ apiClient.interceptors.request.use(
   }
 );
 
+export const getMe = async () => {
+  try {
+    return await apiClient.get('/auth/getMe');
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
 // checks token again and resets password if valid
 export const resetPassword = async (data) => {
   try {
     return await apiClient.post('/password/reset', data);
   } catch (exception) {
-    console.log(exception);
     return {
       error: true,
       message: exception.response.data,
@@ -40,7 +50,6 @@ export const resetPasswordLink = async (data) => {
   try {
     return await apiClient.post('/password', data);
   } catch (exception) {
-    console.log(exception);
     return {
       error: true,
       message: exception.response.data,
@@ -52,7 +61,6 @@ export const checkTokenForPasswordReset = async ({ email, token }) => {
   try {
     return await apiClient.get(`/password/${email}/${token}`);
   } catch (exception) {
-    console.log(exception);
     return {
       error: true,
       message: exception.response.data,

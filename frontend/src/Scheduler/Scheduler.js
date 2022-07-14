@@ -41,27 +41,25 @@ export default function Scheduler({
     }
   }, [dispatch]);
 
-  const filterButtons =
-    filterLists &&
-    filterLists.map((item) => {
-      return (
-        <Button
-          key={item.name}
-          onClick={(e) => {
-            e.preventDefault();
-            setFilterName(item.name);
-          }}
-          variant="contained"
-          sx={{
-            bgcolor: item.color,
-            color: "white",
-            ":hover": { bgcolor: "white", color: item.color },
-          }}
-        >
-          {item.name}
-        </Button>
-      );
-    });
+  const filterButtons = filterLists.map((item) => {
+    return (
+      <Button
+        key={item.name}
+        onClick={(e) => {
+          e.preventDefault();
+          setFilterName(item.name);
+        }}
+        variant="contained"
+        sx={{
+          bgcolor: item.color,
+          color: "white",
+          ":hover": { bgcolor: "white", color: item.color },
+        }}
+      >
+        {item.name}
+      </Button>
+    );
+  });
   const filteredAppointments = filterAppointments(
     scheduler.appointments,
     filterName

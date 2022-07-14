@@ -24,7 +24,7 @@ apiClient.interceptors.request.use(
 
 export const getMe = async () => {
   try {
-    return await apiClient.get('/getMe');
+    return await apiClient.get('/auth/getMe');
   } catch (exception) {
     return {
       error: true,

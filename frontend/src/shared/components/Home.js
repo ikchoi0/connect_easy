@@ -24,13 +24,14 @@ export default function Home({
   handleAuth();
   // GRAB the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
-  const userDetails = JSON.parse(localStorage.getItem('user'));
+  const userDetails = JSON.parse(localStorage.getItem("user"));
 
   // FILTER menu for appointment status types:
   const selectedStatusFilter = useSelector(
     (state) => state.appointment.selectedStatusFilter
   );
   const dispatch = useDispatch();
+
   const handleChange = (event) => {
     dispatch(updateSelectedStatusFilter(event.target.value));
   };
@@ -48,7 +49,7 @@ export default function Home({
   });
   const handleJoinMeetingButton = (meetingId) => {
     dispatch(updateMeetingId(meetingId));
-    dispatch(updateSelectedNavigatorItem('Meeting'));
+    dispatch(updateSelectedNavigatorItem("Meeting"));
   };
   const filteredAppointmentsList = filterAppointments(
     appointments,
@@ -60,7 +61,7 @@ export default function Home({
     (appointment, index) => {
       return (
         <AppointmentCard
-          role={JSON.parse(localStorage.getItem('user')).role}
+          role={JSON.parse(localStorage.getItem("user")).role}
           clientName={appointment.client}
           consultantName={appointment.consultant}
           // email={userDetails.email}
@@ -68,8 +69,8 @@ export default function Home({
           id={appointment.appointmentId}
           description={appointment.description}
           date={appointment.date}
-          startTime={moment(appointment.start).format('HH:mm')}
-          endTime={moment(appointment.end).format('HH:mm')}
+          startTime={moment(appointment.start).format("HH:mm")}
+          endTime={moment(appointment.end).format("HH:mm")}
           buttonLabel={buttonLabel}
           handleCardButton={handleCardButton}
           appointmentBooked={appointment.appointmentBooked}
@@ -78,8 +79,8 @@ export default function Home({
         >
           <Button
             sx={{
-              ml: '5px',
-              mr: '5px',
+              ml: "5px",
+              mr: "5px",
               flexGrow: 1,
             }}
             variant="contained"
@@ -99,34 +100,34 @@ export default function Home({
   return (
     <Box
       sx={{
-        maxWidth: '70%',
-        minHeight: '50vh',
-        padding: '20px',
-        height: 'auto',
-        backgroundColor: '#fafafa',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '5px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        maxWidth: "70%",
+        minHeight: "50vh",
+        padding: "20px",
+        height: "auto",
+        backgroundColor: "#fafafa",
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: "5px",
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
         }}
       >
-        <Typography variant="h5" mb={'40px'}>
+        <Typography variant="h5" mb={"40px"}>
           Welcome,
           <Typography
-            mb={'40px'}
+            mb={"40px"}
             fontStyle="italic"
-            fontWeight={'600'}
-            fontSize={'1.5rem'}
+            fontWeight={"600"}
+            fontSize={"1.5rem"}
           >
-            {userDetails && userDetails.firstName}{' '}
+            {userDetails && userDetails.firstName}{" "}
             {userDetails && userDetails.lastName}!
           </Typography>
         </Typography>
@@ -134,7 +135,7 @@ export default function Home({
 
       <FormControl
         sx={{
-          maxWidth: '30%',
+          maxWidth: "30%",
         }}
       >
         <InputLabel id="demo-simple-select-label">Filter by Status</InputLabel>
@@ -151,18 +152,18 @@ export default function Home({
 
       <Box
         sx={{
-          marginTop: '20px',
-          maxWidth: '100%',
-          minHeight: '50vh',
-          padding: '20px',
-          height: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          borderRadius: '5px',
+          marginTop: "20px",
+          maxWidth: "100%",
+          minHeight: "50vh",
+          padding: "20px",
+          height: "auto",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "5px",
         }}
       >
-        <Typography variant="h4" component="h1" mb={'30px'}>
-          {mappedAppointments.length ? mappedAppointments : 'No appointments'}
+        <Typography variant="h4" component="h1" mb={"30px"}>
+          {mappedAppointments.length ? mappedAppointments : "No appointments"}
         </Typography>
       </Box>
     </Box>

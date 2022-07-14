@@ -3,6 +3,9 @@ import { Box, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
 
+
+
+
 const AppointmentCard = ({
   role,
   clientName,
@@ -20,6 +23,7 @@ const AppointmentCard = ({
   handleCardButton,
   appointmentBooked,
   children,
+  unbookedString = "Unbooked",
 }) => {
   let title = "Meeting with: ";
   let name = "";
@@ -27,7 +31,7 @@ const AppointmentCard = ({
   let clientEmailString = "";
   let consultantEmailString = "";
   let inquiry = "Inquiry: ";
-
+  
 
   
 
@@ -49,6 +53,8 @@ const AppointmentCard = ({
     name = "";
     inquiry = "";
   }
+
+
 
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }
@@ -96,10 +102,9 @@ const AppointmentCard = ({
           {...typographyProps}
           fontWeight="bold"
         >
-          &nbsp; &nbsp;Unbooked
+          &nbsp; &nbsp;{unbookedString}
         </Typography>
         <Button
-        
           variant="contained"
           color="error"
           size="large"
@@ -162,11 +167,27 @@ const AppointmentCard = ({
           )}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", mt: "16px" }}>
+      <Box
+        component="div"
+        whiteSpace="normal"
+        sx={{ display: "flex", mt: "16px" }}
+      >
         <Typography {...typographyProps} fontWeight="bold">
           {inquiry} &nbsp;
         </Typography>
-        <Typography>{body}</Typography>
+        <Typography
+          textOverflow={"ellipsis"}
+     
+          // noWrap
+          sx={{
+            width: "350px",
+            wordWrap: "break-word",
+            textOverflow: "ellipsis",
+          }}
+        >
+          
+          {body}
+        </Typography>
       </Box>
     </>
   );

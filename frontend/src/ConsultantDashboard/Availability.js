@@ -97,6 +97,7 @@ export default function Availability() {
         endTime={moment(appointment.appointmentEndTime).format("HH:mm")}
         handleCardButton={handleDeleteAppointmentOnClick}
         buttonLabel={"Delete"}
+        unbookedString={""}
       />
     );
   });

@@ -48,7 +48,10 @@ const CategoryCard = ({
           component="img"
           height="120px"
           width="100%"
-          image={profilePicture}
+          image={
+            profilePicture ||
+            "https://i.ibb.co/9tCfDKv/defaultprofilepicture.png"
+          }
           alt="profile picture"
         />
         <CardContent sx={{ flex: "1 0 auto" }}>

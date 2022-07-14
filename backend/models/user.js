@@ -28,6 +28,8 @@ const userSchema = new Schema(
       website: { type: String },
 
       available: { type: Boolean },
+      activeMeetingId: { type: String },
+      hasActiveMeeting: { type: Boolean, default: false },
     },
   },
   { timestamps: true }

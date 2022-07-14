@@ -37,14 +37,14 @@ const ClientSeeds = [
     role: "client",
     firstName: "Dongwan",
     lastName: "Kim",
-    email: "donkim@client.com",
+    email: "don@client.com",
     password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
   {
     role: "client",
     firstName: "Ik Sung",
     lastName: "Choi",
-    email: "ikchoi@client.com",
+    email: "choi@client.com",
     password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
 ];

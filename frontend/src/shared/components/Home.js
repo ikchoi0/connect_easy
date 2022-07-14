@@ -14,7 +14,6 @@ import { updateMeetingId } from '../../store/reducers/meetingReducer';
 import moment from 'moment';
 import { updateSelectedStatusFilter } from '../../store/reducers/appointmentReducer';
 import { filterAppointments } from '../utils/filterAppointments';
-import Grid from '@mui/material/Grid';
 
 export default function Home({
   getAppointmentAction,

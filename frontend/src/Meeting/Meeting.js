@@ -9,6 +9,7 @@ const Meeting = ({ meetingId }) => {
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
+  const myStream = useRef(null);
   let peerConnectionRef;
   let peerVideo;
   let video;
@@ -86,9 +87,7 @@ const Meeting = ({ meetingId }) => {
     init();
 
     return () => {
-      // socket.emit('disconnect-meeting', meetingId);
-      // socket.off();
-      // socket.emit("disconnect", meetingId);
+      myStream.current?.getTracks().forEach((track) => track.stop());
       peerConnectionRef?.close();
       peerConnectionRef = null;
       socket.close();
@@ -104,12 +103,12 @@ const Meeting = ({ meetingId }) => {
         video: true,
       };
 
-      const myStream = await navigator.mediaDevices.getUserMedia(
+      myStream.current = await navigator.mediaDevices.getUserMedia(
         initialConstraints
       );
-      console.log(myStream);
-      myFace.srcObject = myStream;
-      return myStream;
+      console.log(myStream.current);
+      myFace.srcObject = myStream.current;
+      return myStream.current;
     } catch (err) {
       console.log(err);
     }

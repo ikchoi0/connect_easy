@@ -6,7 +6,10 @@ import "./Scheduler.css";
 import { Container, Box, Button } from "@mui/material";
 import TimeSlots from "./TimeSlots";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAppointments } from "../store/reducers/scheduleReducer";
+import {
+  getAllAppointments,
+  getAppointmentsForClientId,
+} from "../store/reducers/scheduleReducer";
 import { handleAuth } from "../shared/utils/auth";
 import { bgcolor, color } from "@mui/system";
 import { filterAppointments } from "../shared/utils/filterAppointments";
@@ -31,13 +34,14 @@ export default function Scheduler({
   const [filterName, setFilterName] = React.useState("Show All");
 
   const scheduler = useSelector((state) => state.scheduler);
-  const role = JSON.parse(localStorage.getItem("user")).role;
+  const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(scheduler);
     if (consultantId) {
       dispatch(getAllAppointments(consultantId));
+    } else if (user.role === "client") {
+      dispatch(getAppointmentsForClientId(user.userId));
     }
   }, [dispatch]);
 
@@ -67,7 +71,6 @@ export default function Scheduler({
     filterName
   );
   const handleOpenTimeSlots = (e) => {
-    console.log(selectedDate);
     setSelectedAppointmentId("");
     setDescription("");
     setSelectedDate(e.start);
@@ -112,7 +115,7 @@ export default function Scheduler({
             }}
           />
         </Box>
-        {role === "client" && (
+        {user.role === "client" && consultantId && (
           <TimeSlots
             selectedDate={selectedDate}
             consultantId={consultantId}

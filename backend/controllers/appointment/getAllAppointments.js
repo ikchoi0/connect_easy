@@ -1,7 +1,7 @@
 const Types = require("mongoose").Types;
 const Appointment = require("../../models/appointment");
 const moment = require("moment");
-
+const COLORS = ["grey"];
 const getAllAppointments = async (req, res) => {
   try {
     const { consultantId } = req.params;
@@ -64,6 +64,7 @@ const getAllAppointments = async (req, res) => {
         end: newEndTime,
         title: `${titleStartTime} - ${titleEndTime}`,
         allDay: false,
+        color: appointment.appointmentBooked ? "#778899" : "#90EE90",
         resource: appointment.client,
         appointmentBooked: appointment.appointmentBooked,
         consultantEmail: appointment.consultant.email,

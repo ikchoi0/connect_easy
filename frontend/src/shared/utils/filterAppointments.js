@@ -1,3 +1,4 @@
+const COLORS = ["black, grey"];
 export const filterAppointments = (appointments, selectedStatusFilter) => {
   let filteredAppointmentsList;
   switch (selectedStatusFilter) {

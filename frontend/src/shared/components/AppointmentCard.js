@@ -20,6 +20,7 @@ const AppointmentCard = ({
   handleCardButton,
   appointmentBooked,
   children,
+  unbookedString = "Unbooked",
 }) => {
   let title = "Meeting with: ";
   let name = "";
@@ -27,7 +28,7 @@ const AppointmentCard = ({
   let clientEmailString = "";
   let consultantEmailString = "";
   let inquiry = "Inquiry: ";
-
+  
 
   
 
@@ -49,6 +50,8 @@ const AppointmentCard = ({
     name = "";
     inquiry = "";
   }
+
+
 
   const styles = appointmentBooked
     ? { backgroundColor: "#fafafa" }
@@ -96,10 +99,9 @@ const AppointmentCard = ({
           {...typographyProps}
           fontWeight="bold"
         >
-          &nbsp; &nbsp;Unbooked
+          &nbsp; &nbsp;{unbookedString}
         </Typography>
         <Button
-        
           variant="contained"
           color="error"
           size="large"

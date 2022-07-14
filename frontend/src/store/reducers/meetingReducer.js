@@ -6,11 +6,11 @@ const meetingState = {
   meetingId: "",
 };
 
-export const updateAppointmentVideoStartTime = createAsyncThunk(
-  "schedule/updateVideoStartTime",
+export const updateVideoStatusActive = createAsyncThunk(
+  "schedule/updateVideoStatusActive",
   async ({ appointmentData, history }, thunkApi) => {
     // console.log(appointmentData);
-    const response = await api.updateAppointmentVideoStartTime(appointmentData);
+    const response = await api.updateVideoStatusActive(appointmentData);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response);
@@ -30,11 +30,11 @@ const meetingSlice = createSlice({
     },
   },
   extraReducers: {
-    [updateAppointmentVideoStartTime.fulfilled]: (state, action) => {
+    [updateVideoStatusActive.fulfilled]: (state, action) => {
       console.log(action.payload);
       console.log("updateVideoStartTime fulfilled");
     },
-    [updateAppointmentVideoStartTime.rejected]: (state, action) => {
+    [updateVideoStatusActive.rejected]: (state, action) => {
       console.log("updateVideoStartTime rejected");
     },
   },

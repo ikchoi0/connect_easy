@@ -78,8 +78,8 @@ router.patch(
 );
 
 router.patch(
-  "/videoStartTime",
+  "/updateVideoStatusActive",
   auth(["client", "consultant"]),
-  appointmentController.controllers.updateAppointmentVideoStartTime
+  appointmentController.controllers.updateVideoStatusActive
 );
 module.exports = router;

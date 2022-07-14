@@ -6,7 +6,7 @@ const getAppointment = require("./getAppointment");
 const getAppointmentByDate = require("./getAppointmentByDate");
 const getAppointmentsForClientId = require("./getAppointmentsForClientId");
 const updateAppointmentBookedStatus = require("./updateAppointmentBookedStatus");
-const updateAppointmentVideoStartTime = require("./updateAppointmentVideoStartTime");
+const updateVideoStatusActive = require("./updateVideoStatusActive");
 
 exports.controllers = {
   postAppointment,
@@ -17,5 +17,5 @@ exports.controllers = {
   getAppointmentByDate,
   getAppointmentsForClientId,
   updateAppointmentBookedStatus,
-  updateAppointmentVideoStartTime,
+  updateVideoStatusActive,
 };

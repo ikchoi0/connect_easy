@@ -128,8 +128,16 @@ export default function Availability() {
     };
 
     if (card.appointmentEndTime && card.appointmentStartTime) {
-      dispatch(showSuccessMessage("Appointment added successfully"));
-      dispatch(setOneAppointment(card));
+      if (
+        moment(card.appointmentEndTime).isAfter(
+          moment(card.appointmentStartTime)
+        )
+      ) {
+        dispatch(showSuccessMessage("Appointment added successfully"));
+        dispatch(setOneAppointment(card));
+      } else {
+        dispatch(showAlertMessage("End time must be after start time"));
+      }
     } else {
       dispatch(showAlertMessage("Please enter valid time"));
     }

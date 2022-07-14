@@ -88,7 +88,7 @@ const Meeting = ({ meetingId }) => {
     return () => {
       // socket.emit('disconnect-meeting', meetingId);
       // socket.off();
-      socket.emit("disconnect", meetingId);
+      // socket.emit("disconnect", meetingId);
       peerConnectionRef?.close();
       peerConnectionRef = null;
       socket.close();

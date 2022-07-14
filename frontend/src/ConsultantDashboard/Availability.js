@@ -22,12 +22,17 @@ import {
   createOpenAppointments,
   clearOpeningAppointmentsList,
 } from "../store/reducers/scheduleReducer";
+import {
+  showAlertMessage,
+  showSuccessMessage,
+} from "../store/reducers/alertReducer";
 
 export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isTimeValid, setIsTimeValid] = useState(false);
   // const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
@@ -122,7 +127,12 @@ export default function Availability() {
       // description,
     };
 
-    dispatch(setOneAppointment(card));
+    if (card.appointmentEndTime && card.appointmentStartTime) {
+      dispatch(showSuccessMessage("Appointment added successfully"));
+      dispatch(setOneAppointment(card));
+    } else {
+      dispatch(showAlertMessage("Please enter valid time"));
+    }
   };
 
   const handleSaveAppointmentsButton = () => {

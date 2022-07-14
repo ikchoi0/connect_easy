@@ -11,7 +11,8 @@ const getAppointmentsForClientId = async (req, res) => {
       appointmentCancel: false,
     })
       .populate('client')
-      .populate('consultant');
+      .populate('consultant')
+      .sort({ createdAt: -1 });
 
     /**
      * Event {
@@ -53,7 +54,8 @@ const getAppointmentsForClientId = async (req, res) => {
         resource: appointment.client,
         appointmentBooked: appointment.appointmentBooked,
         consultantEmail: appointment.consultant.email,
-        clientEmail: appointment.client.email,
+        clientEmail: appointment.client?.email || '',
+        appointmentCancel: appointment.appointmentCancel,
       };
     });
 

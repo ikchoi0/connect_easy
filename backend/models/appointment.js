@@ -14,9 +14,9 @@ const appointmentSchema = new Schema(
     appointmentEndTime: { type: Date, required: true },
     appointmentCancellation_time: { type: Date },
     appointmentCancel: { type: Boolean, default: false },
-
     videoStartTime: { type: Date },
     videoEndTime: { type: Date },
+    // isMeetingLive: { type: Boolean, select: false, default: true },
   },
   { timestamps: true }
 );

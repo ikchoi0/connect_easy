@@ -20,7 +20,7 @@ const socketHandler = (wsServer) => {
     });
 
     socket.on("disconnect", () => {
-      console.log(socket.adapter);
+      // console.log(socket.adapter);
       const roomName = rooms[socket.id];
       delete rooms[socket.id];
       socket.to(roomName).emit("peer_left");

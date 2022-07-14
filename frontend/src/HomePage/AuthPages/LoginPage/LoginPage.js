@@ -49,7 +49,7 @@ export default function Login() {
     history.push("/register");
   };
   const handleLoginOnClick = () => {
-    history.push("/login");
+    history.push("/password");
   };
 
   return (
@@ -103,7 +103,7 @@ export default function Login() {
               <Grid item>
                 <ButtonBase onClick={handleLoginOnClick}>
                   <Typography variant="body2" color={"primary.main"}>
-                    {"Are you registed? Login"}
+                    {"Forgot password?"}
                   </Typography>
                 </ButtonBase>
               </Grid>

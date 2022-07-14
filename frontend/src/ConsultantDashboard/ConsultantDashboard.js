@@ -70,8 +70,8 @@ const ClientDashboard = () => {
   ];
   const filterLists = [
     { name: "Show All", color: "#191970" },
-    { name: "Upcoming", color: "#90EE90" },
-    { name: "Unbooked", color: "#4682B4" },
+    { name: "Upcoming", color: "#4682B4" },
+    { name: "Unbooked", color: "#90EE90" },
     { name: "Past", color: "#778899" },
     { name: "Canceled", color: "#FA8072" },
   ];

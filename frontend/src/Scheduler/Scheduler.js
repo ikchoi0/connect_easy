@@ -86,9 +86,9 @@ export default function Scheduler({
       >
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
+            // display: "flex",
+            // flexDirection: "column",
+            // gap: "1rem",
             width: "100%",
           }}
         >
@@ -109,11 +109,6 @@ export default function Scheduler({
               return { style: { backgroundColor } };
             }}
           />
-          <Box
-            sx={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}
-          >
-            {filterButtons}
-          </Box>
         </Box>
         {role === "client" && (
           <TimeSlots
@@ -127,6 +122,9 @@ export default function Scheduler({
           />
         )}
       </Container>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}>
+        {filterButtons}
+      </Box>
     </>
   );
 }

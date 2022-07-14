@@ -173,8 +173,8 @@ const Meeting = ({ meetingId }) => {
         ref={peerVideoRef}
         autoPlay
         playsInline
-        width={"200px"}
-        height={"200px"}
+        width={"400px"}
+        height={"400px"}
       ></video>
       <h2>This is video 2</h2>
 

@@ -47,6 +47,7 @@ const getAppointmentByDate = async (req, res) => {
       const newEndTime = moment(newDate + ' ' + endTime).format(
         'YYYY-MM-DD HH:mm'
       );
+
       return {
         appointmentId: appointment._id,
         description: appointment.description,

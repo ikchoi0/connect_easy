@@ -73,12 +73,14 @@ const Meeting = ({ meetingId }) => {
       } catch (error) {
         console.log(error);
       }
-      socket.on("someone_left", async (ice) => {
-        peerConnectionRef = new RTCPeerConnection();
-        peerConnectionRef.addEventListener("icecandidate", handleIce);
-        peerConnectionRef.addEventListener("addstream", handleAddStream);
-        peerVideo.srcObject = null;
-      });
+    });
+    socket.on("peer_left", async (ice) => {
+      console.log("Peer left, closing connection");
+      peerConnectionRef?.close();
+      peerConnectionRef = new RTCPeerConnection();
+      peerConnectionRef.addEventListener("icecandidate", handleIce);
+      peerConnectionRef.addEventListener("addstream", handleAddStream);
+      init();
     });
 
     init();
@@ -86,6 +88,7 @@ const Meeting = ({ meetingId }) => {
     return () => {
       // socket.emit('disconnect-meeting', meetingId);
       // socket.off();
+      socket.emit("disconnect", meetingId);
       peerConnectionRef?.close();
       peerConnectionRef = null;
       socket.close();

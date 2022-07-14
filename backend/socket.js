@@ -1,16 +1,9 @@
 const socketHandler = (wsServer) => {
+  const rooms = {};
   wsServer.on("connection", (socket) => {
-    console.log("connected", socket);
-    // console.log('Client connected');
-
-    socket.on("join_room", (roomName, sid) => {
-      // console.log('Client joined room', roomName);
-
-      // this will create a room
+    socket.on("join_room", (roomName) => {
+      rooms[socket.id] = roomName;
       socket.join(roomName);
-
-      // console.log(socket.rooms[roomName]);
-
       socket.to(roomName).emit("welcome");
     });
 
@@ -19,20 +12,18 @@ const socketHandler = (wsServer) => {
     });
 
     socket.on("answer", (answer, roomName) => {
-      // console.log("answer", answer);
       socket.to(roomName).emit("answer", answer);
     });
 
     socket.on("ice", (ice, roomName) => {
-      console.log("ice", ice);
       socket.to(roomName).emit("ice", ice);
     });
 
-    socket.on("disconnect", (roomName) => {
-      console.log("Client disconnected");
-      /**
-       *
-       */
+    socket.on("disconnect", () => {
+      console.log(socket.adapter);
+      const roomName = rooms[socket.id];
+      delete rooms[socket.id];
+      socket.to(roomName).emit("peer_left");
     });
   });
 };

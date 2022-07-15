@@ -30,6 +30,7 @@ export const postEndMeeting = createAsyncThunk(
   "schedule/postEndMeeting",
   async ({ appointmentData, history }, thunkApi) => {
     // pass appointmentId to backend
+    console.log("appointmentData", appointmentData);
     const response = await api.postEndMeeting(appointmentData);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.data.message));

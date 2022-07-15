@@ -317,6 +317,7 @@ export const postStartMeeting = async (appointmentData) => {
 
 export const postEndMeeting = async (appointmentData) => {
   try {
+    console.log(appointmentData);
     return await apiClient.post(`/appointment/postEndMeeting`, appointmentData);
   } catch (exception) {
     checkResponseCode(exception);

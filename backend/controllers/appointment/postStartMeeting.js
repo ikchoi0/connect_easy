@@ -1,7 +1,6 @@
 const Appointment = require("../../models/appointment");
 const User = require("../../models/user");
 const Types = require("mongoose").Types;
-
 const postStartMeeting = async (req, res) => {
   try {
     const { appointmentId, userId } = req.body;

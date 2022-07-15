@@ -25,6 +25,11 @@ const socketHandler = (wsServer) => {
       delete rooms[socket.id];
       socket.to(roomName).emit("peer_left");
     });
+    socket.on("chat", (message) => {
+      // console.log(message);
+      const roomName = rooms[socket.id];
+      socket.to(roomName).emit("chat", message);
+    });
   });
 };
 

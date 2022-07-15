@@ -17,6 +17,7 @@ import Meeting from "./Meeting/Meeting";
 import { AlertNotification } from "./shared/components/AlertNotification";
 import ResetPasswordPage from "./HomePage/AuthPages/ResetPasswordPage/ResetPasswordPage";
 import GetEmailPage from "./HomePage/AuthPages/GetEmailPage/GetEmailPage";
+import Chat from "./Chat/Chat";
 
 /**
  *
@@ -61,6 +62,9 @@ function App() {
           </Route>
           <Route path="/meeting">
             <Meeting />
+          </Route>
+          <Route path="/chat">
+            <Chat />
           </Route>
           <Route path="/">
             <Redirect to="/" />

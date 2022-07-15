@@ -22,10 +22,11 @@ const Meeting = ({ meetingId }) => {
   // get current userDetails
   const userDetails = useSelector((state) => state.auth.userDetails);
 
-  // const socket = io("http://localhost:5002");
-  const socket = io('https://connect-easy-rid.herokuapp.com');
+  const socket = io('http://localhost:5002');
+  // const socket = io('https://connect-easy-rid.herokuapp.com');
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
+
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
@@ -35,8 +36,10 @@ const Meeting = ({ meetingId }) => {
   let video;
 
   useEffect(() => {
-    // get me
     dispatch(getMe());
+  }, [dispatch]);
+
+  useEffect(() => {
     // console.log("PEERCONNECTIONREF", peerConnectionRef);
 
     peerConnectionRef = new RTCPeerConnection({
@@ -104,29 +107,34 @@ const Meeting = ({ meetingId }) => {
         // console.log("received candidate", ice);
         if (ice) {
           const user = JSON.parse(localStorage.getItem('user'));
-          console.log(userDetails);
-          // console.log('!!!!!!!activeMeetingId!!!!!!', user.activeMeetingId);
-          // console.log('!!!!!!!hasActiveMeeting!!!!!!', user.hasActiveMeeting);
-          // update video start time here
+          // const mId = JSON.parse(localStorage.getItem('activeMeeting'));
+          // console.log('###########', mId);
+          console.log('&&&&&&&&&&&&', userDetails);
 
-          dispatch(
-            postStartMeeting({
-              appointmentData: {
-                appointmentId: meetingId,
-                userId: user.userId,
-              },
-              history,
-            })
-          );
+          if (userDetails && !userDetails.options?.hasActiveMeeting) {
+            // update video start time here
+            dispatch(
+              postStartMeeting({
+                appointmentData: {
+                  appointmentId: meetingId,
+                  userId: user.userId,
+                },
+                history,
+              })
+            );
+          }
+
           console.log('connected !!');
         }
         await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     });
     socket.on('peer_left', async (ice) => {
       // console.log("Peer left, closing connection");
+      // const mId = JSON.parse(localStorage.getItem('activeMeeting'));
+
       peerConnectionRef?.close();
       peerConnectionRef = new RTCPeerConnection({
         iceServers: [

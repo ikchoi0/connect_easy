@@ -23,7 +23,7 @@ const loginSchema = Joi.object({
 // api/auth/getMe
 router.get(
   '/getMe',
-  auth(['consultant, client']),
+  auth(['consultant', 'client']),
   authController.controllers.getUserMeetingStatus
 );
 

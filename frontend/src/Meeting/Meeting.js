@@ -39,18 +39,18 @@ const Meeting = ({ meetingId }) => {
       ],
     });
 
-    const stream = await navigator.mediaDevices.getUserMedia({
+    myStream.current = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
     });
 
     if (videoRef.current) {
-      videoRef.current.srcObject = stream;
+      videoRef.current.srcObject = myStream.current;
     }
 
-    stream.getTracks().forEach((track) => {
+    myStream.current.getTracks().forEach((track) => {
       if (peerConnectionRef.current) {
-        peerConnectionRef.current.addTrack(track, stream);
+        peerConnectionRef.current.addTrack(track, myStream.current);
       }
     });
 
@@ -181,30 +181,12 @@ const Meeting = ({ meetingId }) => {
 
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
-      peerConnectionRef.current?.close();
+      peerConnectionRef.current.close();
       peerConnectionRef.current = null;
       socket.close();
       socket.removeAllListeners();
     };
   }, [meetingId, init]);
-
-  const getCamera = async (myFace) => {
-    try {
-      const initialConstraints = {
-        audio: true,
-        video: true,
-      };
-
-      myStream.current = await navigator.mediaDevices.getUserMedia(
-        initialConstraints
-      );
-
-      myFace.srcObject = myStream.current;
-      return myStream.current;
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   function handleIce(data) {
     socket.emit('ice', data.candidate, meetingId);

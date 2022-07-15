@@ -27,6 +27,10 @@ import {
 } from "../store/reducers/scheduleReducer";
 import ProfilePage from "../shared/pages/ProfilePage";
 import Meeting from "../Meeting/Meeting";
+import { io } from "socket.io-client";
+import { showSuccessMessage } from "../store/reducers/alertReducer";
+
+const socket = io("http://localhost:5002");
 
 const drawerWidth = 300;
 const menuItems = [
@@ -53,6 +57,17 @@ const ClientDashboard = () => {
     if (user.role !== "consultant") {
       history.push("/clientDashboard");
     }
+    socket.emit("connected", user.userId);
+    socket.on("appointment_booked", (data) => {
+      dispatch(
+        showSuccessMessage(
+          `Your ${data._id} was booked! Appointment will be on: ${data.appointmentStartTime}`
+        )
+      );
+    });
+    return () => {
+      socket.emit("disconnected_from_dashboard", user.userId);
+    };
   }, []);
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
   const { meetingId } = useSelector((state) => state.meeting);

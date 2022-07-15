@@ -42,7 +42,7 @@ const menuItems = [
   { id: "Calendar", icon: <CalendarMonthIcon /> },
   { id: "Payments", icon: <PaymentIcon /> },
   { id: "Settings", icon: <SettingsApplicationsIcon /> },
-  { id: "Meeting", icon: <VideoCameraFrontIcon /> },
+  // { id: "Meeting", icon: <VideoCameraFrontIcon /> },
 ];
 // const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];
 
@@ -64,6 +64,7 @@ const ClientDashboard = () => {
           `Your ${data._id} was booked! Appointment will be on: ${data.appointmentStartTime}`
         )
       );
+      dispatch(getAllAppointments(user.userId));
     });
     return () => {
       socket.emit("disconnected_from_dashboard", user.userId);

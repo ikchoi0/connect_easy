@@ -26,6 +26,7 @@ const Meeting = ({ meetingId }) => {
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
   let connectionMade = false;
+  let peer_left = false;
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
@@ -76,10 +77,10 @@ const Meeting = ({ meetingId }) => {
   const handleEndMeeting = () => {
     if (connectionMade) {
       // add router to show alert before redirecting to dashboard
-      alert("End meeting");
       localStorage.removeItem("activeMeeting");
       dispatch(postEndMeeting(meetingId));
       socket.emit("meeting_ended");
+      alert("End meeting");
       window.location.replace("/dashboard");
     } else {
       dispatch(showAlertMessage("You must be connected to end meeting"));
@@ -149,6 +150,8 @@ const Meeting = ({ meetingId }) => {
           }
 
           console.log("connected !!");
+        } else {
+          peer_left = true;
         }
         await peerConnectionRef.current.addIceCandidate(ice);
       } catch (error) {
@@ -157,8 +160,8 @@ const Meeting = ({ meetingId }) => {
     });
     socket.on("peer_left", async (ice) => {
       // console.log("Peer left, closing connection");
-      peerConnectionRef?.close();
-      peerConnectionRef = new RTCPeerConnection({
+      peerConnectionRef?.current.close();
+      peerConnectionRef.current = new RTCPeerConnection({
         iceServers: [
           {
             urls: [
@@ -180,9 +183,12 @@ const Meeting = ({ meetingId }) => {
 
     socket.on("meeting_ended", async () => {
       // add router to show alert before redirecting to dashboard
+
       alert("Meeting ended");
-      localStorage.removeItem("activeMeeting");
-      window.location.replace("/dashboard");
+      setTimeout(() => {
+        localStorage.removeItem("activeMeeting");
+        window.location.replace("/dashboard");
+      }, 1000);
     });
 
     return () => {
@@ -194,6 +200,11 @@ const Meeting = ({ meetingId }) => {
       if (!connectionMade) {
         localStorage.removeItem("activeMeeting");
       }
+      /**
+       * on dismounting, remove localstorage activeMeeting only when:
+       * 1. the connection was never made
+       * 2. connection was made and peer left (no one is in the room)
+       */
     };
   }, [meetingId, init]);
 
@@ -236,10 +247,8 @@ const Meeting = ({ meetingId }) => {
               height: "700px",
             }}
           >
-            {/* 🎃 MEETING DETAILS */}
             <Box
               sx={{
-                // height: "20%",
                 backgroundColor: "yellow",
               }}
             >
@@ -248,7 +257,6 @@ const Meeting = ({ meetingId }) => {
               <Typography>Time elapsed</Typography>
               <Typography>Description:</Typography>
             </Box>
-            {/* 🎃 CHAT GOES HERE */}
             <Chat socket={socket} />
           </Grid>
 

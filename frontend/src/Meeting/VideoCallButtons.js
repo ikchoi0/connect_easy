@@ -1,15 +1,15 @@
-import React from 'react';
-import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
-import MicIcon from '@mui/icons-material/Mic';
-import ScreenShareIcon from '@mui/icons-material/ScreenShare';
-import CallEndIcon from '@mui/icons-material/CallEnd';
-import { Grid, Button } from '@mui/material';
-import { postEndMeeting } from '../store/reducers/meetingReducer';
+import React from "react";
+import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
+import MicIcon from "@mui/icons-material/Mic";
+import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import CallEndIcon from "@mui/icons-material/CallEnd";
+import { Grid, Button } from "@mui/material";
+import { postEndMeeting } from "../store/reducers/meetingReducer";
 
 let muted = false;
 let cameraOff = false;
-let muteBtn = 'mute';
-let cameraBtn = 'camera';
+let muteBtn = "mute";
+let cameraBtn = "camera";
 
 export default function VideoCallButtons({ myStream, handleEndMeeting }) {
   function handleMuteClick() {
@@ -17,15 +17,15 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
     if (!muted) {
-      muteBtn = 'Unmute';
+      muteBtn = "Unmute";
       muted = true;
-      console.log('muted:', muted);
+      console.log("muted:", muted);
     } else {
-      muteBtn = 'Mute';
+      muteBtn = "Mute";
       muted = false;
-      console.log('muted:', muted);
+      console.log("muted:", muted);
     }
-    console.log('mute button:', muteBtn);
+    console.log("mute button:", muteBtn);
   }
 
   function handleCameraClick() {
@@ -33,13 +33,13 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
       .getVideoTracks()
       .forEach((track) => (track.enabled = !track.enabled));
     if (cameraOff) {
-      cameraBtn = 'Off';
+      cameraBtn = "Off";
       cameraOff = false;
     } else {
-      cameraBtn = 'On';
+      cameraBtn = "On";
       cameraOff = true;
     }
-    console.log('camera button:', cameraBtn);
+    console.log("camera button:", cameraBtn);
   }
 
   return (
@@ -47,11 +47,10 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
       item
       md={8}
       sx={{
-        backgroundColor: 'white',
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
+        alignContent: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        display: "flex",
       }}
     >
       <Button id="camera" onClick={handleCameraClick}>

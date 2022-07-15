@@ -55,7 +55,9 @@ export default function Chat({ socket }) {
         }}
       >
         <Paper key={message} elevation={4} sx={{ paddingX: "10px" }}>
-          <PersonIcon /> {sender.id === 1 ? "Me" : "You"}
+          <Typography sx={{ fontWeight: "bold" }}>
+            {sender.id === 1 ? "Me" : "You"}
+          </Typography>
           <Typography sx={{ wordWrap: "break-word" }}>{message}</Typography>
         </Paper>
       </Box>
@@ -63,18 +65,26 @@ export default function Chat({ socket }) {
   });
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        bgcolor: "background.default",
-        display: "flex",
-        gap: 2,
-        justifyContent: "space-between",
-        flexDirection: "column",
-      }}
-    >
-      {content}
-      <Box ref={scrollRef} sx={{ display: "flex", gap: "0.5rem" }}>
+    <>
+      <Box
+        sx={{
+          height: "100%",
+          // bgcolor: "background.default",
+          display: "flex",
+          gap: 2,
+          justifyContent: "space-between",
+          flexDirection: "column",
+          overflowY: "scroll",
+        }}
+      >
+        {content}
+        <div ref={scrollRef}></div>
+      </Box>
+
+      <Box
+  
+        sx={{ display: "flex", gap: "0.5rem", marginTop: "10px" }}
+      >
         <TextField
           id="standard-name"
           label="Enter your message"
@@ -92,6 +102,6 @@ export default function Chat({ socket }) {
           Send
         </Button>
       </Box>
-    </Box>
+    </>
   );
 }

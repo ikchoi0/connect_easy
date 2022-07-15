@@ -5,9 +5,42 @@ import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import { Grid, Button } from "@mui/material";
 
-export default function VideoCallButtons({
+let muted = false;
+let cameraOff = false;
+let muteBtn = "mute";
+let cameraBtn = "camera";
 
-}) {
+export default function VideoCallButtons({ myStream }) {
+  function handleMuteClick() {
+    myStream.current
+      .getAudioTracks()
+      .forEach((track) => (track.enabled = !track.enabled));
+    if (!muted) {
+      muteBtn = "Unmute";
+      muted = true;
+      console.log("muted:", muted);
+    } else {
+      muteBtn = "Mute";
+      muted = false;
+      console.log("muted:", muted);
+    }
+    console.log("mute button:", muteBtn);
+  }
+
+  function handleCameraClick() {
+    myStream.current
+      .getVideoTracks()
+      .forEach((track) => (track.enabled = !track.enabled));
+    if (cameraOff) {
+      cameraBtn = "Off";
+      cameraOff = false;
+    } else {
+      cameraBtn = "On";
+      cameraOff = true;
+    }
+    console.log("camera button:", cameraBtn);
+  }
+
   return (
     <Grid
       item
@@ -20,15 +53,18 @@ export default function VideoCallButtons({
         display: "flex",
       }}
     >
-      <Button>
+      <Button id="camera" onClick={handleCameraClick}>
         <VideoCameraFrontIcon color="primary" fontSize="large" />
       </Button>
-      <Button>
+
+      <Button id="mute" onClick={handleMuteClick}>
         <MicIcon color="primary" fontSize="large" />
       </Button>
+
       <Button>
         <ScreenShareIcon color="primary" fontSize="large" />
       </Button>
+
       <Button>
         <CallEndIcon color="error" fontSize="large" />
       </Button>

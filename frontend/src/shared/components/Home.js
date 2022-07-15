@@ -37,9 +37,9 @@ export default function Home({
     dispatch(updateSelectedStatusFilter(event.target.value));
   };
 
-  // useEffect(() => {
-  //   dispatch(getAppointmentAction(userDetails.userId));
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAppointmentAction(userDetails.userId));
+  }, [dispatch]);
 
   const menuItem = appointmentStatusFilterOptionList.map((option, idx) => {
     return (

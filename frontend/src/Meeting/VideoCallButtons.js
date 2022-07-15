@@ -4,13 +4,14 @@ import MicIcon from "@mui/icons-material/Mic";
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import { Grid, Button } from "@mui/material";
+import { postEndMeeting } from "../store/reducers/meetingReducer";
 
 let muted = false;
 let cameraOff = false;
 let muteBtn = "mute";
 let cameraBtn = "camera";
 
-export default function VideoCallButtons({ myStream }) {
+export default function VideoCallButtons({ myStream, handleEndMeeting }) {
   function handleMuteClick() {
     myStream.current
       .getAudioTracks()
@@ -66,7 +67,11 @@ export default function VideoCallButtons({ myStream }) {
       </Button>
 
       <Button>
-        <CallEndIcon color="error" fontSize="large" />
+        <CallEndIcon
+          color="error"
+          onClick={handleEndMeeting}
+          fontSize="large"
+        />
       </Button>
     </Grid>
   );

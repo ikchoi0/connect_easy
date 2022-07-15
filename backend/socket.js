@@ -1,6 +1,5 @@
 const socketHandler = (wsServer) => {
   const rooms = {};
-  const socketToRoom = {};
 
   wsServer.on('connection', (socket) => {
     socket.on('join_room', (roomName) => {

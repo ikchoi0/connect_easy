@@ -1,6 +1,6 @@
-const Appointment = require("../../models/appointment");
-const User = require("../../models/user");
-const Types = require("mongoose").Types;
+const Appointment = require('../../models/appointment');
+const User = require('../../models/user');
+const Types = require('mongoose').Types;
 const postEndMeeting = async (req, res) => {
   try {
     if (req.body && req.body.appointmentId) {
@@ -8,36 +8,38 @@ const postEndMeeting = async (req, res) => {
       const appointment = await Appointment.findById(
         Types.ObjectId(appointmentId)
       )
-        .populate("client")
-        .populate("consultant");
+        .populate('client')
+        .populate('consultant');
 
       if (!appointment) {
-        return res.status(404).send("Appointment not found");
+        return res.status(404).send('Appointment not found');
       }
-      if (!appointment.hasOwnProperty("videoEndTime")) {
+      if (!appointment.hasOwnProperty('videoEndTime')) {
         await appointment.updateOne({
           videoEndTime: new Date(),
         });
       }
+      console.log('appointment', appointment.client);
+
       await appointment.client.updateOne({
         options: {
           hasActiveMeeting: false,
-          activeMeetingId: "",
+          activeMeetingId: '',
         },
       });
       await appointment.consultant.updateOne({
         options: {
           hasActiveMeeting: false,
-          activeMeetingId: "",
+          activeMeetingId: '',
         },
       });
       return res.status(200).send({
         data: { appointment },
-        message: "Meeting ended",
+        message: 'Meeting ended',
         error: false,
       });
     } else {
-      return res.status(400).send("AppointmentId is required");
+      return res.status(400).send('AppointmentId is required');
     }
   } catch (error) {
     return res.status(500).send(error.message); // 500 Internal Server Error

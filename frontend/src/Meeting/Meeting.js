@@ -3,28 +3,26 @@ import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { updateAppointmentVideoStartTime } from '../store/reducers/meetingReducer';
+import VideoCallButtons from './VideoCallButtons';
+import { Box, Container, Typography, CardMedia, Grid } from '@mui/material';
 import {
-  postEndMeeting,
   postStartMeeting,
+  postEndMeeting,
 } from '../store/reducers/meetingReducer';
+import Chat from '../Chat/Chat';
+
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
   const socket = io('http://localhost:5002');
-
-  // const socket = io('https://connect-easy-rid.herokuapp.com');
-
+  // const socket = io("https://connect-easy-rid.herokuapp.com");
+  // const [videoRef, setVideoRef] = useState(null);
+  // const [peerVideoRef, setPeerVideoRef] = useState(null);
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
-
-  const handleEndMeeting = () => {
-    localStorage.removeItem('activeMeeting');
-    dispatch(postEndMeeting(meetingId));
-    socket.emit('end_meeting');
-    window.location.replace('/dashboard');
-  };
 
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
@@ -72,6 +70,16 @@ const Meeting = ({ meetingId }) => {
 
     socket.emit('join_room', meetingId);
   }, [history, meetingId]);
+
+  const handleEndMeeting = () => {
+    // add router to show alert before redirecting to dashboard
+    alert('End meeting');
+    localStorage.removeItem('activeMeeting');
+    dispatch(postEndMeeting(meetingId));
+    socket.emit('meeting_ended');
+    window.location.replace('/dashboard');
+    // history.push("/dashboard");
+  };
 
   useEffect(() => {
     socket.on('welcome', async () => {
@@ -143,8 +151,8 @@ const Meeting = ({ meetingId }) => {
     });
     socket.on('peer_left', async (ice) => {
       // console.log("Peer left, closing connection");
-      peerConnectionRef.current.close();
-      peerConnectionRef.current = new RTCPeerConnection({
+      peerConnectionRef?.close();
+      peerConnectionRef = new RTCPeerConnection({
         iceServers: [
           {
             urls: [
@@ -162,13 +170,14 @@ const Meeting = ({ meetingId }) => {
       init();
     });
 
+    init();
+
     socket.on('meeting_ended', async () => {
+      // add router to show alert before redirecting to dashboard
       alert('Meeting ended');
       localStorage.removeItem('activeMeeting');
       window.location.replace('/dashboard');
     });
-
-    init();
 
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
@@ -178,6 +187,24 @@ const Meeting = ({ meetingId }) => {
       socket.removeAllListeners();
     };
   }, [meetingId, init]);
+
+  const getCamera = async (myFace) => {
+    try {
+      const initialConstraints = {
+        audio: true,
+        video: true,
+      };
+
+      myStream.current = await navigator.mediaDevices.getUserMedia(
+        initialConstraints
+      );
+
+      myFace.srcObject = myStream.current;
+      return myStream.current;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   function handleIce(data) {
     socket.emit('ice', data.candidate, meetingId);
@@ -189,26 +216,70 @@ const Meeting = ({ meetingId }) => {
 
   return (
     <>
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        width={'400px'}
-        height={'400px'}
-      ></video>
+      <Container
+        maxWidth="lg"
+        color="primary.main"
+        sx={{
+          maxHeight: '700px',
+        }}
+        display="flex"
+      >
+        <Grid container spacing={2} sx={{}}>
+          <Grid item md={8} sx={{ padding: 0 }}>
+            {/* 🎃 VIDEO 1 */}
+            <CardMedia
+              component="video"
+              ref={videoRef}
+              autoPlay
+              playsInline
+              width={'100%'}
+              height={'100%'}
+            ></CardMedia>
+          </Grid>
+          <Grid
+            item
+            md={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '700px',
+            }}
+          >
+            {/* 🎃 MEETING DETAILS */}
+            <Box
+              sx={{
+                // height: "20%",
+                backgroundColor: 'yellow',
+              }}
+            >
+              <Typography>Client: John Doe</Typography>
+              <Typography>Consultant: Jane Smith</Typography>
+              <Typography>Time elapsed</Typography>
+              <Typography>Description:</Typography>
+            </Box>
+            {/* 🎃 CHAT GOES HERE */}
+            <Chat socket={socket} />
+          </Grid>
 
-      <h2>This is video 1</h2>
+          {/* 🎃 BUTTONS */}
+          <VideoCallButtons
+            myStream={myStream}
+            handleEndMeeting={handleEndMeeting}
+          />
 
-      <video
-        ref={peerVideoRef}
-        autoPlay
-        playsInline
-        width={'400px'}
-        height={'400px'}
-      ></video>
-      <h2>This is video 2</h2>
-
-      <button onClick={handleEndMeeting}>END</button>
+          {/* 🎃 VIDEO 2 */}
+          <Grid item md={4}>
+            <CardMedia
+              component="video"
+              ref={peerVideoRef}
+              autoPlay
+              playsInline
+              width={'300px'}
+              height={'300px'}
+            ></CardMedia>
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 };

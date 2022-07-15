@@ -32,6 +32,7 @@ export default function Scheduler({
   const [description, setDescription] = React.useState("");
   const [selectedAppointmentId, setSelectedAppointmentId] = React.useState("");
   const [filterName, setFilterName] = React.useState("Show All");
+  const [timeSelected, setTimeSelected] = React.useState(false);
 
   const scheduler = useSelector((state) => state.scheduler);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -71,11 +72,13 @@ export default function Scheduler({
     filterName
   );
   const handleOpenTimeSlots = (e) => {
+    setTimeSelected(false);
     setSelectedAppointmentId("");
     setDescription("");
     setSelectedDate(e.start);
   };
   const handleEventClick = (e) => {
+    setTimeSelected(false);
     setSelectedDate(new Date(e.start));
   };
   return (
@@ -117,6 +120,8 @@ export default function Scheduler({
         </Box>
         {user.role === "client" && consultantId && (
           <TimeSlots
+            timeSelected={timeSelected}
+            setTimeSelected={setTimeSelected}
             selectedDate={selectedDate}
             consultantId={consultantId}
             description={description}

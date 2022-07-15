@@ -1,7 +1,18 @@
 const socketHandler = (wsServer) => {
   const rooms = {};
-
+  const onlineUsers = {};
   wsServer.on("connection", (socket) => {
+    socket.on("connected", (userId) => {
+      console.log("connected to server: " + userId);
+      onlineUsers[userId] = socket.id;
+    });
+    socket.on("appointment_booked", (data) => {
+      socket.to(onlineUsers[data.consultant]).emit("appointment_booked", data);
+    });
+    socket.on("disconnected_from_dashboard", (userId) => {
+      console.log("disconnected from dashboard: " + userId);
+      delete onlineUsers[userId];
+    });
     socket.on("join_room", (roomName) => {
       rooms[socket.id] = roomName;
       socket.join(roomName);

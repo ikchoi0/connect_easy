@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../api";
-import { showAlertMessage } from "./alertReducer";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:5002");
 
 const schedulerState = {
   openingAppointmentsList: [],
@@ -17,6 +20,9 @@ export const createOpenAppointments = createAsyncThunk(
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
+    thunkApi.dispatch(
+      showSuccessMessage("New appointments saved successfully")
+    );
     return response.data;
   }
 );
@@ -130,6 +136,7 @@ const schedulerSlice = createSlice({
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
+      state.appointments = action.payload;
       // console.log('create fulfilled', action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {
@@ -157,6 +164,8 @@ const schedulerSlice = createSlice({
     },
     [bookAppointment.fulfilled]: (state, action) => {
       state.booked = true;
+      // console.log(action.payload);
+      socket.emit("appointment_booked", action.payload);
       // console.log('appointment booked FULFILLED', action.payload);
     },
     [bookAppointment.rejected]: (state, action) => {

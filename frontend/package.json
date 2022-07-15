@@ -1,5 +1,4 @@
 {
-  "proxy": "https://connect-easy-rid.herokuapp.com/api",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,

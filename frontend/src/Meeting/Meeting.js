@@ -22,8 +22,8 @@ const Meeting = ({ meetingId }) => {
   const handleEndMeeting = () => {
     localStorage.removeItem('activeMeeting');
     dispatch(postEndMeeting(meetingId));
-    socket.emit('endMeeting');
-    history.push('/dashboard');
+    socket.emit('end_meeting');
+    window.location.replace('/dashboard');
   };
 
   const init = useCallback(async () => {
@@ -74,8 +74,6 @@ const Meeting = ({ meetingId }) => {
   }, [history, meetingId]);
 
   useEffect(() => {
-    // console.log("PEERCONNECTIONREF", peerConnectionRef);
-
     socket.on('welcome', async () => {
       try {
         // console.log("Sending offer");
@@ -111,14 +109,11 @@ const Meeting = ({ meetingId }) => {
         await peerConnectionRef.current.setRemoteDescription(answer);
       } catch (error) {
         console.log(error);
-        socket.emit('leave', meetingId);
-        // window.location.replace("/dashboard");
       }
     });
 
     socket.on('ice', async (ice) => {
       try {
-        // console.log("received candidate", ice);
         if (ice) {
           const userId = JSON.parse(localStorage.getItem('user')).userId;
           const activeMeeting = JSON.parse(
@@ -143,7 +138,7 @@ const Meeting = ({ meetingId }) => {
         }
         await peerConnectionRef.current.addIceCandidate(ice);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     });
     socket.on('peer_left', async (ice) => {
@@ -170,7 +165,7 @@ const Meeting = ({ meetingId }) => {
     socket.on('meeting_ended', async () => {
       alert('Meeting ended');
       localStorage.removeItem('activeMeeting');
-      history.push('/dashboard');
+      window.location.replace('/dashboard');
     });
 
     init();
@@ -214,9 +209,6 @@ const Meeting = ({ meetingId }) => {
       <h2>This is video 2</h2>
 
       <button onClick={handleEndMeeting}>END</button>
-
-      {/* <VideoFrame setVideoRef={setVideoRef} />
-      <VideoFrame setVideoRef={setPeerVideoRef} /> */}
     </>
   );
 };

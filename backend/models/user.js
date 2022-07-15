@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -9,10 +9,10 @@ const userSchema = new Schema(
     password: { type: String, required: true, select: false },
     role: {
       type: String,
-      enum: ["admin", "client", "consultant"],
-      default: "client",
+      enum: ['admin', 'client', 'consultant'],
+      default: 'client',
     },
-    category: { type: Schema.Types.ObjectId, ref: "Category" },
+    category: { type: Schema.Types.ObjectId, ref: 'Category' },
     options: {
       description: { type: String },
       price: { type: Number },
@@ -35,4 +35,4 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

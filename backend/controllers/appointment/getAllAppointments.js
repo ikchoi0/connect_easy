@@ -62,7 +62,9 @@ const getAllAppointments = async (req, res) => {
           color = '#FA8072';
         }
       }
-
+      if (appointment.videoEndTime) {
+        color = '#778899';
+      }
       return {
         consultant:
           appointment.consultant.firstName +
@@ -84,6 +86,8 @@ const getAllAppointments = async (req, res) => {
         consultantEmail: appointment.consultant.email,
         appointmentCancel: appointment.appointmentCancel,
         clientEmail: appointment.client?.email || '',
+        videoStartTime: appointment.videoStartTime || null,
+        videoEndTime: appointment.videoEndTime || null,
         // isMeetingLive: appointment.isMeetingLive,
       };
     });

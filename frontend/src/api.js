@@ -3,9 +3,8 @@ import { logout } from "./shared/utils/auth";
 import { showAlertMessage } from "./store/reducers/alertReducer";
 
 const apiClient = axios.create({
-  // baseURL: "https://connect-easy-rid.herokuapp.com/api/",
-
   baseURL: "http://localhost:5002/api",
+  // baseURL: 'https://connect-easy-rid.herokuapp.com/api',
   timeout: 1000,
 });
 
@@ -23,12 +22,22 @@ apiClient.interceptors.request.use(
   }
 );
 
+export const getMe = async () => {
+  try {
+    return await apiClient.get("/auth/getMe");
+  } catch (exception) {
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
 // checks token again and resets password if valid
 export const resetPassword = async (data) => {
   try {
     return await apiClient.post("/password/reset", data);
   } catch (exception) {
-    console.log(exception);
     return {
       error: true,
       message: exception.response.data,
@@ -41,7 +50,6 @@ export const resetPasswordLink = async (data) => {
   try {
     return await apiClient.post("/password", data);
   } catch (exception) {
-    console.log(exception);
     return {
       error: true,
       message: exception.response.data,
@@ -53,7 +61,6 @@ export const checkTokenForPasswordReset = async ({ email, token }) => {
   try {
     return await apiClient.get(`/password/${email}/${token}`);
   } catch (exception) {
-    console.log(exception);
     return {
       error: true,
       message: exception.response.data,
@@ -317,8 +324,10 @@ export const postStartMeeting = async (appointmentData) => {
 
 export const postEndMeeting = async (appointmentData) => {
   try {
-    console.log(appointmentData);
-    return await apiClient.post(`/appointment/postEndMeeting`, appointmentData);
+    console.log("FROM API.JS", appointmentData);
+    return await apiClient.post(`/appointment/postEndMeeting`, {
+      appointmentId: appointmentData,
+    });
   } catch (exception) {
     checkResponseCode(exception);
     return {

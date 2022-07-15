@@ -48,6 +48,10 @@ const getAppointmentsForClientId = async (req, res) => {
           color = '#FA8072';
         }
       }
+      if (appointment.videoEndTime) {
+        color = '#778899';
+      }
+
       const titleStartTime = moment(newDate + ' ' + startTime).format('HH:mm');
       const titleEndTime = moment(newDate + ' ' + endTime).format('HH:mm');
 
@@ -72,6 +76,8 @@ const getAppointmentsForClientId = async (req, res) => {
         clientEmail: appointment.client.email,
         title: `${titleStartTime} - ${titleEndTime}`,
         appointmentCancel: appointment.appointmentCancel,
+        videoStartTime: appointment.videoStartTime || null,
+        videoEndTime: appointment.videoEndTime || null,
       };
     });
 

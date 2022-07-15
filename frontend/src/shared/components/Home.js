@@ -48,24 +48,44 @@ export default function Home({
       </MenuItem>
     );
   });
+
   const handleJoinMeetingButton = (meetingId) => {
     dispatch(updateMeetingId(meetingId));
     localStorage.setItem('activeMeeting', JSON.stringify(meetingId));
 
     dispatch(updateSelectedNavigatorItem('Meeting'));
   };
+
   const filteredAppointmentsList = filterAppointments(
     appointments,
     selectedStatusFilter
   );
+
   // MAPPED appointments for the user:  scheduler.appointments
   const mappedAppointments = filteredAppointmentsList.map(
     (appointment, index) => {
-      // disable all of the meeting buttons except the active one if the any meeting is active
-      // let disableJoinMeeting= false;
-      // if (appointment.isMeetingLive){
-      //   if (appointment.)
-      // }
+      let disableMeeting = false;
+      let cancelButtonStatus = false;
+
+      const activeMeeting = JSON.parse(localStorage.getItem('activeMeeting'));
+
+      /**
+       * TODO: DO SOMETHING WITH THIS
+       */
+      if (activeMeeting) {
+        console.log(appointment);
+        if (
+          appointment.videoEndTime ||
+          activeMeeting !== appointment.appointmentId
+        ) {
+          disableMeeting = true;
+        } else if (activeMeeting === appointment.appointmentId) {
+          cancelButtonStatus = true;
+        } else if (appointment.videoEndTime) {
+          cancelButtonStatus = true;
+        }
+      }
+
       return (
         <AppointmentCard
           role={JSON.parse(localStorage.getItem('user')).role}
@@ -83,11 +103,13 @@ export default function Home({
           appointmentBooked={appointment.appointmentBooked}
           clientEmail={appointment.clientEmail}
           consultantEmail={appointment.consultantEmail}
+          cancelButtonStatus={cancelButtonStatus}
         >
           <Button
             sx={{
               flexGrow: 1,
             }}
+            disabled={disableMeeting}
             variant="contained"
             color="primary"
             size="large"

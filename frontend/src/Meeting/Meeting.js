@@ -9,15 +9,22 @@ import {
 } from '../store/reducers/meetingReducer';
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  // const socket = io("http://localhost:5002");
+  const socket = io('http://localhost:5002');
 
-  const socket = io('https://connect-easy-rid.herokuapp.com');
+  // const socket = io('https://connect-easy-rid.herokuapp.com');
 
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
+
+  const handleEndMeeting = () => {
+    localStorage.removeItem('activeMeeting');
+    dispatch(postEndMeeting(meetingId));
+    socket.emit('endMeeting');
+    history.push('/dashboard');
+  };
 
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
@@ -160,6 +167,12 @@ const Meeting = ({ meetingId }) => {
       init();
     });
 
+    socket.on('meeting_ended', async () => {
+      alert('Meeting ended');
+      localStorage.removeItem('activeMeeting');
+      history.push('/dashboard');
+    });
+
     init();
 
     return () => {
@@ -200,14 +213,7 @@ const Meeting = ({ meetingId }) => {
       ></video>
       <h2>This is video 2</h2>
 
-      <button
-        onClick={() => {
-          localStorage.removeItem('activeMeeting');
-          dispatch(postEndMeeting(meetingId));
-        }}
-      >
-        END
-      </button>
+      <button onClick={handleEndMeeting}>END</button>
 
       {/* <VideoFrame setVideoRef={setVideoRef} />
       <VideoFrame setVideoRef={setPeerVideoRef} /> */}

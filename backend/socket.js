@@ -27,6 +27,10 @@ const socketHandler = (wsServer) => {
       delete rooms[socket.id];
       socket.to(roomName).emit('peer_left');
     });
+    socket.on('meeting_ended', () => {
+      const roomName = rooms[socket.id];
+      socket.to(roomName).emit('meeting_ended');
+    });
   });
 };
 

@@ -1,37 +1,38 @@
 export const filterAppointments = (appointments, selectedStatusFilter) => {
   let filteredAppointmentsList;
   switch (selectedStatusFilter) {
-    case "Upcoming":
+    case 'Upcoming':
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (
           appointment.appointmentBooked &&
-          !appointment.hasOwnProperty("videoEndTime") &&
+          !appointment.videoEndTime &&
           !appointment.appointmentCancel
         ) {
           return appointment;
         }
       });
       break;
-    case "Unbooked":
+    case 'Unbooked':
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (
           !appointment.appointmentBooked &&
-          !appointment.hasOwnProperty("videoEndTime")
+          !appointment.videoEndTime &&
+          !appointment.videoStartTime
         ) {
           return appointment;
         }
       });
       break;
-    case "Canceled":
+    case 'Canceled':
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (appointment.appointmentCancel) {
           return appointment;
         }
       });
       break;
-    case "Past":
+    case 'Past':
       filteredAppointmentsList = appointments.filter((appointment) => {
-        if (appointment.hasOwnProperty("videoEndTime")) {
+        if (appointment.videoEndTime) {
           return appointment;
         }
       });

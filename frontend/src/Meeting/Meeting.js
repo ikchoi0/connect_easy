@@ -15,6 +15,7 @@ import {
   Button,
 } from "@mui/material";
 import { postStartMeeting } from "../store/reducers/meetingReducer";
+import Chat from "../Chat/Chat";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
@@ -198,9 +199,10 @@ const Meeting = ({ meetingId }) => {
       <Container
         maxWidth="lg"
         color="primary.main"
+        
         sx={
           {
-            // backgroundColor: "pink",
+            maxHeight: "700px",
           }
         }
         display="flex"
@@ -223,12 +225,13 @@ const Meeting = ({ meetingId }) => {
             sx={{
               display: "flex",
               flexDirection: "column",
+              height: "700px"
             }}
           >
             {/* 🎃 MEETING DETAILS */}
             <Box
               sx={{
-                height: "20%",
+                // height: "20%",
                 backgroundColor: "yellow",
               }}
             >
@@ -237,9 +240,9 @@ const Meeting = ({ meetingId }) => {
               <Typography>Time elapsed</Typography>
               <Typography>Description:</Typography>
             </Box>
+            {/* 🎃 CHAT GOES HERE */}
+            <Chat />
           </Grid>
-
-          {/* 🎃 CHAT GOES HERE */}
 
           {/* 🎃 BUTTONS */}
           <VideoCallButtons myStream={myStream} />

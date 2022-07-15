@@ -1,20 +1,20 @@
-import React, { useCallback } from "react";
-import { useEffect, useRef } from "react";
-import { io } from "socket.io-client";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
-import VideoCallButtons from "./VideoCallButtons";
-import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
+import React, { useCallback } from 'react';
+import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateAppointmentVideoStartTime } from '../store/reducers/meetingReducer';
+import VideoCallButtons from './VideoCallButtons';
+import { Box, Container, Typography, CardMedia, Grid } from '@mui/material';
 import {
   postStartMeeting,
   postEndMeeting,
-} from "../store/reducers/meetingReducer";
-import Chat from "../Chat/Chat";
+} from '../store/reducers/meetingReducer';
+import Chat from '../Chat/Chat';
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  const socket = io("http://localhost:5002");
+  const socket = io('http://localhost:5002');
   // const socket = io("https://connect-easy-rid.herokuapp.com");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
@@ -29,28 +29,28 @@ const Meeting = ({ meetingId }) => {
       iceServers: [
         {
           urls: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
-            "stun:stun4.l.google.com:19302",
+            'stun:stun.l.google.com:19302',
+            'stun:stun1.l.google.com:19302',
+            'stun:stun2.l.google.com:19302',
+            'stun:stun3.l.google.com:19302',
+            'stun:stun4.l.google.com:19302',
           ],
         },
       ],
     });
 
-    const stream = await navigator.mediaDevices.getUserMedia({
+    myStream.current = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
     });
 
     if (videoRef.current) {
-      videoRef.current.srcObject = stream;
+      videoRef.current.srcObject = myStream.current;
     }
 
-    stream.getTracks().forEach((track) => {
+    myStream.current.getTracks().forEach((track) => {
       if (peerConnectionRef.current) {
-        peerConnectionRef.current.addTrack(track, stream);
+        peerConnectionRef.current.addTrack(track, myStream.current);
       }
     });
 
@@ -58,49 +58,31 @@ const Meeting = ({ meetingId }) => {
       peerVideoRef.current.srcObject = event.streams[0];
     };
 
-    peerConnectionRef.current.addEventListener("icecandidate", handleIce);
-    peerConnectionRef.current.addEventListener("addstream", handleAddStream);
+    peerConnectionRef.current.addEventListener('icecandidate', handleIce);
+    peerConnectionRef.current.addEventListener('addstream', handleAddStream);
 
     peerConnectionRef.current.oniceconnectionstatechange = () => {
       console.log(
-        "ICE state changed to ",
+        'ICE state changed to ',
         peerConnectionRef.current.iceConnectionState
       );
     };
 
-    socket.emit("join_room", meetingId);
+    socket.emit('join_room', meetingId);
   }, [history, meetingId]);
 
   const handleEndMeeting = () => {
     // add router to show alert before redirecting to dashboard
-    alert("End meeting");
-    localStorage.removeItem("activeMeeting");
+    alert('End meeting');
+    localStorage.removeItem('activeMeeting');
     dispatch(postEndMeeting(meetingId));
-    socket.emit("meeting_ended");
-    window.location.replace("/dashboard");
+    socket.emit('meeting_ended');
+    window.location.replace('/dashboard');
     // history.push("/dashboard");
   };
 
   useEffect(() => {
-    // console.log("PEERCONNECTIONREF", peerConnectionRef);
-    peerConnectionRef.current = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: [
-            "stun:stun.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-            "stun:stun2.l.google.com:19302",
-            "stun:stun3.l.google.com:19302",
-            "stun:stun4.l.google.com:19302",
-          ],
-        },
-      ],
-    });
-
-    peerConnectionRef.current.addEventListener("icecandidate", handleIce);
-    peerConnectionRef.current.addEventListener("addstream", handleAddStream);
-
-    socket.on("welcome", async () => {
+    socket.on('welcome', async () => {
       try {
         // console.log("Sending offer");
         const offer = await peerConnectionRef.current.createOffer({
@@ -108,13 +90,13 @@ const Meeting = ({ meetingId }) => {
         });
 
         await peerConnectionRef.current?.setLocalDescription(offer);
-        socket.emit("offer", offer, meetingId);
+        socket.emit('offer', offer, meetingId);
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on("offer", async (offer) => {
+    socket.on('offer', async (offer) => {
       try {
         await peerConnectionRef.current.setRemoteDescription(offer);
 
@@ -124,13 +106,13 @@ const Meeting = ({ meetingId }) => {
         await peerConnectionRef.current?.setLocalDescription(answer);
 
         // console.log("Sending answer");
-        socket.emit("answer", answer, meetingId);
+        socket.emit('answer', answer, meetingId);
       } catch (error) {
         console.log(error);
       }
     });
 
-    socket.on("answer", async (answer) => {
+    socket.on('answer', async (answer) => {
       try {
         await peerConnectionRef.current.setRemoteDescription(answer);
       } catch (error) {
@@ -138,13 +120,12 @@ const Meeting = ({ meetingId }) => {
       }
     });
 
-    socket.on("ice", async (ice) => {
+    socket.on('ice', async (ice) => {
       try {
-        // console.log("received candidate", ice);
         if (ice) {
-          const userId = JSON.parse(localStorage.getItem("user")).userId;
+          const userId = JSON.parse(localStorage.getItem('user')).userId;
           const activeMeeting = JSON.parse(
-            localStorage.getItem("activeMeeting")
+            localStorage.getItem('activeMeeting')
           );
 
           // update video start time here
@@ -161,72 +142,54 @@ const Meeting = ({ meetingId }) => {
             );
           }
 
-          console.log("connected !!");
+          console.log('connected !!');
         }
         await peerConnectionRef.current.addIceCandidate(ice);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     });
-    socket.on("peer_left", async (ice) => {
+    socket.on('peer_left', async (ice) => {
       // console.log("Peer left, closing connection");
       peerConnectionRef?.close();
       peerConnectionRef = new RTCPeerConnection({
         iceServers: [
           {
             urls: [
-              "stun:stun.l.google.com:19302",
-              "stun:stun1.l.google.com:19302",
-              "stun:stun2.l.google.com:19302",
-              "stun:stun3.l.google.com:19302",
-              "stun:stun4.l.google.com:19302",
+              'stun:stun.l.google.com:19302',
+              'stun:stun1.l.google.com:19302',
+              'stun:stun2.l.google.com:19302',
+              'stun:stun3.l.google.com:19302',
+              'stun:stun4.l.google.com:19302',
             ],
           },
         ],
       });
-      peerConnectionRef.current.addEventListener("icecandidate", handleIce);
-      peerConnectionRef.current.addEventListener("addstream", handleAddStream);
+      peerConnectionRef.current.addEventListener('icecandidate', handleIce);
+      peerConnectionRef.current.addEventListener('addstream', handleAddStream);
       init();
     });
 
     init();
 
-    socket.on("meeting_ended", async () => {
+    socket.on('meeting_ended', async () => {
       // add router to show alert before redirecting to dashboard
-      alert("Meeting ended");
-      localStorage.removeItem("activeMeeting");
-      window.location.replace("/dashboard");
+      alert('Meeting ended');
+      localStorage.removeItem('activeMeeting');
+      window.location.replace('/dashboard');
     });
 
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
-      peerConnectionRef.current?.close();
+      peerConnectionRef.current.close();
       peerConnectionRef.current = null;
       socket.close();
       socket.removeAllListeners();
     };
   }, [meetingId, init]);
 
-  const getCamera = async (myFace) => {
-    try {
-      const initialConstraints = {
-        audio: true,
-        video: true,
-      };
-
-      myStream.current = await navigator.mediaDevices.getUserMedia(
-        initialConstraints
-      );
-      console.log("21321321321", myStream);
-      myFace.srcObject = myStream.current;
-      return myStream.current;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   function handleIce(data) {
-    socket.emit("ice", data.candidate, meetingId);
+    socket.emit('ice', data.candidate, meetingId);
   }
 
   function handleAddStream(data) {
@@ -239,7 +202,7 @@ const Meeting = ({ meetingId }) => {
         maxWidth="lg"
         color="primary.main"
         sx={{
-          maxHeight: "700px",
+          maxHeight: '700px',
         }}
         display="flex"
       >
@@ -251,24 +214,24 @@ const Meeting = ({ meetingId }) => {
               ref={videoRef}
               autoPlay
               playsInline
-              width={"100%"}
-              height={"100%"}
+              width={'100%'}
+              height={'100%'}
             ></CardMedia>
           </Grid>
           <Grid
             item
             md={4}
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              height: "700px",
+              display: 'flex',
+              flexDirection: 'column',
+              height: '700px',
             }}
           >
             {/* 🎃 MEETING DETAILS */}
             <Box
               sx={{
                 // height: "20%",
-                backgroundColor: "yellow",
+                backgroundColor: 'yellow',
               }}
             >
               <Typography>Client: John Doe</Typography>
@@ -293,8 +256,8 @@ const Meeting = ({ meetingId }) => {
               ref={peerVideoRef}
               autoPlay
               playsInline
-              width={"300px"}
-              height={"300px"}
+              width={'300px'}
+              height={'300px'}
             ></CardMedia>
           </Grid>
         </Grid>

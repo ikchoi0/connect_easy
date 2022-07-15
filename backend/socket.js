@@ -10,15 +10,15 @@ const socketHandler = (wsServer) => {
     });
 
     socket.on('offer', (offer, roomName) => {
-      socket.to(roomName).emit('getOffer', offer);
+      socket.to(roomName).emit('offer', offer);
     });
 
     socket.on('answer', (answer, roomName) => {
-      socket.to(roomName).emit('getAnswer', answer);
+      socket.to(roomName).emit('answer', answer);
     });
 
     socket.on('ice', (ice, roomName) => {
-      socket.to(roomName).emit('getIce', ice);
+      socket.to(roomName).emit('ice', ice);
     });
 
     socket.on('disconnect', () => {
@@ -31,5 +31,4 @@ const socketHandler = (wsServer) => {
   });
 };
 
-const activeRooms = {};
 module.exports = socketHandler;

@@ -108,7 +108,7 @@ const Meeting = ({ meetingId }) => {
               history,
             })
           );
-          // console.log("connected !!");
+          console.log("connected !!");
         }
         await peerConnectionRef?.addIceCandidate(ice);
       } catch (error) {
@@ -151,7 +151,7 @@ const Meeting = ({ meetingId }) => {
   const getCamera = async (myFace) => {
     try {
       const initialConstraints = {
-        audio: false,
+        audio: true,
         video: true,
       };
 
@@ -162,7 +162,7 @@ const Meeting = ({ meetingId }) => {
       myFace.srcObject = myStream.current;
       return myStream.current;
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 
@@ -198,9 +198,11 @@ const Meeting = ({ meetingId }) => {
       <Container
         maxWidth="lg"
         color="primary.main"
-        sx={{
-          backgroundColor: "pink",
-        }}
+        sx={
+          {
+            // backgroundColor: "pink",
+          }
+        }
         display="flex"
       >
         <Grid container spacing={2} sx={{}}>
@@ -235,28 +237,12 @@ const Meeting = ({ meetingId }) => {
               <Typography>Time elapsed</Typography>
               <Typography>Description:</Typography>
             </Box>
-
-            {/* 🎃 CHAT MESSAGES */}
-            <Box
-              sx={{
-                height: "70%",
-                backgroundColor: "white",
-              }}
-            >
-              Chat text here........
-            </Box>
-            <TextField
-              sx={
-                {
-                  // height: "20%",
-                }
-              }
-            ></TextField>
-            <Button variant="contained">Contained</Button>
           </Grid>
 
-          {/* 🎃 ICONS */}
-          <VideoCallButtons/>
+          {/* 🎃 CHAT GOES HERE */}
+
+          {/* 🎃 BUTTONS */}
+          <VideoCallButtons myStream={myStream} />
 
           {/* 🎃 VIDEO 2 */}
           <Grid item md={4}>

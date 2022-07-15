@@ -64,7 +64,6 @@ const ClientDashboard = () => {
           `Your ${data._id} was booked! Appointment will be on: ${data.appointmentStartTime}`
         )
       );
-      dispatch(getAllAppointments(user.userId));
     });
     return () => {
       socket.emit("disconnected_from_dashboard", user.userId);

@@ -55,7 +55,6 @@ const ClientDashboard = () => {
     if (user.role !== "client") {
       history.push("/consultantDashboard");
     }
-    dispatch(getAppointmentsForClientId(user.userId));
   }, []);
 
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
@@ -82,6 +81,7 @@ const ClientDashboard = () => {
           >
             {selectedNavigatorItem === "Home" && (
               <Home
+                getAppointmentAction={getAppointmentsForClientId}
                 appointmentStatusFilterOptionList={[
                   "Past",
                   "Canceled",

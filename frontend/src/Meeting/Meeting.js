@@ -5,13 +5,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
 import VideoCallButtons from "./VideoCallButtons";
-import {
-  Box,
-  Container,
-  Typography,
-  CardMedia,
-  Grid,
-} from "@mui/material";
+import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
 import {
   postStartMeeting,
   postEndMeeting,

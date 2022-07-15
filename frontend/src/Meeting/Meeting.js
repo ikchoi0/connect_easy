@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { updateAppointmentVideoStartTime } from '../store/reducers/meetingReducer';
 import VideoCallButtons from './VideoCallButtons';
 import { Box, Container, Typography, CardMedia, Grid } from '@mui/material';
 import {
@@ -16,8 +15,7 @@ const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
   const socket = io('http://localhost:5002');
   // const socket = io("https://connect-easy-rid.herokuapp.com");
-  // const [videoRef, setVideoRef] = useState(null);
-  // const [peerVideoRef, setPeerVideoRef] = useState(null);
+
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
@@ -78,13 +76,11 @@ const Meeting = ({ meetingId }) => {
     dispatch(postEndMeeting(meetingId));
     socket.emit('meeting_ended');
     window.location.replace('/dashboard');
-    // history.push("/dashboard");
   };
 
   useEffect(() => {
     socket.on('welcome', async () => {
       try {
-        // console.log("Sending offer");
         const offer = await peerConnectionRef.current.createOffer({
           iceRestart: true,
         });
@@ -102,10 +98,8 @@ const Meeting = ({ meetingId }) => {
 
         const answer = await peerConnectionRef.current.createAnswer();
 
-        // console.log("Received offer");
         await peerConnectionRef.current?.setLocalDescription(answer);
 
-        // console.log("Sending answer");
         socket.emit('answer', answer, meetingId);
       } catch (error) {
         console.log(error);
@@ -141,15 +135,13 @@ const Meeting = ({ meetingId }) => {
               })
             );
           }
-
-          console.log('connected !!');
         }
         await peerConnectionRef.current.addIceCandidate(ice);
       } catch (error) {
         console.log(error);
       }
     });
-    socket.on('peer_left', async (ice) => {
+    socket.on('peer_left', async () => {
       // console.log("Peer left, closing connection");
       peerConnectionRef?.close();
       peerConnectionRef = new RTCPeerConnection({

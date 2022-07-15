@@ -14,8 +14,8 @@ import Chat from "../Chat/Chat";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  // const socket = io("http://localhost:5002");
-  const socket = io("https://connect-easy-rid.herokuapp.com");
+  const socket = io("http://localhost:5002");
+  // const socket = io("https://connect-easy-rid.herokuapp.com");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
   const history = useHistory();
@@ -72,16 +72,18 @@ const Meeting = ({ meetingId }) => {
   }, [history, meetingId]);
 
   const handleEndMeeting = () => {
+    // add router to show alert before redirecting to dashboard
+    alert("End meeting");
     localStorage.removeItem("activeMeeting");
     dispatch(postEndMeeting(meetingId));
-    socket.emit("endMeeting");
-    history.push("/dashboard");
+    socket.emit("meeting_ended");
+    window.location.replace("/dashboard");
+    // history.push("/dashboard");
   };
 
   useEffect(() => {
     // console.log("PEERCONNECTIONREF", peerConnectionRef);
-
-    peerConnectionRef = new RTCPeerConnection({
+    peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
         {
           urls: [
@@ -95,8 +97,8 @@ const Meeting = ({ meetingId }) => {
       ],
     });
 
-    peerConnectionRef.addEventListener("icecandidate", handleIce);
-    peerConnectionRef.addEventListener("addstream", handleAddStream);
+    peerConnectionRef.current.addEventListener("icecandidate", handleIce);
+    peerConnectionRef.current.addEventListener("addstream", handleAddStream);
 
     socket.on("welcome", async () => {
       try {
@@ -133,8 +135,6 @@ const Meeting = ({ meetingId }) => {
         await peerConnectionRef.current.setRemoteDescription(answer);
       } catch (error) {
         console.log(error);
-        socket.emit("leave", meetingId);
-        // window.location.replace("/dashboard");
       }
     });
 
@@ -184,12 +184,19 @@ const Meeting = ({ meetingId }) => {
           },
         ],
       });
-      peerConnectionRef.addEventListener("icecandidate", handleIce);
-      peerConnectionRef.addEventListener("addstream", handleAddStream);
+      peerConnectionRef.current.addEventListener("icecandidate", handleIce);
+      peerConnectionRef.current.addEventListener("addstream", handleAddStream);
       init();
     });
 
     init();
+
+    socket.on("meeting_ended", async () => {
+      // add router to show alert before redirecting to dashboard
+      alert("Meeting ended");
+      localStorage.removeItem("activeMeeting");
+      window.location.replace("/dashboard");
+    });
 
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
@@ -210,7 +217,7 @@ const Meeting = ({ meetingId }) => {
       myStream.current = await navigator.mediaDevices.getUserMedia(
         initialConstraints
       );
-      // console.log(myStream.current);
+      console.log("21321321321", myStream);
       myFace.srcObject = myStream.current;
       return myStream.current;
     } catch (err) {
@@ -270,7 +277,7 @@ const Meeting = ({ meetingId }) => {
               <Typography>Description:</Typography>
             </Box>
             {/* 🎃 CHAT GOES HERE */}
-            <Chat />
+            <Chat socket={socket} />
           </Grid>
 
           {/* 🎃 BUTTONS */}

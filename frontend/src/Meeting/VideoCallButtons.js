@@ -3,6 +3,8 @@ import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import MicIcon from "@mui/icons-material/Mic";
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import CallEndIcon from "@mui/icons-material/CallEnd";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import MicOffIcon from "@mui/icons-material/MicOff";
 import { Grid, Button } from "@mui/material";
 import { postEndMeeting } from "../store/reducers/meetingReducer";
 
@@ -54,11 +56,14 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
       }}
     >
       <Button id="camera" onClick={handleCameraClick}>
+        {cameraBtn} 
         <VideoCameraFrontIcon color="primary" fontSize="large" />
+        <VideocamOffIcon color="primary" fontSize="large" />
       </Button>
 
       <Button id="mute" onClick={handleMuteClick}>
         <MicIcon color="primary" fontSize="large" />
+        <MicOffIcon color="primary" fontSize="large" />
       </Button>
 
       <Button>

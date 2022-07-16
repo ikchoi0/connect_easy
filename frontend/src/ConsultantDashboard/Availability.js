@@ -16,11 +16,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   setOneAppointment,
   deleteOneOpeningAppointment,
-} from '../store/reducers/scheduleReducer';
-import {
   createOpenAppointments,
   clearOpeningAppointmentsList,
+  getAllAppointments,
 } from '../store/reducers/scheduleReducer';
+
 import {
   showAlertMessage,
   showSuccessMessage,
@@ -29,6 +29,7 @@ import {
 export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const { appointments } = useSelector((state) => state.scheduler);
+  const user = JSON.parse(localStorage.getItem('user'));
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -170,6 +171,7 @@ export default function Availability() {
       if (compareEnd.isSameOrAfter(compareStart)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
+
         return;
       } else {
         dispatch(showAlertMessage('Start time must be before end time'));
@@ -206,8 +208,9 @@ export default function Availability() {
       } else {
         dispatch(showSuccessMessage('Appointment created'));
         dispatch(setOneAppointment(card));
+
         setStartTime(moment(endTime).toISOString());
-        setEndTime(null);
+
         return;
       }
     }
@@ -216,6 +219,7 @@ export default function Availability() {
   const handleSaveAppointmentsButton = () => {
     dispatch(createOpenAppointments(openingAppointmentsList));
     dispatch(clearOpeningAppointmentsList());
+    dispatch(getAllAppointments(user.userId));
   };
 
   return (

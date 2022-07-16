@@ -101,10 +101,6 @@ const Meeting = ({ meetingId, socket }) => {
     // }
   };
 
-  // useEffect(() => {
-  //   dispatch(getAppointmentByAppointmentId(meetingId));
-  // }, []);
-
   useEffect(() => {
     socket.on("welcome", async () => {
       try {

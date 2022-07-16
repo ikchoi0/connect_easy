@@ -16,6 +16,7 @@ export default function Chat({ socket }) {
   });
   const [values, setValues] = React.useState("");
   const scrollRef = useRef(null);
+
   // const [list, setList] = useState([]);
   const [isInputValid, setIsInputValid] = useState(false);
   const [messages, setMessages] = useState([...mg]);
@@ -33,17 +34,19 @@ export default function Chat({ socket }) {
     setIsInputValid(false);
     setValues("");
   };
+
   const content =
     messages.length &&
     messages.map(({ sender, message }) => {
       return (
         <Box
           key={index++}
+          ref={scrollRef}
           sx={{
             textAlignLast: sender !== userId ? "left" : "right",
           }}
         >
-          <Paper key={message} elevation={4} sx={{ paddingX: "10px" }}>
+          <Paper key={message} elevation={2} sx={{ paddingX: "10px" }}>
             <PersonIcon /> {sender !== userId ? "You" : "Me"}
             <Typography sx={{ wordWrap: "break-word" }}>{message}</Typography>
           </Paper>
@@ -52,21 +55,31 @@ export default function Chat({ socket }) {
     });
 
   return (
-    <>
+    <Box
+      sx={{
+        height: "100%",
+      }}
+    >
       <Box
+
         sx={{
-          height: "100%",
-          bgcolor: "background.default",
+          height: "420px",
+          bgcolor: "white",
           display: "flex",
           gap: 2,
           justifyContent: "start",
           flexDirection: "column",
           overflowY: "scroll",
+          borderRadius: "10px",
+          marginBottom: "10px",
+          padding: "5px",
         }}
       >
         {content}
       </Box>
+
       <Box ref={scrollRef}></Box>
+
       <Box sx={{ display: "flex", gap: "0.5rem" }}>
         <TextField
           id="standard-name"
@@ -85,6 +98,6 @@ export default function Chat({ socket }) {
           Send
         </Button>
       </Box>
-    </>
+    </Box>
   );
 }

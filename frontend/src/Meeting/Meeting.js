@@ -12,6 +12,8 @@ import {
 } from "../store/reducers/meetingReducer";
 import Chat from "../Chat/Chat";
 import { showAlertMessage } from "../store/reducers/alertReducer";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import TimelapseIcon from "@mui/icons-material/Timelapse";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
@@ -216,47 +218,71 @@ const Meeting = ({ meetingId }) => {
     peerVideoRef.current.srcObject = data.stream;
   }
 
+  const meetingInfoStyles = {
+    fontSize: "0.9rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
   return (
     <>
       <Container
         maxWidth="lg"
         color="primary.main"
-        sx={{
-          maxHeight: "700px",
-        }}
         display="flex"
+        sx={{
+          position: "absolute",
+          left: "25%",
+          // right: "auto",
+        }}
       >
         <Grid container spacing={2} sx={{}}>
+          {/* 🎃 VIDEO 1 */}
           <Grid item md={8} sx={{ padding: 0 }}>
-            {/* 🎃 VIDEO 1 */}
             <CardMedia
               component="video"
-              ref={videoRef}
+              ref={peerVideoRef}
               autoPlay
               playsInline
-              width={"100%"}
-              height={"100%"}
+              sx={{ border: "2px solid white", borderRadius: "10px" }}
             ></CardMedia>
           </Grid>
+
           <Grid
             item
             md={4}
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: "700px",
             }}
           >
+            {/* 🎃 MEETING INFO */}
             <Box
               sx={{
-                backgroundColor: "yellow",
+                backgroundColor: "#e1e8eb",
+                padding: "2px",
+                borderRadius: "10px",
+                marginBottom: "10px",
               }}
             >
-              <Typography>Client: John Doe</Typography>
-              <Typography>Consultant: Jane Smith</Typography>
-              <Typography>Time elapsed</Typography>
-              <Typography>Description:</Typography>
+              <Typography sx={meetingInfoStyles}>
+                <AccountBoxIcon />
+                Consultant name here
+              </Typography>
+
+              <Typography sx={meetingInfoStyles}>
+                <AccountBoxIcon />
+                Client name here
+              </Typography>
+
+              <Typography sx={meetingInfoStyles}>
+                <TimelapseIcon />
+                Time elapsed here...or remaining
+              </Typography>
             </Box>
+
+            {/* 🎃 CHAT */}
             <Chat socket={socket} />
           </Grid>
 
@@ -270,11 +296,17 @@ const Meeting = ({ meetingId }) => {
           <Grid item md={4}>
             <CardMedia
               component="video"
-              ref={peerVideoRef}
+              ref={videoRef}
               autoPlay
               playsInline
-              width={"300px"}
-              height={"300px"}
+              sx={{
+                position: "absolute",
+                width: "300px",
+                top: "53.5%",
+                right: "35%",
+                border: "2px solid white",
+                borderRadius: "10px",
+              }}
             ></CardMedia>
           </Grid>
         </Grid>

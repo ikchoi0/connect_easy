@@ -155,6 +155,8 @@ export default function Availability() {
       if (compareStart.isBefore(compareEnd)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
+      } else {
+        dispatch(showAlertMessage('Start time must be before end time'));
       }
     }
   };
@@ -200,6 +202,13 @@ export default function Availability() {
                 dispatch(showAlertMessage('please select a valid time'));
                 setStartTime(new Date());
               }}
+              shouldDisableTime={(timeValue, clockType) => {
+                if (clockType === 'minutes' && timeValue % 5) {
+                  return true;
+                }
+
+                return false;
+              }}
             />
             <TimePicker
               label="End Time"
@@ -209,6 +218,13 @@ export default function Availability() {
               onError={(error) => {
                 dispatch(showAlertMessage('please select a valid time'));
                 setEndTime(new Date());
+              }}
+              shouldDisableTime={(timeValue, clockType) => {
+                if (clockType === 'minutes' && timeValue % 5) {
+                  return true;
+                }
+
+                return false;
               }}
             />{' '}
           </Grid>

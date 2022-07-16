@@ -150,6 +150,19 @@ export const getAllAppointments = async (consultantId) => {
   }
 };
 
+// get one single appointment 
+export const getAppointmentByAppointmentId = async (appointmentId) => {
+  try {
+    return await apiClient.get(`/appointment/single/${appointmentId}`);
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
 // delete existing appointment by id
 export const deleteOneAppointmentById = async (appointmentId) => {
   try {

@@ -4,6 +4,7 @@ import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 
 const meetingState = {
   meetingId: "",
+  appointmentData: null,
 };
 
 // updates video start time in appointment table
@@ -43,6 +44,20 @@ export const postEndMeeting = createAsyncThunk(
   }
 );
 
+export const getAppointmentByAppointmentId = createAsyncThunk(
+  "schedule/getAppointmentByAppointmentId",
+  async (appointmentData, thunkApi) => {
+    // pass appointmentId to backend
+    console.log("getAppointmentByAppointmentId", appointmentData);
+    const response = await api.getAppointmentByAppointmentId(appointmentData);
+    if (response.error) {
+      return thunkApi.rejectWithValue(response);
+    } else {
+      return response.data;
+    }
+  }
+);
+
 const meetingSlice = createSlice({
   name: "meeting",
   initialState: meetingState,
@@ -66,6 +81,14 @@ const meetingSlice = createSlice({
     },
     [postEndMeeting.rejected]: (state, action) => {
       console.log("postEndMeeting rejected");
+    },
+    [getAppointmentByAppointmentId.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      state.appointmentData = action.payload;
+      console.log("Single appointment retrieved.");
+    },
+    [getAppointmentByAppointmentId.rejected]: (state, action) => {
+      console.log("Single appointment rejected");
     },
   },
 });

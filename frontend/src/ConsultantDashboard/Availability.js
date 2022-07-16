@@ -28,6 +28,7 @@ import {
 
 export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
+  const { appointments } = useSelector((state) => state.scheduler);
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -35,16 +36,6 @@ export default function Availability() {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
-
-  const [currentSelectedStartTime, setCurrentSelectedStartTime] =
-    useState(null);
-  const [currentSelectedEndTime, setCurrentSelectedEndTime] = useState(null);
-
-  const [tempAppointment, setTempAppointment] = useState([]);
-
-  /**
-   * TODO: NEED TO FIX FORM VALIDATION
-   */
 
   useEffect(() => {
     if (openingAppointmentsList.length && date && startTime && endTime) {
@@ -56,7 +47,14 @@ export default function Availability() {
       setIsNewAppointmentValid(date && startTime && endTime ? true : false);
     };
     handleCreateAppointmentCheck();
-  }, [openingAppointmentsList, setIsFormValid, date, startTime, endTime]);
+  }, [
+    openingAppointmentsList,
+    appointments,
+    setIsFormValid,
+    date,
+    startTime,
+    endTime,
+  ]);
 
   const parseDate = (value, setValue) => {
     const time = moment(value).format('HH:mm');
@@ -71,6 +69,7 @@ export default function Availability() {
   };
 
   const handleStartTimeChange = (startTime) => {
+    console.log(startTime);
     parseDate(startTime, setStartTime);
   };
 
@@ -103,6 +102,10 @@ export default function Availability() {
 
     const key = uuid();
 
+    const newDate = moment(date).format('YYYY-MM-DD');
+    const newStartTime = moment(startTime).format('HH:mm');
+    const newEndTime = moment(endTime).format('HH:mm');
+
     let card = {
       key,
       consultant: consultantId,
@@ -112,12 +115,14 @@ export default function Availability() {
         .seconds(0)
         .milliseconds(0)
         .toISOString(true),
-      appointmentStartTime: moment(startTime).toISOString(true),
-      appointmentEndTime: moment(endTime).toISOString(true),
+      appointmentStartTime: moment(newDate + ' ' + newStartTime).toISOString(
+        true
+      ),
+      appointmentEndTime: moment(newDate + ' ' + newEndTime).toISOString(true),
       // description,
     };
 
-    if (openingAppointmentsList.length) {
+    if (openingAppointmentsList.length > 0) {
       let startFlag = true;
       let endFlag = true;
 
@@ -137,26 +142,32 @@ export default function Availability() {
 
         // compare if new endtime is within the range of an existing appointment
         endFlag = compareEnd.isBetween(startTime, endTime, undefined, '[]');
-
-        // store the new appointment
       }
+
       if (!startFlag && !endFlag) {
-        dispatch(showSuccessMessage('Appointment added successfully'));
+        dispatch(showSuccessMessage('Appointment created'));
         dispatch(setOneAppointment(card));
+        setStartTime(endTime);
+        setEndTime(null);
+        return;
       } else {
         dispatch(
           showAlertMessage('Appointment overlaps with existing appointment')
         );
+        return;
       }
     } else {
+      ///////////////////////////////
       const compareStart = moment(card.appointmentStartTime);
       const compareEnd = moment(card.appointmentEndTime);
 
       if (compareStart.isBefore(compareEnd)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
+        return;
       } else {
         dispatch(showAlertMessage('Start time must be before end time'));
+        return;
       }
     }
   };
@@ -198,10 +209,10 @@ export default function Availability() {
               value={startTime}
               onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
-              onError={(error) => {
-                dispatch(showAlertMessage('please select a valid time'));
-                setStartTime(new Date());
-              }}
+              // onError={(error) => {
+              //   dispatch(showAlertMessage('please select a valid time'));
+              //   setStartTime(new Date());
+              // }}
               shouldDisableTime={(timeValue, clockType) => {
                 if (clockType === 'minutes' && timeValue % 5) {
                   return true;
@@ -215,10 +226,10 @@ export default function Availability() {
               value={endTime}
               onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
-              onError={(error) => {
-                dispatch(showAlertMessage('please select a valid time'));
-                setEndTime(new Date());
-              }}
+              // onError={(error) => {
+              //   dispatch(showAlertMessage('please select a valid time'));
+              //   setEndTime(new Date());
+              // }}
               shouldDisableTime={(timeValue, clockType) => {
                 if (clockType === 'minutes' && timeValue % 5) {
                   return true;
@@ -226,7 +237,7 @@ export default function Availability() {
 
                 return false;
               }}
-            />{' '}
+            />
           </Grid>
           {appointmentCards && appointmentCards}
 

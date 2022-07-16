@@ -101,9 +101,10 @@ export default function TimeSlots(props) {
     <Box
       sx={{
         width: '20%',
-        marginLeft: 3,
+        marginLeft: '1rem',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
       <Typography variant="h6" gutterBottom>
@@ -115,10 +116,11 @@ export default function TimeSlots(props) {
           overflowY: 'scroll',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
           gap: '1rem',
         }}
       >
-        {!props.timeSelected && items && items}
+        {!props.timeSelected && items}
         {props.timeSelected && items.length > 0 && props.selectedAppointmentId && (
           <>
             <Box sx={{ marginTop: '2rem' }}>
@@ -139,6 +141,7 @@ export default function TimeSlots(props) {
           </>
         )}
       </Box>
+
       {confirm && (
         <DialogPopUp open={confirm}>
           <ConfirmModal

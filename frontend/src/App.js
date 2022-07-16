@@ -18,7 +18,7 @@ import { AlertNotification } from "./shared/components/AlertNotification";
 import ResetPasswordPage from "./HomePage/AuthPages/ResetPasswordPage/ResetPasswordPage";
 import GetEmailPage from "./HomePage/AuthPages/GetEmailPage/GetEmailPage";
 import Chat from "./Chat/Chat";
-
+import Invoice from "./Invoice/Invoice";
 /**
  *
  * https://reacttraining.com/blog/react-router-v5-1/
@@ -30,6 +30,9 @@ function App() {
     <>
       <Router>
         <Switch>
+          <Route exact path="/Invoice">
+            <Invoice />
+          </Route>
           <Route exact path="/">
             <HomePage />
           </Route>

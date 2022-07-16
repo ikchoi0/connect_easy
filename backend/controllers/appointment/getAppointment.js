@@ -12,6 +12,7 @@ const getAppointment = async (req, res) => {
       .populate("client")
       .populate("consultant");
 
+
     if (!appointment) return res.status(404).send("Appointment not found");
     /**
      * Event {

@@ -3,6 +3,8 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
+import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
 import VideoCallButtons from "./VideoCallButtons";
 import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
 import {
@@ -11,10 +13,15 @@ import {
 } from "../store/reducers/meetingReducer";
 import Chat from "../Chat/Chat";
 import { showAlertMessage } from "../store/reducers/alertReducer";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import TimelapseIcon from "@mui/icons-material/Timelapse";
 
 import MeetingInfo from "./MeetingInfo";
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
+
+  const { appointmentData } = useSelector((state) => state.meeting);
+
   const socket = io("http://localhost:5002");
   // const socket = io("https://connect-easy-rid.herokuapp.com");
   // const [videoRef, setVideoRef] = useState(null);
@@ -24,6 +31,7 @@ const Meeting = ({ meetingId }) => {
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
+
   let connectionMade = false;
   let peerInfo;
   let peer_left;
@@ -88,6 +96,10 @@ const Meeting = ({ meetingId }) => {
     //   dispatch(showAlertMessage("You must be connected to end meeting"));
     // }
   };
+
+  useEffect(() => {
+    dispatch(getAppointmentByAppointmentId(meetingId));
+  }, []);
 
   useEffect(() => {
     socket.on("welcome", async () => {
@@ -221,6 +233,7 @@ const Meeting = ({ meetingId }) => {
   function handleScreenSwitch() {
     if (peerVideoRef.current) {
       peerVideoRef.current.requestFullscreen();
+
     }
   }
 
@@ -230,6 +243,7 @@ const Meeting = ({ meetingId }) => {
     alignItems: "center",
     justifyContent: "flex-start",
   };
+
   return (
     <>
       <Container
@@ -250,7 +264,7 @@ const Meeting = ({ meetingId }) => {
               ref={peerVideoRef}
               autoPlay
               playsInline
-              controls={false}
+
               onClick={handleScreenSwitch}
               sx={{
                 border: "2px solid white",
@@ -273,6 +287,7 @@ const Meeting = ({ meetingId }) => {
             {/* 🎃 MEETING INFO */}
             <MeetingInfo meetingId={meetingId} />
             {/* <Box
+            <Box
               sx={{
                 backgroundColor: "#e1e8eb",
                 padding: "2px",
@@ -286,6 +301,7 @@ const Meeting = ({ meetingId }) => {
                   appointmentData.client.firstName +
                     " " +
                     appointmentData.client.lastName}
+
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
@@ -294,6 +310,7 @@ const Meeting = ({ meetingId }) => {
                   appointmentData.consultant.firstName +
                     " " +
                     appointmentData.consultant.lastName}
+
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
@@ -304,6 +321,7 @@ const Meeting = ({ meetingId }) => {
 
             {/* 🎃 CHAT */}
             <Chat socket={socket} meetingId={meetingId} />
+
           </Grid>
 
           {/* 🎃 BUTTONS */}

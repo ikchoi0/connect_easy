@@ -150,7 +150,7 @@ export const getAllAppointments = async (consultantId) => {
   }
 };
 
-// get one single appointment 
+// get one single appointment
 export const getAppointmentByAppointmentId = async (appointmentId) => {
   try {
     return await apiClient.get(`/appointment/single/${appointmentId}`);

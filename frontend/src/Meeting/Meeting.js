@@ -14,6 +14,7 @@ import Chat from "../Chat/Chat";
 import { showAlertMessage } from "../store/reducers/alertReducer";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
+import "./Meeting.css";  
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
@@ -258,6 +259,7 @@ const Meeting = ({ meetingId }) => {
               autoPlay
               playsInline
               onClick={handleScreenSwitch}
+              
               sx={{
                 border: "2px solid white",
                 borderRadius: "10px",

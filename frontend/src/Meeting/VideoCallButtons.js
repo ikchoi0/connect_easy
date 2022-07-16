@@ -13,7 +13,7 @@ import { Grid, Button } from "@mui/material";
 export default function VideoCallButtons({ myStream, handleEndMeeting }) {
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  // const [isScreenSharing, setIsScreenSharing] = useState(false);
 
 
   function handleMuteClick() {
@@ -38,16 +38,16 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
     }
   }
 
-  function handleScreenShareClick() {
-    myStream.current
-      .getVideoTracks()
-      .forEach((track) => (track.enabled = !track.enabled));
-    if (isScreenSharing) {
-      setIsScreenSharing(false);
-    } else {
-      setIsScreenSharing(true);
-    }
-  }
+  // function handleScreenShareClick() {
+  //   myStream.current
+  //     .getVideoTracks()
+  //     .forEach((track) => (track.enabled = !track.enabled));
+  //   if (isScreenSharing) {
+  //     setIsScreenSharing(false);
+  //   } else {
+  //     setIsScreenSharing(true);
+  //   }
+  // }
 
 
   return (
@@ -77,13 +77,13 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
         )}
       </Button>
 
-      <Button id="share" onClick={handleScreenShareClick}>
+      {/* <Button id="share" onClick={handleScreenShareClick}>
         {isScreenSharing ? (
           <StopScreenShareIcon style={{ color: "#B53D2D" }} fontSize="large" />
           ) : (
           <ScreenShareIcon style={{ color: "#09995F" }} fontSize="large" />
         )}
-      </Button>
+      </Button> */}
 
       <Button>
         <CallEndIcon

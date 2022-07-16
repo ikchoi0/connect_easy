@@ -2,8 +2,8 @@ import React, { useCallback } from "react";
 import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
 import VideoCallButtons from "./VideoCallButtons";
 import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
 import {
@@ -17,6 +17,10 @@ import TimelapseIcon from "@mui/icons-material/Timelapse";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
+  const {appointmentData} = useSelector((state) => state.meeting);
+  console.log("HI", appointmentData);
+
+
 
   const socket = io("http://localhost:5002");
   // const socket = io("https://connect-easy-rid.herokuapp.com");
@@ -27,6 +31,7 @@ const Meeting = ({ meetingId }) => {
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
+
   let connectionMade = false;
   let peer_left = false;
   const init = useCallback(async () => {
@@ -88,6 +93,10 @@ const Meeting = ({ meetingId }) => {
       dispatch(showAlertMessage("You must be connected to end meeting"));
     }
   };
+
+  useEffect(() => {
+    dispatch(getAppointmentByAppointmentId(meetingId));
+  }, []);
 
   useEffect(() => {
     socket.on("welcome", async () => {
@@ -222,7 +231,7 @@ const Meeting = ({ meetingId }) => {
     fontSize: "0.9rem",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   };
 
   return (
@@ -245,7 +254,12 @@ const Meeting = ({ meetingId }) => {
               ref={peerVideoRef}
               autoPlay
               playsInline
-              sx={{ border: "2px solid white", borderRadius: "10px" }}
+              sx={{
+                border: "2px solid white",
+                borderRadius: "10px",
+                height: "568.984px",
+                width: "758.656px",
+              }}
             ></CardMedia>
           </Grid>
 
@@ -268,12 +282,12 @@ const Meeting = ({ meetingId }) => {
             >
               <Typography sx={meetingInfoStyles}>
                 <AccountBoxIcon />
-                Consultant name here
+                {appointmentData && appointmentData.client?.firstName}
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
                 <AccountBoxIcon />
-                Client name here
+                {appointmentData && appointmentData.consultant?.firstName}
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
@@ -302,8 +316,8 @@ const Meeting = ({ meetingId }) => {
               sx={{
                 position: "absolute",
                 width: "300px",
-                top: "53.5%",
-                right: "35%",
+                top: "52.8%",
+                right: "35.5%",
                 border: "2px solid white",
                 borderRadius: "10px",
               }}

@@ -47,7 +47,7 @@ router.delete(
 
 // GET A Appointment
 router.get(
-  '/:appointmentId',
+  '/single/:appointmentId',
   auth(['consultant', 'client']),
   appointmentController.controllers.getAppointment
 );

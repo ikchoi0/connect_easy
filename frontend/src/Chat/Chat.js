@@ -78,8 +78,6 @@ export default function Chat({ socket }) {
         {content}
       </Box>
 
-      <Box ref={scrollRef}></Box>
-
       <Box sx={{ display: "flex", gap: "0.5rem" }}>
         <TextField
           id="standard-name"

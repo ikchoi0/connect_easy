@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
 import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
-
+import moment from "moment";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
 
@@ -12,6 +12,7 @@ const MeetingInfo = ({ meetingId }) => {
   useEffect(() => {
     dispatch(getAppointmentByAppointmentId(meetingId));
   }, []);
+
   const meetingInfoStyles = {
     fontSize: "0.9rem",
     display: "flex",
@@ -29,20 +30,20 @@ const MeetingInfo = ({ meetingId }) => {
     >
       <Typography sx={meetingInfoStyles}>
         <AccountBoxIcon />
-        {appointmentData &&
-          appointmentData.client.firstName +
-            " " +
-            appointmentData.client.lastName}
-      </Typography>
-
-      <Typography sx={meetingInfoStyles}>
-        <AccountBoxIcon />
+        Consultant:{" "}
         {appointmentData &&
           appointmentData.consultant.firstName +
             " " +
             appointmentData.consultant.lastName}
       </Typography>
-
+      <Typography sx={meetingInfoStyles}>
+        <AccountBoxIcon />
+        Client:{" "}
+        {appointmentData &&
+          appointmentData.client.firstName +
+            " " +
+            appointmentData.client.lastName}
+      </Typography>
       <Typography sx={meetingInfoStyles}>
         <TimelapseIcon />
         Time elapsed here...or remaining

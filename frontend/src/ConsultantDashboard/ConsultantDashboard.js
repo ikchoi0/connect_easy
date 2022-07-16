@@ -88,6 +88,14 @@ const ConsultantDashboard = () => {
       );
       dispatch(getAllAppointments(user.userId));
     });
+    socket.on("meeting_ended", () => {
+      // add router to show alert before redirecting to dashboard
+      alert("Meeting ended");
+      localStorage.removeItem("activeMeeting");
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 2000);
+    });
     return () => {
       socket.emit("disconnected_from_dashboard", user.userId);
     };
@@ -157,7 +165,7 @@ const ConsultantDashboard = () => {
             {selectedNavigatorItem === "Payments" && <>payments</>}
             {selectedNavigatorItem === "Settings" && <ProfilePage />}
             {selectedNavigatorItem === "Meeting" && (
-              <Meeting meetingId={meetingId} />
+              <Meeting meetingId={meetingId} socket={socket} />
             )}
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>

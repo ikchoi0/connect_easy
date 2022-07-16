@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
@@ -11,21 +11,22 @@ import {
 } from "../store/reducers/meetingReducer";
 import Chat from "../Chat/Chat";
 import { showAlertMessage } from "../store/reducers/alertReducer";
-
+import PersonOffIcon from "@mui/icons-material/PersonOff";
 import MeetingInfo from "./MeetingInfo";
-const Meeting = ({ meetingId }) => {
+const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
-  const socket = io("http://localhost:5002");
+  // const socket = io("http://localhost:5002");
   // const socket = io("https://connect-easy-rid.herokuapp.com");
   // const [videoRef, setVideoRef] = useState(null);
   // const [peerVideoRef, setPeerVideoRef] = useState(null);
+  const [display, setDisplay] = useState("none");
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
+  let meetingEnded = false;
   let connectionMade = false;
-  let peerInfo;
   let peer_left;
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
@@ -58,13 +59,21 @@ const Meeting = ({ meetingId }) => {
     });
 
     peerConnectionRef.current.ontrack = (event) => {
-      peerVideoRef.current.srcObject = event.streams[0];
+      if (peerVideoRef.current.srcObject) {
+        peerVideoRef.current.srcObject = event.streams[0];
+      } else {
+      }
     };
 
     peerConnectionRef.current.addEventListener("icecandidate", handleIce);
     peerConnectionRef.current.addEventListener("addstream", handleAddStream);
 
     peerConnectionRef.current.oniceconnectionstatechange = () => {
+      if (peerConnectionRef.current.iceConnectionState === "disconnected") {
+        setDisplay("none");
+      } else {
+        setDisplay("block");
+      }
       console.log(
         "ICE state changed to ",
         peerConnectionRef.current.iceConnectionState
@@ -77,9 +86,12 @@ const Meeting = ({ meetingId }) => {
   const handleEndMeeting = () => {
     // if (connectionMade) {
     // add router to show alert before redirecting to dashboard
+    meetingEnded = true;
     localStorage.removeItem("activeMeeting");
+
+    //// remove comment
     dispatch(postEndMeeting(meetingId));
-    socket.emit("meeting_ended");
+    socket.emit("meeting_ended", meetingId);
     setTimeout(() => {
       alert("End meeting");
       window.location.replace("/dashboard");
@@ -107,9 +119,7 @@ const Meeting = ({ meetingId }) => {
     socket.on("offer", async (offer) => {
       try {
         await peerConnectionRef.current.setRemoteDescription(offer);
-
         const answer = await peerConnectionRef.current.createAnswer();
-
         // console.log("Received offer");
         await peerConnectionRef.current?.setLocalDescription(answer);
 
@@ -150,18 +160,17 @@ const Meeting = ({ meetingId }) => {
               })
             );
           }
-
-          console.log("connected !!");
         } else {
           peer_left = true;
         }
-        await peerConnectionRef.current.addIceCandidate(ice);
+        await peerConnectionRef?.current?.addIceCandidate(ice);
       } catch (error) {
         console.log(error);
       }
     });
     socket.on("peer_left", async (ice) => {
-      // console.log("Peer left, closing connection");
+      console.log("Peer left, closing connection");
+      setDisplay("none");
       peerConnectionRef?.current.close();
       peerConnectionRef.current = new RTCPeerConnection({
         iceServers: [
@@ -183,22 +192,23 @@ const Meeting = ({ meetingId }) => {
 
     init();
 
-    socket.on("meeting_ended", async () => {
-      // add router to show alert before redirecting to dashboard
-
-      alert("Meeting ended");
-      setTimeout(() => {
-        localStorage.removeItem("activeMeeting");
-        window.location.replace("/dashboard");
-      }, 2000);
-    });
+    // socket.on("meeting_ended", () => {
+    //   // add router to show alert before redirecting to dashboard
+    //   console.log("Meeting endedMeeting endedMeeting endedMeeting ended");
+    //   alert("Meeting ended");
+    //   localStorage.removeItem("activeMeeting");
+    //   setTimeout(() => {
+    //     window.location.replace("/dashboard");
+    //   }, 2000);
+    // });
 
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
       peerConnectionRef.current.close();
       peerConnectionRef.current = null;
-      socket.close();
-      socket.removeAllListeners();
+
+      // socket.close();
+      // socket.removeAllListeners();
       if (!connectionMade) {
         localStorage.removeItem("activeMeeting");
       }
@@ -224,12 +234,6 @@ const Meeting = ({ meetingId }) => {
     }
   }
 
-  const meetingInfoStyles = {
-    fontSize: "0.9rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  };
   return (
     <>
       <Container
@@ -253,6 +257,7 @@ const Meeting = ({ meetingId }) => {
               controls={false}
               onClick={handleScreenSwitch}
               sx={{
+                display: { display },
                 border: "2px solid white",
                 borderRadius: "10px",
                 height: "568.984px",
@@ -260,6 +265,18 @@ const Meeting = ({ meetingId }) => {
                 cursor: "pointer",
               }}
             ></CardMedia>
+          </Grid>
+          <Grid
+            item
+            md={8}
+            sx={{
+              // height: "100%",
+              // width: "100%",
+              padding: 0,
+              display: display === "none" ? "block" : "none",
+            }}
+          >
+            <PersonOffIcon sx={{ width: "70%", height: "70%" }}></PersonOffIcon>
           </Grid>
 
           <Grid

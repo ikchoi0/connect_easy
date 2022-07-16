@@ -74,6 +74,14 @@ const ClientDashboard = () => {
       }
       // dispatch(showSuccessMessage("Please join the meeting!"));
     });
+    socket.on("meeting_ended", () => {
+      // add router to show alert before redirecting to dashboard
+      alert("Meeting ended");
+      localStorage.removeItem("activeMeeting");
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 2000);
+    });
     console.log("CLIENT DASHBOARD USER", meetingId);
   }, []);
   const handleDismissOnClick = () => {
@@ -127,7 +135,7 @@ const ClientDashboard = () => {
             )}
             {selectedNavigatorItem === "Payments" && <>payments</>}
             {selectedNavigatorItem === "Meeting" && (
-              <Meeting meetingId={meetingId} />
+              <Meeting meetingId={meetingId} socket={socket} />
             )}
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>

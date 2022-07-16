@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -29,7 +29,10 @@ import ProfilePage from '../shared/pages/ProfilePage';
 import Meeting from '../Meeting/Meeting';
 import { io } from 'socket.io-client';
 import { showSuccessMessage } from '../store/reducers/alertReducer';
-
+import DialogPopUp from '../shared/components/DialogPopUp';
+import ConfirmModal from '../shared/components/ConfirmModal';
+import { updateSelectedNavigatorItem } from '../store/reducers/dashboardReducer';
+import { updateMeetingId } from '../store/reducers/meetingReducer';
 const socket = io('http://localhost:5002');
 
 const drawerWidth = 300;
@@ -46,9 +49,14 @@ const menuItems = [
 ];
 // const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];
 
-const ClientDashboard = () => {
+const ConsultantDashboard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(false);
+  const [message, setMessage] = useState('');
+  const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
+  const { meetingId } = useSelector((state) => state.meeting);
+  let appointmentId;
   // return user if not logged in
   handleAuth();
   const user = JSON.parse(localStorage.getItem('user'));
@@ -57,7 +65,21 @@ const ClientDashboard = () => {
     if (user.role !== 'consultant') {
       history.push('/clientDashboard');
     }
+
     socket.emit('connected', user.userId);
+
+    socket.on('join_meeting', (appointment) => {
+      if (!JSON.parse(localStorage.getItem('activeMeeting'))) {
+        dispatch(updateMeetingId(appointment.appointmentId));
+        console.log(appointment);
+        user && user.role === 'consultant'
+          ? setMessage(appointment.client)
+          : setMessage(appointment.consultant);
+
+        setConfirm(true);
+      }
+      // dispatch(showSuccessMessage("Please join the meeting!"));
+    });
     socket.on('appointment_booked', (data) => {
       dispatch(
         showSuccessMessage(
@@ -70,8 +92,20 @@ const ClientDashboard = () => {
       socket.emit('disconnected_from_dashboard', user.userId);
     };
   }, []);
-  const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
-  const { meetingId } = useSelector((state) => state.meeting);
+
+  const handleDismissOnClick = () => {
+    const activeMeeting = localStorage.getItem('activeMeeting');
+    if (activeMeeting) {
+      localStorage.removeItem('activeMeeting');
+    }
+    setConfirm(false);
+  };
+
+  const handleConfirmClose = () => {
+    localStorage.setItem('activeMeeting', JSON.stringify(meetingId));
+    dispatch(updateSelectedNavigatorItem('Meeting'));
+    setConfirm(false);
+  };
 
   const handleCardButton = (appointmentId) => {
     dispatch(deleteOneAppointment(appointmentId));
@@ -131,8 +165,15 @@ const ClientDashboard = () => {
           </Box>
         </Box>
       </Box>
+      <DialogPopUp open={confirm}>
+        <ConfirmModal
+          onConfirm={handleConfirmClose}
+          onCancel={handleDismissOnClick}
+          message={`${message} joined your meeting! Do you want to join?`}
+        />
+      </DialogPopUp>
     </ThemeProvider>
   );
 };
 
-export default ClientDashboard;
+export default ConsultantDashboard;

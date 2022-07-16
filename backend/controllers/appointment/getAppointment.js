@@ -8,7 +8,10 @@ const getAppointment = async (req, res) => {
 
     const appointment = await Appointment.findById(
       Types.ObjectId(appointmentId)
-    );
+    )
+      .populate("client")
+      .populate("consultant");
+
 
     if (!appointment) return res.status(404).send("Appointment not found");
     /**
@@ -22,6 +25,8 @@ const getAppointment = async (req, res) => {
      */
 
     const parsedAppointment = {
+      client: appointment.client,
+      consultant: appointment.consultant,
       appointmentId: appointment._id,
       description: appointment.description,
       date: appointment.date,

@@ -32,9 +32,9 @@ export default function Availability() {
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [date, setDate] = useState(moment().toISOString());
+  const [startTime, setStartTime] = useState(moment().toISOString());
+  const [endTime, setEndTime] = useState(null);
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
 
   useEffect(() => {
@@ -69,7 +69,6 @@ export default function Availability() {
   };
 
   const handleStartTimeChange = (startTime) => {
-    console.log(startTime);
     parseDate(startTime, setStartTime);
   };
 
@@ -122,51 +121,93 @@ export default function Availability() {
       // description,
     };
 
-    if (openingAppointmentsList.length > 0) {
-      let startFlag = true;
-      let endFlag = true;
+    ///////////////////////////////
 
-      for (const appointment of openingAppointmentsList) {
-        const startTime = moment(appointment.appointmentStartTime);
-        const endTime = moment(appointment.appointmentEndTime);
-        const compareStart = moment(card.appointmentStartTime);
-        const compareEnd = moment(card.appointmentEndTime);
+    let isOverlapDb = false;
 
-        if (compareStart.isAfter(compareEnd)) {
-          dispatch(showAlertMessage('Start time must be before end time'));
-          return;
-        }
-
-        // compare if new starttime is within the range of an existing appointment
-        startFlag = compareStart.isBetween(startTime, endTime, undefined, '[]');
-
-        // compare if new endtime is within the range of an existing appointment
-        endFlag = compareEnd.isBetween(startTime, endTime, undefined, '[]');
+    for (const ap of appointments) {
+      console.log(ap);
+      if (ap.appointmentBooked || ap.appointmentCancel) {
+        continue;
       }
+      const dbDate = moment(ap.date).format('YYYY-MM-DD');
+      const dbStartTime = moment(ap.start).format('HH:mm');
+      const dbEndTime = moment(ap.end).format('HH:mm');
 
-      if (!startFlag && !endFlag) {
-        dispatch(showSuccessMessage('Appointment created'));
-        dispatch(setOneAppointment(card));
-        setStartTime(endTime);
-        setEndTime(null);
-        return;
-      } else {
-        dispatch(
-          showAlertMessage('Appointment overlaps with existing appointment')
-        );
-        return;
+      const newStartTime = moment(dbDate + ' ' + dbStartTime);
+      const newEndTime = moment(dbDate + ' ' + dbEndTime);
+
+      const cardStartTime = moment(card.appointmentStartTime);
+      const cardEndTime = moment(card.appointmentEndTime);
+
+      if (
+        cardStartTime.isBetween(newStartTime, newEndTime, 'minutes', '[]') ||
+        cardEndTime.isBetween(newStartTime, newEndTime, 'minutes', '[]')
+      ) {
+        console.log('overlap');
+        isOverlapDb = true;
+        break;
       }
-    } else {
-      ///////////////////////////////
+      if (
+        newStartTime.isAfter(cardStartTime) &&
+        newEndTime.isBefore(cardEndTime)
+      ) {
+        console.log('overlap');
+        isOverlapDb = true;
+        break;
+      }
+    }
+    if (isOverlapDb) {
+      dispatch(showAlertMessage('Appointment overlaps with DB'));
+      return;
+    }
+    console.log(isOverlapDb);
+
+    if (!openingAppointmentsList.length && !isOverlapDb) {
       const compareStart = moment(card.appointmentStartTime);
       const compareEnd = moment(card.appointmentEndTime);
 
-      if (compareStart.isBefore(compareEnd)) {
+      if (compareEnd.isSameOrAfter(compareStart)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
         return;
       } else {
         dispatch(showAlertMessage('Start time must be before end time'));
+        return;
+      }
+    }
+
+    let isOverlap = false;
+    if (openingAppointmentsList.length > 0 && !isOverlapDb) {
+      for (const appointment of openingAppointmentsList) {
+        const startTime = moment(appointment.appointmentStartTime);
+        const endTime = moment(appointment.appointmentEndTime);
+        const cardStartTime = moment(card.appointmentStartTime);
+        const cardEndTime = moment(card.appointmentEndTime);
+
+        if (
+          cardStartTime.isBetween(startTime, endTime, 'minutes', '[]') ||
+          cardEndTime.isBetween(startTime, endTime, 'minutes', '[]')
+        ) {
+          isOverlap = true;
+          break;
+        }
+        if (startTime.isAfter(cardStartTime) && endTime.isBefore(cardEndTime)) {
+          isOverlap = true;
+          break;
+        }
+      }
+
+      if (isOverlap) {
+        dispatch(
+          showAlertMessage('Appointment overlaps with existing appointment')
+        );
+        return;
+      } else {
+        dispatch(showSuccessMessage('Appointment created'));
+        dispatch(setOneAppointment(card));
+        setStartTime(moment(endTime).toISOString());
+        setEndTime(null);
         return;
       }
     }

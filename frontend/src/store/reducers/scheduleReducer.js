@@ -166,7 +166,9 @@ const schedulerSlice = createSlice({
     [bookAppointment.fulfilled]: (state, action) => {
       state.booked = true;
       // console.log(action.payload);
-      socket.emit('appointment_booked', action.payload);
+      setTimeout(() => {
+        socket.emit('appointment_booked', action.payload);
+      }, 1000);
       // console.log('appointment booked FULFILLED', action.payload);
     },
     [bookAppointment.rejected]: (state, action) => {

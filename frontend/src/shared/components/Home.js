@@ -15,6 +15,8 @@ import moment from 'moment';
 import { updateSelectedStatusFilter } from '../../store/reducers/appointmentReducer';
 import { filterAppointments } from '../utils/filterAppointments';
 import { getMe } from '../../store/reducers/authReducer';
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:5002');
 
 export default function Home({
   getAppointmentAction,
@@ -49,10 +51,14 @@ export default function Home({
     );
   });
 
-  const handleJoinMeetingButton = (meetingId) => {
-    dispatch(updateMeetingId(meetingId));
-    localStorage.setItem('activeMeeting', JSON.stringify(meetingId));
-
+  const handleJoinMeetingButton = (appointment) => {
+    // we need to remove the line below? maybe not.
+    dispatch(updateMeetingId(appointment.appointmentId));
+    localStorage.setItem(
+      'activeMeeting',
+      JSON.stringify(appointment.appointmentId)
+    );
+    socket.emit('join_meeting', appointment);
     dispatch(updateSelectedNavigatorItem('Meeting'));
   };
 
@@ -117,7 +123,7 @@ export default function Home({
             variant="contained"
             color="primary"
             size="large"
-            onClick={() => handleJoinMeetingButton(appointment.appointmentId)}
+            onClick={() => handleJoinMeetingButton(appointment)}
             // 🚨 when appointment is not close, disable the button
             // disabled={appointmentBooked}
           >

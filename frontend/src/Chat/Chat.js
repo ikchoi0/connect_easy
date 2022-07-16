@@ -18,6 +18,7 @@ export default function Chat({ socket, meetingId }) {
   const [values, setValues] = React.useState("");
   const scrollRef = useRef(null);
 
+
   // const [list, setList] = useState([]);
   const [isInputValid, setIsInputValid] = useState(false);
   const [messages, setMessages] = useState([...mg]);
@@ -63,6 +64,7 @@ export default function Chat({ socket, meetingId }) {
       }}
     >
       <Box
+
         sx={{
           height: "420px",
           bgcolor: "white",

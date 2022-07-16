@@ -49,6 +49,7 @@ router.delete(
 router.get(
   "/single/:appointmentId",
   auth(["consultant", "client"]),
+
   appointmentController.controllers.getAppointment
 );
 

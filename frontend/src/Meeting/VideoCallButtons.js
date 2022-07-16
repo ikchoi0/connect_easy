@@ -46,6 +46,7 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
   //   }
   // }
 
+
   return (
     <Grid
       item
@@ -61,6 +62,7 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
         {isCameraOff ? (
           <VideocamOffIcon style={{ color: "#B53D2D" }} fontSize="large" />
         ) : (
+
           <VideoCameraFrontIcon style={{ color: "#09995F" }} fontSize="large" />
         )}
       </Button>
@@ -69,6 +71,7 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
         {isMuted ? (
           <MicOffIcon style={{ color: "#B53D2D" }} fontSize="large" />
         ) : (
+
           <MicIcon style={{ color: "#09995F" }} fontSize="large" />
         )}
       </Button>

@@ -137,7 +137,7 @@ const schedulerSlice = createSlice({
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
-      state.appointments = action.payload;
+      // state.appointments = action.payload;
       // console.log('create fulfilled', action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {

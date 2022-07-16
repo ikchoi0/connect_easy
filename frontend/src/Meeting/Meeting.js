@@ -1,34 +1,8 @@
-<<<<<<< HEAD
-import React, { useCallback, useState } from "react";
-import { useEffect, useRef } from "react";
-import { io } from "socket.io-client";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import VideoCallButtons from "./VideoCallButtons";
-import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
-import {
-  postStartMeeting,
-  postEndMeeting,
-} from "../store/reducers/meetingReducer";
-import Chat from "../Chat/Chat";
-import { showAlertMessage } from "../store/reducers/alertReducer";
-import PersonOffIcon from "@mui/icons-material/PersonOff";
-import MeetingInfo from "./MeetingInfo";
-const Meeting = ({ meetingId, socket }) => {
-  const dispatch = useDispatch();
-  // const socket = io("http://localhost:5002");
-  // const socket = io("https://connect-easy-rid.herokuapp.com");
-  // const [videoRef, setVideoRef] = useState(null);
-  // const [peerVideoRef, setPeerVideoRef] = useState(null);
-  const [display, setDisplay] = useState("none");
-=======
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { getAppointmentByAppointmentId } from '../store/reducers/meetingReducer';
 import VideoCallButtons from './VideoCallButtons';
 import { Box, Container, Typography, CardMedia, Grid } from '@mui/material';
 import {
@@ -37,29 +11,21 @@ import {
 } from '../store/reducers/meetingReducer';
 import Chat from '../Chat/Chat';
 import { showAlertMessage } from '../store/reducers/alertReducer';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import TimelapseIcon from '@mui/icons-material/Timelapse';
-
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 import MeetingInfo from './MeetingInfo';
-const Meeting = ({ meetingId }) => {
+const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
-
-  const { appointmentData } = useSelector((state) => state.meeting);
-
-  const socket = io('http://localhost:5002');
+  // const socket = io("http://localhost:5002");
   // const socket = io("https://connect-easy-rid.herokuapp.com");
-
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
+  // const [videoRef, setVideoRef] = useState(null);
+  // const [peerVideoRef, setPeerVideoRef] = useState(null);
+  const [display, setDisplay] = useState('none');
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
-<<<<<<< HEAD
   let meetingEnded = false;
-=======
-
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
   let connectionMade = false;
   let peer_left;
   const init = useCallback(async () => {
@@ -103,10 +69,10 @@ const Meeting = ({ meetingId }) => {
     peerConnectionRef.current.addEventListener('addstream', handleAddStream);
 
     peerConnectionRef.current.oniceconnectionstatechange = () => {
-      if (peerConnectionRef.current.iceConnectionState === "disconnected") {
-        setDisplay("none");
+      if (peerConnectionRef.current.iceConnectionState === 'disconnected') {
+        setDisplay('none');
       } else {
-        setDisplay("block");
+        setDisplay('block');
       }
       console.log(
         'ICE state changed to ',
@@ -120,18 +86,12 @@ const Meeting = ({ meetingId }) => {
   const handleEndMeeting = () => {
     // if (connectionMade) {
     // add router to show alert before redirecting to dashboard
-<<<<<<< HEAD
     meetingEnded = true;
-    localStorage.removeItem("activeMeeting");
+    localStorage.removeItem('activeMeeting');
 
     //// remove comment
     dispatch(postEndMeeting(meetingId));
-    socket.emit("meeting_ended", meetingId);
-=======
-    localStorage.removeItem('activeMeeting');
-    dispatch(postEndMeeting(meetingId));
-    socket.emit('meeting_ended');
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
+    socket.emit('meeting_ended', meetingId);
     setTimeout(() => {
       alert('End meeting');
       window.location.replace('/dashboard');
@@ -140,10 +100,6 @@ const Meeting = ({ meetingId }) => {
     //   dispatch(showAlertMessage("You must be connected to end meeting"));
     // }
   };
-
-  useEffect(() => {
-    dispatch(getAppointmentByAppointmentId(meetingId));
-  }, []);
 
   useEffect(() => {
     socket.on('welcome', async () => {
@@ -163,11 +119,7 @@ const Meeting = ({ meetingId }) => {
       try {
         await peerConnectionRef.current.setRemoteDescription(offer);
         const answer = await peerConnectionRef.current.createAnswer();
-<<<<<<< HEAD
         // console.log("Received offer");
-=======
-
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
         await peerConnectionRef.current?.setLocalDescription(answer);
 
         // console.log("Sending answer");
@@ -207,11 +159,6 @@ const Meeting = ({ meetingId }) => {
               })
             );
           }
-<<<<<<< HEAD
-=======
-
-          console.log('connected !!');
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
         } else {
           peer_left = true;
         }
@@ -220,14 +167,9 @@ const Meeting = ({ meetingId }) => {
         console.log(error);
       }
     });
-<<<<<<< HEAD
-    socket.on("peer_left", async (ice) => {
-      console.log("Peer left, closing connection");
-      setDisplay("none");
-=======
-    socket.on('peer_left', async () => {
-      // console.log("Peer left, closing connection");
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
+    socket.on('peer_left', async (ice) => {
+      console.log('Peer left, closing connection');
+      setDisplay('none');
       peerConnectionRef?.current.close();
       peerConnectionRef.current = new RTCPeerConnection({
         iceServers: [
@@ -249,7 +191,6 @@ const Meeting = ({ meetingId }) => {
 
     init();
 
-<<<<<<< HEAD
     // socket.on("meeting_ended", () => {
     //   // add router to show alert before redirecting to dashboard
     //   console.log("Meeting endedMeeting endedMeeting endedMeeting ended");
@@ -259,17 +200,6 @@ const Meeting = ({ meetingId }) => {
     //     window.location.replace("/dashboard");
     //   }, 2000);
     // });
-=======
-    socket.on('meeting_ended', async () => {
-      // add router to show alert before redirecting to dashboard
-
-      alert('Meeting ended');
-      setTimeout(() => {
-        localStorage.removeItem('activeMeeting');
-        window.location.replace('/dashboard');
-      }, 2000);
-    });
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
 
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
@@ -303,16 +233,6 @@ const Meeting = ({ meetingId }) => {
     }
   }
 
-<<<<<<< HEAD
-=======
-  const meetingInfoStyles = {
-    fontSize: '0.9rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  };
-
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
   return (
     <>
       <Container
@@ -335,20 +255,12 @@ const Meeting = ({ meetingId }) => {
               playsInline
               onClick={handleScreenSwitch}
               sx={{
-<<<<<<< HEAD
                 display: { display },
-                border: "2px solid white",
-                borderRadius: "10px",
-                height: "568.984px",
-                width: "758.656px",
-                cursor: "pointer",
-=======
                 border: '2px solid white',
                 borderRadius: '10px',
                 height: '568.984px',
                 width: '758.656px',
                 cursor: 'pointer',
->>>>>>> 07cc31fdfa8d116cfdadda061facb9964fee1d0d
               }}
             ></CardMedia>
           </Grid>
@@ -359,10 +271,10 @@ const Meeting = ({ meetingId }) => {
               // height: "100%",
               // width: "100%",
               padding: 0,
-              display: display === "none" ? "block" : "none",
+              display: display === 'none' ? 'block' : 'none',
             }}
           >
-            <PersonOffIcon sx={{ width: "70%", height: "70%" }}></PersonOffIcon>
+            <PersonOffIcon sx={{ width: '70%', height: '70%' }}></PersonOffIcon>
           </Grid>
 
           <Grid

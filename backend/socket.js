@@ -4,8 +4,6 @@ const socketHandler = (wsServer) => {
   const socketIdToUserId = {};
 
   wsServer.on("connection", (socket) => {
-    console.log("logging: ", onlineUsers);
-
     socket.on("connected", (userId) => {
       console.log("connected to server: " + userId);
       onlineUsers[userId] = socket.id;
@@ -22,14 +20,15 @@ const socketHandler = (wsServer) => {
         .emit("join_meeting", appointment);
       console.log(appointment);
     });
-    socket.on("join_room", (roomName) => {
+    socket.on("join_room", (roomName, user) => {
+      console.log(user);
       rooms[socket.id] = roomName;
       socket.join(roomName);
-      socket.to(roomName).emit("welcome");
+      socket.to(roomName).emit("welcome", user);
     });
 
-    socket.on("offer", (offer, roomName) => {
-      socket.to(roomName).emit("offer", offer);
+    socket.on("offer", (offer, roomName, user) => {
+      socket.to(roomName).emit("offer", offer, user);
     });
 
     socket.on("answer", (answer, roomName) => {
@@ -53,10 +52,9 @@ const socketHandler = (wsServer) => {
       const roomName = rooms[socket.id];
       socket.to(roomName).emit("meeting_ended");
     });
-    socket.on("chat", (message) => {
+    socket.on("chat", (message, meetingId) => {
       // console.log(message);
-      const roomName = rooms[socket.id];
-      socket.to(roomName).emit("chat", message);
+      socket.to(meetingId).emit("chat", message);
     });
   });
 };

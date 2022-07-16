@@ -67,8 +67,9 @@ const ClientDashboard = () => {
       if (!JSON.parse(localStorage.getItem("activeMeeting"))) {
         dispatch(updateMeetingId(appointment.appointmentId));
         console.log(appointment);
-        setMessage(appointment.consultant);
-
+        user && user.role === "client"
+          ? setMessage(appointment.consultant)
+          : setMessage(appointment.client);
         setConfirm(true);
       }
       // dispatch(showSuccessMessage("Please join the meeting!"));
@@ -76,6 +77,10 @@ const ClientDashboard = () => {
     console.log("CLIENT DASHBOARD USER", meetingId);
   }, []);
   const handleDismissOnClick = () => {
+    const activeMeeting = localStorage.getItem("activeMeeting");
+    if (activeMeeting) {
+      localStorage.removeItem("activeMeeting");
+    }
     setConfirm(false);
   };
 

@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 
-const appointmentController = require('../controllers/appointment/appointmentController');
-const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi);
-const validator = require('express-joi-validation').createValidator({});
+const appointmentController = require("../controllers/appointment/appointmentController");
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
+const validator = require("express-joi-validation").createValidator({});
 // const auth = require("../middleware/auth");
 
 const appointmentSchema = Joi.object({
@@ -27,66 +27,66 @@ const appointmentSchemas = Joi.array().items(appointmentSchema);
  */
 
 router.post(
-  '/',
-  auth(['consultant']),
+  "/",
+  auth(["consultant"]),
   // validator.body(appointmentSchemas),
   appointmentController.controllers.postAppointment
 );
 
 router.get(
-  '/:consultantId',
-  auth(['consultant', 'client']),
+  "/:consultantId",
+  auth(["consultant", "client"]),
   appointmentController.controllers.getAllAppointments
 );
 
 router.delete(
-  '/:consultantId',
-  auth(['consultant']),
+  "/:consultantId",
+  auth(["consultant"]),
   appointmentController.controllers.deleteAppointment
 );
 
 // GET A Appointment
 router.get(
-  '/:appointmentId',
-  auth(['consultant', 'client']),
+  "/single/:appointmentId",
+  auth(["consultant", "client"]),
   appointmentController.controllers.getAppointment
 );
 
 router.get(
-  '/date/:consultantId/:date',
-  auth(['consultant', 'client']),
+  "/date/:consultantId/:date",
+  auth(["consultant", "client"]),
   appointmentController.controllers.getAppointmentByDate
 );
 
 router.patch(
-  '/book',
-  auth(['client']),
+  "/book",
+  auth(["client"]),
   appointmentController.controllers.updateAppointment
 );
 
 // Client Appointments
 router.get(
-  '/client/:clientId',
-  auth(['client', 'consultant']),
+  "/client/:clientId",
+  auth(["client", "consultant"]),
   appointmentController.controllers.getAppointmentsForClientId
 );
 
 router.patch(
-  '/cancel',
-  auth(['client', 'consultant']),
+  "/cancel",
+  auth(["client", "consultant"]),
   appointmentController.controllers.updateAppointmentBookedStatus
 );
 
 router.post(
-  '/postStartMeeting',
-  auth(['client', 'consultant']),
+  "/postStartMeeting",
+  auth(["client", "consultant"]),
   appointmentController.controllers.postStartMeeting
 );
 module.exports = router;
 
 router.post(
-  '/postEndMeeting',
-  auth(['client', 'consultant']),
+  "/postEndMeeting",
+  auth(["client", "consultant"]),
   appointmentController.controllers.postEndMeeting
 );
 module.exports = router;

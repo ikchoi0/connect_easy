@@ -72,7 +72,9 @@ const ConsultantDashboard = () => {
       if (!JSON.parse(localStorage.getItem("activeMeeting"))) {
         dispatch(updateMeetingId(appointment.appointmentId));
         console.log(appointment);
-        setMessage(appointment.consultant);
+        user && user.role === "consultant"
+          ? setMessage(appointment.client)
+          : setMessage(appointment.consultant);
 
         setConfirm(true);
       }
@@ -92,6 +94,10 @@ const ConsultantDashboard = () => {
   }, []);
 
   const handleDismissOnClick = () => {
+    const activeMeeting = localStorage.getItem("activeMeeting");
+    if (activeMeeting) {
+      localStorage.removeItem("activeMeeting");
+    }
     setConfirm(false);
   };
 

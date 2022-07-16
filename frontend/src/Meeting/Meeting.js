@@ -2,8 +2,7 @@ import React, { useCallback } from "react";
 import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { updateAppointmentVideoStartTime } from "../store/reducers/meetingReducer";
+import { useDispatch, useSelector } from "react-redux";
 import VideoCallButtons from "./VideoCallButtons";
 import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
 import {
@@ -12,11 +11,10 @@ import {
 } from "../store/reducers/meetingReducer";
 import Chat from "../Chat/Chat";
 import { showAlertMessage } from "../store/reducers/alertReducer";
-import { getAllAppointments } from "../api";
 
+import MeetingInfo from "./MeetingInfo";
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-
   const socket = io("http://localhost:5002");
   // const socket = io("https://connect-easy-rid.herokuapp.com");
   // const [videoRef, setVideoRef] = useState(null);
@@ -27,7 +25,8 @@ const Meeting = ({ meetingId }) => {
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
   let connectionMade = false;
-  let peer_left = false;
+  let peerInfo;
+  let peer_left;
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
@@ -76,18 +75,18 @@ const Meeting = ({ meetingId }) => {
   }, [history, meetingId]);
 
   const handleEndMeeting = () => {
-    if (connectionMade) {
-      // add router to show alert before redirecting to dashboard
-      localStorage.removeItem("activeMeeting");
-      dispatch(postEndMeeting(meetingId));
-      socket.emit("meeting_ended");
-      setTimeout(() => {
-        alert("End meeting");
-        window.location.replace("/dashboard");
-      }, 1000);
-    } else {
-      dispatch(showAlertMessage("You must be connected to end meeting"));
-    }
+    // if (connectionMade) {
+    // add router to show alert before redirecting to dashboard
+    localStorage.removeItem("activeMeeting");
+    dispatch(postEndMeeting(meetingId));
+    socket.emit("meeting_ended");
+    setTimeout(() => {
+      alert("End meeting");
+      window.location.replace("/dashboard");
+    }, 1000);
+    // } else {
+    //   dispatch(showAlertMessage("You must be connected to end meeting"));
+    // }
   };
 
   useEffect(() => {
@@ -132,7 +131,7 @@ const Meeting = ({ meetingId }) => {
     socket.on("ice", async (ice) => {
       try {
         if (ice) {
-          const userId = JSON.parse(localStorage.getItem("user")).userId;
+          const user = JSON.parse(localStorage.getItem("user"));
           const activeMeeting = JSON.parse(
             localStorage.getItem("activeMeeting")
           );
@@ -145,7 +144,7 @@ const Meeting = ({ meetingId }) => {
               postStartMeeting({
                 appointmentData: {
                   appointmentId: meetingId,
-                  userId: userId,
+                  userId: user.userId,
                 },
                 history,
               })
@@ -219,48 +218,92 @@ const Meeting = ({ meetingId }) => {
     peerVideoRef.current.srcObject = data.stream;
   }
 
+  function handleScreenSwitch() {
+    if (peerVideoRef.current) {
+      peerVideoRef.current.requestFullscreen();
+    }
+  }
+
+  const meetingInfoStyles = {
+    fontSize: "0.9rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  };
   return (
     <>
       <Container
         maxWidth="lg"
         color="primary.main"
-        sx={{
-          maxHeight: "700px",
-        }}
         display="flex"
+        sx={{
+          position: "absolute",
+          left: "25%",
+          // right: "auto",
+        }}
       >
         <Grid container spacing={2} sx={{}}>
+          {/* 🎃 VIDEO 1 */}
           <Grid item md={8} sx={{ padding: 0 }}>
-            {/* 🎃 VIDEO 1 */}
             <CardMedia
               component="video"
-              ref={videoRef}
+              ref={peerVideoRef}
               autoPlay
               playsInline
-              width={"100%"}
-              height={"100%"}
+              controls={false}
+              onClick={handleScreenSwitch}
+              sx={{
+                border: "2px solid white",
+                borderRadius: "10px",
+                height: "568.984px",
+                width: "758.656px",
+                cursor: "pointer",
+              }}
             ></CardMedia>
           </Grid>
+
           <Grid
             item
             md={4}
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: "700px",
             }}
           >
-            <Box
+            {/* 🎃 MEETING INFO */}
+            <MeetingInfo meetingId={meetingId} />
+            {/* <Box
               sx={{
-                backgroundColor: "yellow",
+                backgroundColor: "#e1e8eb",
+                padding: "2px",
+                borderRadius: "10px",
+                marginBottom: "10px",
               }}
             >
-              <Typography>Client: John Doe</Typography>
-              <Typography>Consultant: Jane Smith</Typography>
-              <Typography>Time elapsed</Typography>
-              <Typography>Description:</Typography>
-            </Box>
-            <Chat socket={socket} />
+              <Typography sx={meetingInfoStyles}>
+                <AccountBoxIcon />
+                {appointmentData &&
+                  appointmentData.client.firstName +
+                    " " +
+                    appointmentData.client.lastName}
+              </Typography>
+
+              <Typography sx={meetingInfoStyles}>
+                <AccountBoxIcon />
+                {appointmentData &&
+                  appointmentData.consultant.firstName +
+                    " " +
+                    appointmentData.consultant.lastName}
+              </Typography>
+
+              <Typography sx={meetingInfoStyles}>
+                <TimelapseIcon />
+                Time elapsed here...or remaining
+              </Typography>
+            </Box> */}
+
+            {/* 🎃 CHAT */}
+            <Chat socket={socket} meetingId={meetingId} />
           </Grid>
 
           {/* 🎃 BUTTONS */}
@@ -273,11 +316,17 @@ const Meeting = ({ meetingId }) => {
           <Grid item md={4}>
             <CardMedia
               component="video"
-              ref={peerVideoRef}
+              ref={videoRef}
               autoPlay
               playsInline
-              width={"300px"}
-              height={"300px"}
+              sx={{
+                position: "absolute",
+                width: "300px",
+                top: "52.8%",
+                right: "35.5%",
+                border: "2px solid white",
+                borderRadius: "10px",
+              }}
             ></CardMedia>
           </Grid>
         </Grid>

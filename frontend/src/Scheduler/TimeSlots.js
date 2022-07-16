@@ -26,7 +26,6 @@ export default function TimeSlots(props) {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
 
   const [confirm, setConfirm] = useState(false);
-
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -48,6 +47,7 @@ export default function TimeSlots(props) {
     props.setSelectedAppointmentId('');
     props.setDescription('');
     setConfirm(false);
+    props.setTimeSelected(false);
   };
 
   const handledBookingAppointment = () => {
@@ -70,10 +70,10 @@ export default function TimeSlots(props) {
       <Button
         onClick={() => {
           // console.log(item);
-          const start = moment(item.start).format('HH:mm');
-          const end = moment(item.end).format('HH:mm');
+          const start = moment(item.start).format('h:mm a');
+          const end = moment(item.end).format('h:mm a');
           const timeSlot = `${start} - ${end}`;
-
+          props.setTimeSelected(true);
           setSelectedTimeSlot(timeSlot);
           props.setSelectedAppointmentId(item.appointmentId);
         }}
@@ -81,14 +81,16 @@ export default function TimeSlots(props) {
         value={item.appointmentId}
       >
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <Typography variant="subtitle1">
-            {moment(item.start).format('HH:mm')}
+          <Typography component="span" variant="subtitle1">
+            {moment(item.start).format('h:mm a')}
           </Typography>
 
-          <Typography variant="subtitle1">-</Typography>
+          <Typography component="span" variant="subtitle1">
+            -
+          </Typography>
 
-          <Typography variant="subtitle1">
-            {moment(item.end).format('HH:mm')}
+          <Typography component="span" variant="subtitle1">
+            {moment(item.end).format('h:mm a')}
           </Typography>
         </Box>
       </Button>
@@ -108,9 +110,16 @@ export default function TimeSlots(props) {
         {selectedDateText}
       </Typography>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {items && items}
-        {items.length > 0 && props.selectedAppointmentId && (
+      <Box
+        sx={{
+          overflowY: 'scroll',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}
+      >
+        {!props.timeSelected && items && items}
+        {props.timeSelected && items.length > 0 && props.selectedAppointmentId && (
           <>
             <Box sx={{ marginTop: '2rem' }}>
               <Typography variant="subtitle1" gutterBottom>

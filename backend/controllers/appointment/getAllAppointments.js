@@ -48,8 +48,8 @@ const getAllAppointments = async (req, res) => {
       const newEndTime = moment(newDate + ' ' + endTime).format(
         'YYYY-MM-DD HH:mm'
       );
-      const titleStartTime = moment(newDate + ' ' + startTime).format('HH:mm');
-      const titleEndTime = moment(newDate + ' ' + endTime).format('HH:mm');
+      const titleStartTime = moment(newDate + ' ' + startTime).format('h:mm a');
+      const titleEndTime = moment(newDate + ' ' + endTime).format('h:mm a');
 
       let color = '#778899';
       // color = appointment["videoEndTime"] && "#778899";

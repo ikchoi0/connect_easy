@@ -1,14 +1,16 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showAlertMessage, showSuccessMessage } from './alertReducer';
-import * as api from '../../api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
+
+import * as api from "../../api";
 
 const authState = {
   userDetails: null,
   isLoggedIn: false,
   isTokenValid: null,
+  activeMeetingId: "",
 };
 
-export const getMe = createAsyncThunk('auth/getMe', async (_, thunkApi) => {
+export const getMe = createAsyncThunk("auth/getMe", async (_, thunkApi) => {
   const response = await api.getMe();
   if (response.error) {
     thunkApi.dispatch(showAlertMessage(response.message));
@@ -18,7 +20,7 @@ export const getMe = createAsyncThunk('auth/getMe', async (_, thunkApi) => {
 });
 
 export const resetPassword = createAsyncThunk(
-  'auth/resetPassword',
+  "auth/resetPassword",
   async ({ userDetails, history }, thunkApi) => {
     const response = await api.resetPassword(userDetails);
     if (response.error) {
@@ -31,7 +33,7 @@ export const resetPassword = createAsyncThunk(
   }
 );
 export const resetPasswordLink = createAsyncThunk(
-  'auth/resetPasswordLink',
+  "auth/resetPasswordLink",
   async ({ userDetails }, thunkApi) => {
     const response = await api.resetPasswordLink(userDetails);
     if (response.error) {
@@ -44,7 +46,7 @@ export const resetPasswordLink = createAsyncThunk(
 );
 
 export const checkTokenForPasswordReset = createAsyncThunk(
-  'auth/checkTokenForPasswordReset',
+  "auth/checkTokenForPasswordReset",
   async (userDetails, thunkApi) => {
     const response = await api.checkTokenForPasswordReset(userDetails);
     if (response.error) {
@@ -58,7 +60,7 @@ export const checkTokenForPasswordReset = createAsyncThunk(
 );
 
 export const login = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async ({ userDetails, history }, thunkApi) => {
     const response = await api.login(userDetails, thunkApi.dispatch);
 
@@ -71,7 +73,7 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async ({ userDetails, dispatch }, thunkApi) => {
     const response = await api.register(userDetails, dispatch);
 
@@ -85,7 +87,7 @@ export const register = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: authState,
   reducers: {
     setUser: (state, action) => {
@@ -95,8 +97,15 @@ const authSlice = createSlice({
   },
   extraReducers: {
     [getMe.fulfilled]: (state, action) => {
-      state.userDetails = action.payload.userDetails;
-      state.isLoggedIn = true;
+      const activeMeetingId =
+        action.payload.userDetails.options.activeMeetingId;
+      if (activeMeetingId) {
+        localStorage.setItem("activeMeeting", JSON.stringify(activeMeetingId));
+        state.activeMeetingId = activeMeetingId;
+      }
+
+      // state.userDetails = action.payload.userDetails;
+      // state.isLoggedIn = true;
     },
 
     [register.fulfilled]: (state, action) => {
@@ -120,8 +129,8 @@ const authSlice = createSlice({
       // handle rejected
     },
     [resetPassword.fulfilled]: (state, action) => {
-      alert('Password has been reset. Please log in with your new password.');
-      window.location.href = '/login';
+      alert("Password has been reset. Please log in with your new password.");
+      window.location.href = "/login";
     },
     [resetPassword.rejected]: (state, action) => {
       // handle rejected
@@ -131,9 +140,9 @@ const authSlice = createSlice({
     },
     [checkTokenForPasswordReset.rejected]: (state, action) => {
       alert(
-        'Token is invalid. Please try again with the valid token to reset password.'
+        "Token is invalid. Please try again with the valid token to reset password."
       );
-      window.location.href = '/login';
+      window.location.href = "/login";
       state.isTokenValid = false;
     },
   },

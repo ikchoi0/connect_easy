@@ -64,26 +64,30 @@ export default function Home({
   // MAPPED appointments for the user:  scheduler.appointments
   const mappedAppointments = filteredAppointmentsList.map(
     (appointment, index) => {
-      let disableMeeting = false;
+      let disableMeeting = true;
       let cancelButtonStatus = false;
-
       const activeMeeting = JSON.parse(localStorage.getItem('activeMeeting'));
 
       /**
        * TODO: DO SOMETHING WITH THIS
        */
+
       if (activeMeeting) {
-        console.log(appointment);
-        if (
-          appointment.videoEndTime ||
-          activeMeeting !== appointment.appointmentId
-        ) {
-          disableMeeting = true;
-        } else if (activeMeeting === appointment.appointmentId) {
-          cancelButtonStatus = true;
-        } else if (appointment.videoEndTime) {
-          cancelButtonStatus = true;
+        if (activeMeeting === appointment.appointmentId) {
+          disableMeeting = false;
+          cancelButtonStatus = false;
         }
+      } else {
+        if (!appointment.videoEndTime) {
+          disableMeeting = false;
+        }
+      }
+      if (appointment.appointmentCancel) {
+        cancelButtonStatus = true;
+        disableMeeting = true;
+      }
+      if (appointment.videoEndTime) {
+        cancelButtonStatus = true;
       }
 
       return (
@@ -96,8 +100,8 @@ export default function Home({
           id={appointment.appointmentId}
           description={appointment.description}
           date={appointment.date}
-          startTime={moment(appointment.start).format('HH:mm')}
-          endTime={moment(appointment.end).format('HH:mm')}
+          startTime={moment(appointment.start).format('h:mm a')}
+          endTime={moment(appointment.end).format('h:mm a')}
           buttonLabel={buttonLabel}
           handleCardButton={handleCardButton}
           appointmentBooked={appointment.appointmentBooked}

@@ -9,21 +9,21 @@ import Meeting from "../Meeting/Meeting";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "../shared/components/theme";
 import Copyright from "../shared/components/Copyright";
-import { logout } from "../shared/utils/auth";
-import { setUser } from "../store/reducers/authReducer";
 import Home from "../shared/components/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import PaymentIcon from "@mui/icons-material/Payment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import { useHistory } from "react-router-dom";
 import { handleAuth, handleUserRole } from "../shared/utils/auth";
+import { io } from "socket.io-client";
+
 import {
   appointmentBookingCancel,
   getAllAppointments,
   deleteOneAppointment,
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
+const socket = io("http://localhost:5002");
 const filterLists = [
   { name: "Show All", color: "#191970" },
   { name: "Upcoming", color: "#4682B4" },
@@ -38,7 +38,7 @@ const menuItems = [
   },
   { id: "Calendar", icon: <CalendarMonthIcon /> },
   { id: "Payments", icon: <PaymentIcon /> },
-  { id: "Meeting", icon: <VideoCameraFrontIcon /> },
+  // { id: "Meeting", icon: <VideoCameraFrontIcon /> },
 ];
 // const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];
 

@@ -50,13 +50,13 @@ const CategoryCard = ({
           width="100%"
           image={
             profilePicture ||
-            "https://i.ibb.co/9tCfDKv/defaultprofilepicture.png"
+            'https://i.ibb.co/9tCfDKv/defaultprofilepicture.png'
           }
           alt="profile picture"
         />
-        <CardContent sx={{ flex: "1 0 auto" }}>
+        <CardContent sx={{ flex: '1 0 auto' }}>
           <Typography
-            component="div"
+            component="span"
             variant="h6"
             color="text.primary"
             sx={{ width: 250 }}
@@ -64,12 +64,17 @@ const CategoryCard = ({
             {firstName} {lastName}
           </Typography>
 
-          <Typography variant="body1" color="text.secondary">
-            {description}
+          <Typography component="div" variant="body1" color="text.secondary">
+            {description || (
+              <Box sx={{ fontStyle: 'italic' }}>
+                Service description pending
+              </Box>
+            )}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" component="div">
-            Rating: {rating ? rating : "No rating"}
+            {rating && `Rating: ${rating}`}
+            {!rating && '-'}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" component="div">

@@ -1,30 +1,30 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { v4 as uuid } from "uuid";
-import { Container } from "@mui/material";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import Stack from "@mui/material/Stack";
-import moment from "moment";
-import AppointmentCard from "../shared/components/AppointmentCard";
-import { useSelector, useDispatch } from "react-redux";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { v4 as uuid } from 'uuid';
+import { Container } from '@mui/material';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import Stack from '@mui/material/Stack';
+import moment from 'moment';
+import AppointmentCard from '../shared/components/AppointmentCard';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   setOneAppointment,
   deleteOneOpeningAppointment,
-} from "../store/reducers/scheduleReducer";
+} from '../store/reducers/scheduleReducer';
 import {
   createOpenAppointments,
   clearOpeningAppointmentsList,
-} from "../store/reducers/scheduleReducer";
+} from '../store/reducers/scheduleReducer';
 import {
   showAlertMessage,
   showSuccessMessage,
-} from "../store/reducers/alertReducer";
+} from '../store/reducers/alertReducer';
 
 export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
@@ -33,8 +33,14 @@ export default function Availability() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [date, setDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(null);
+  const [endTime, setEndTime] = useState(new Date());
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
+
+  const [currentSelectedStartTime, setCurrentSelectedStartTime] =
+    useState(null);
+  const [currentSelectedEndTime, setCurrentSelectedEndTime] = useState(null);
+
+  const [tempAppointment, setTempAppointment] = useState([]);
 
   /**
    * TODO: NEED TO FIX FORM VALIDATION
@@ -53,9 +59,9 @@ export default function Availability() {
   }, [openingAppointmentsList, setIsFormValid, date, startTime, endTime]);
 
   const parseDate = (value, setValue) => {
-    const time = moment(value).format("HH:mm");
-    const newDate = moment(date).format("YYYY-MM-DD");
-    const result = moment(newDate + " " + time).format("YYYY-MM-DD HH:mm");
+    const time = moment(value).format('HH:mm');
+    const newDate = moment(date).format('YYYY-MM-DD');
+    const result = moment(newDate + ' ' + time).format('YYYY-MM-DD HH:mm');
 
     setValue(result);
   };
@@ -81,18 +87,18 @@ export default function Availability() {
         key={appointment.key}
         id={appointment.key}
         // description={appointment.description}
-        date={moment.utc(appointment.date).local().format()}
-        startTime={moment(appointment.appointmentStartTime).format("HH:mm")}
-        endTime={moment(appointment.appointmentEndTime).format("HH:mm")}
+        date={moment.utc(appointment.date).local(true).format()}
+        startTime={moment(appointment.appointmentStartTime).format('h:mm a')}
+        endTime={moment(appointment.appointmentEndTime).format('h:mm a')}
         handleCardButton={handleDeleteAppointmentOnClick}
-        buttonLabel={"Delete"}
-        unbookedString={""}
+        buttonLabel={'Delete'}
+        unbookedString={''}
       />
     );
   });
 
   const handleCreateButton = () => {
-    const consultant = localStorage.getItem("user");
+    const consultant = localStorage.getItem('user');
     const consultantId = JSON.parse(consultant).userId;
 
     const key = uuid();
@@ -101,30 +107,55 @@ export default function Availability() {
       key,
       consultant: consultantId,
       date: moment(date)
-        .utcOffset(0)
         .hours(0)
         .minutes(0)
         .seconds(0)
         .milliseconds(0)
-        .toISOString(),
-      appointmentStartTime: moment(startTime).toISOString(),
-      appointmentEndTime: moment(endTime).toISOString(),
+        .toISOString(true),
+      appointmentStartTime: moment(startTime).toISOString(true),
+      appointmentEndTime: moment(endTime).toISOString(true),
       // description,
     };
 
-    if (card.appointmentEndTime && card.appointmentStartTime) {
-      if (
-        moment(card.appointmentEndTime).isAfter(
-          moment(card.appointmentStartTime)
-        )
-      ) {
-        dispatch(showSuccessMessage("Appointment added successfully"));
+    if (openingAppointmentsList.length) {
+      let startFlag = true;
+      let endFlag = true;
+
+      for (const appointment of openingAppointmentsList) {
+        const startTime = moment(appointment.appointmentStartTime);
+        const endTime = moment(appointment.appointmentEndTime);
+        const compareStart = moment(card.appointmentStartTime);
+        const compareEnd = moment(card.appointmentEndTime);
+
+        if (compareStart.isAfter(compareEnd)) {
+          dispatch(showAlertMessage('Start time must be before end time'));
+          return;
+        }
+
+        // compare if new starttime is within the range of an existing appointment
+        startFlag = compareStart.isBetween(startTime, endTime, undefined, '[]');
+
+        // compare if new endtime is within the range of an existing appointment
+        endFlag = compareEnd.isBetween(startTime, endTime, undefined, '[]');
+
+        // store the new appointment
+      }
+      if (!startFlag && !endFlag) {
+        dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
       } else {
-        dispatch(showAlertMessage("End time must be after start time"));
+        dispatch(
+          showAlertMessage('Appointment overlaps with existing appointment')
+        );
       }
     } else {
-      dispatch(showAlertMessage("Please enter valid time"));
+      const compareStart = moment(card.appointmentStartTime);
+      const compareEnd = moment(card.appointmentEndTime);
+
+      if (compareStart.isBefore(compareEnd)) {
+        dispatch(showSuccessMessage('Appointment added successfully'));
+        dispatch(setOneAppointment(card));
+      }
     }
   };
 
@@ -148,8 +179,8 @@ export default function Availability() {
 
           <Grid
             sx={{
-              display: "flex",
-              justifyContent: "space-around",
+              display: 'flex',
+              justifyContent: 'space-around',
             }}
           >
             <DesktopDatePicker
@@ -165,13 +196,21 @@ export default function Availability() {
               value={startTime}
               onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
+              onError={(error) => {
+                dispatch(showAlertMessage('please select a valid time'));
+                setStartTime(new Date());
+              }}
             />
             <TimePicker
               label="End Time"
               value={endTime}
               onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
-            />{" "}
+              onError={(error) => {
+                dispatch(showAlertMessage('please select a valid time'));
+                setEndTime(new Date());
+              }}
+            />{' '}
           </Grid>
           {appointmentCards && appointmentCards}
 

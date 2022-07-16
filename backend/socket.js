@@ -1,7 +1,11 @@
 const socketHandler = (wsServer) => {
   const rooms = {};
   const onlineUsers = {};
+  const socketIdToUserId = {};
+
   wsServer.on("connection", (socket) => {
+    console.log("logging: ", onlineUsers);
+
     socket.on("connected", (userId) => {
       console.log("connected to server: " + userId);
       onlineUsers[userId] = socket.id;
@@ -10,8 +14,13 @@ const socketHandler = (wsServer) => {
       socket.to(onlineUsers[data.consultant]).emit("appointment_booked", data);
     });
     socket.on("disconnected_from_dashboard", (userId) => {
-      console.log("disconnected from dashboard: " + userId);
       delete onlineUsers[userId];
+    });
+    socket.on("join_meeting", (appointment) => {
+      socket
+        .to([onlineUsers[appointment.peerId]])
+        .emit("join_meeting", appointment);
+      console.log(appointment);
     });
     socket.on("join_room", (roomName) => {
       rooms[socket.id] = roomName;
@@ -33,17 +42,17 @@ const socketHandler = (wsServer) => {
 
     socket.on("disconnect", () => {
       // console.log(socket.adapter);
-      console.log("disconnected");
       const roomName = rooms[socket.id];
       delete rooms[socket.id];
       socket.to(roomName).emit("peer_left");
+      delete onlineUsers[socketIdToUserId[socket.id]];
+      delete socketIdToUserId[socket.id];
     });
     socket.on("meeting_ended", () => {
       const roomName = rooms[socket.id];
       socket.to(roomName).emit("meeting_ended");
     });
     socket.on("chat", (message) => {
-      // console.log(message);
       const roomName = rooms[socket.id];
       socket.to(roomName).emit("chat", message);
     });

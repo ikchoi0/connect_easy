@@ -79,7 +79,6 @@ const Meeting = ({ meetingId }) => {
       // add router to show alert before redirecting to dashboard
       localStorage.removeItem("activeMeeting");
       dispatch(postEndMeeting(meetingId));
-      socket.emit("meeting_ended");
       alert("End meeting");
       window.location.replace("/dashboard");
     } else {

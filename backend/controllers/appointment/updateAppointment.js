@@ -22,7 +22,6 @@ const updateAppointment = async (req, res) => {
       appointmentBooked: true,
     });
 
-    console.log("BOOKED APPOINTMENT", appointment);
     return res.status(200).send(appointment);
   } catch (error) {
     console.log(error);

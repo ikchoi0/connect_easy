@@ -10,12 +10,14 @@ let index = 0;
 const mg = [];
 export default function Chat({ socket }) {
   const userId = JSON.parse(localStorage.getItem("user")).userId;
+
   socket.on("chat", (data) => {
-    console.log(data);
     setMessages([...messages, data]);
+    console.log("data: ", data);
   });
   const [values, setValues] = React.useState("");
   const scrollRef = useRef(null);
+
 
   // const [list, setList] = useState([]);
   const [isInputValid, setIsInputValid] = useState(false);
@@ -36,7 +38,8 @@ export default function Chat({ socket }) {
   };
 
   const content =
-    messages.length &&
+    // messages.length &&
+    messages &&
     messages.map(({ sender, message }) => {
       return (
         <Box
@@ -47,7 +50,7 @@ export default function Chat({ socket }) {
           }}
         >
           <Paper key={message} elevation={2} sx={{ paddingX: "10px" }}>
-            <PersonIcon /> {sender !== userId ? "You" : "Me"}
+            <PersonIcon /> {sender !== userId ? "Them" : "Me"}
             <Typography sx={{ wordWrap: "break-word" }}>{message}</Typography>
           </Paper>
         </Box>

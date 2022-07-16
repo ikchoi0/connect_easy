@@ -17,10 +17,7 @@ import TimelapseIcon from "@mui/icons-material/Timelapse";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
-  const {appointmentData} = useSelector((state) => state.meeting);
-  console.log("HI", appointmentData);
-
-
+  const { appointmentData } = useSelector((state) => state.meeting);
 
   const socket = io("http://localhost:5002");
   // const socket = io("https://connect-easy-rid.herokuapp.com");
@@ -227,6 +224,12 @@ const Meeting = ({ meetingId }) => {
     peerVideoRef.current.srcObject = data.stream;
   }
 
+  function handleScreenSwitch() {
+    if (videoRef.current) {
+      videoRef.current.requestFullscreen();
+    }
+  }
+
   const meetingInfoStyles = {
     fontSize: "0.9rem",
     display: "flex",
@@ -254,11 +257,13 @@ const Meeting = ({ meetingId }) => {
               ref={peerVideoRef}
               autoPlay
               playsInline
+              onClick={handleScreenSwitch}
               sx={{
                 border: "2px solid white",
                 borderRadius: "10px",
                 height: "568.984px",
                 width: "758.656px",
+                cursor: "pointer",
               }}
             ></CardMedia>
           </Grid>
@@ -282,12 +287,18 @@ const Meeting = ({ meetingId }) => {
             >
               <Typography sx={meetingInfoStyles}>
                 <AccountBoxIcon />
-                {appointmentData && appointmentData.client?.firstName}
+                {appointmentData &&
+                  appointmentData.client?.firstName +
+                    " " +
+                    appointmentData.client?.lastName}
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
                 <AccountBoxIcon />
-                {appointmentData && appointmentData.consultant?.firstName}
+                {appointmentData &&
+                  appointmentData.consultant?.firstName +
+                    " " +
+                    appointmentData.consultant?.lastName}
               </Typography>
 
               <Typography sx={meetingInfoStyles}>

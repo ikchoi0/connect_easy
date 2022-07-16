@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
 import VideoCallButtons from "./VideoCallButtons";
 import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
@@ -15,8 +16,10 @@ import { showAlertMessage } from "../store/reducers/alertReducer";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
 
+import MeetingInfo from "./MeetingInfo";
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
+
   const { appointmentData } = useSelector((state) => state.meeting);
 
   const socket = io("http://localhost:5002");
@@ -30,7 +33,8 @@ const Meeting = ({ meetingId }) => {
   const peerConnectionRef = useRef(null);
 
   let connectionMade = false;
-  let peer_left = false;
+  let peerInfo;
+  let peer_left;
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
@@ -79,16 +83,18 @@ const Meeting = ({ meetingId }) => {
   }, [history, meetingId]);
 
   const handleEndMeeting = () => {
-    if (connectionMade) {
-      // add router to show alert before redirecting to dashboard
-      localStorage.removeItem("activeMeeting");
-      dispatch(postEndMeeting(meetingId));
-      socket.emit("meeting_ended");
+    // if (connectionMade) {
+    // add router to show alert before redirecting to dashboard
+    localStorage.removeItem("activeMeeting");
+    dispatch(postEndMeeting(meetingId));
+    socket.emit("meeting_ended");
+    setTimeout(() => {
       alert("End meeting");
       window.location.replace("/dashboard");
-    } else {
-      dispatch(showAlertMessage("You must be connected to end meeting"));
-    }
+    }, 1000);
+    // } else {
+    //   dispatch(showAlertMessage("You must be connected to end meeting"));
+    // }
   };
 
   useEffect(() => {
@@ -137,7 +143,7 @@ const Meeting = ({ meetingId }) => {
     socket.on("ice", async (ice) => {
       try {
         if (ice) {
-          const userId = JSON.parse(localStorage.getItem("user")).userId;
+          const user = JSON.parse(localStorage.getItem("user"));
           const activeMeeting = JSON.parse(
             localStorage.getItem("activeMeeting")
           );
@@ -150,7 +156,7 @@ const Meeting = ({ meetingId }) => {
               postStartMeeting({
                 appointmentData: {
                   appointmentId: meetingId,
-                  userId: userId,
+                  userId: user.userId,
                 },
                 history,
               })
@@ -196,7 +202,7 @@ const Meeting = ({ meetingId }) => {
       setTimeout(() => {
         localStorage.removeItem("activeMeeting");
         window.location.replace("/dashboard");
-      }, 1000);
+      }, 2000);
     });
 
     return () => {
@@ -225,8 +231,9 @@ const Meeting = ({ meetingId }) => {
   }
 
   function handleScreenSwitch() {
-    if (videoRef.current) {
-      videoRef.current.requestFullscreen();
+    if (peerVideoRef.current) {
+      peerVideoRef.current.requestFullscreen();
+
     }
   }
 
@@ -257,6 +264,7 @@ const Meeting = ({ meetingId }) => {
               ref={peerVideoRef}
               autoPlay
               playsInline
+
               onClick={handleScreenSwitch}
               sx={{
                 border: "2px solid white",
@@ -277,6 +285,8 @@ const Meeting = ({ meetingId }) => {
             }}
           >
             {/* 🎃 MEETING INFO */}
+            <MeetingInfo meetingId={meetingId} />
+            {/* <Box
             <Box
               sx={{
                 backgroundColor: "#e1e8eb",
@@ -288,27 +298,30 @@ const Meeting = ({ meetingId }) => {
               <Typography sx={meetingInfoStyles}>
                 <AccountBoxIcon />
                 {appointmentData &&
-                  appointmentData.client?.firstName +
+                  appointmentData.client.firstName +
                     " " +
-                    appointmentData.client?.lastName}
+                    appointmentData.client.lastName}
+
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
                 <AccountBoxIcon />
                 {appointmentData &&
-                  appointmentData.consultant?.firstName +
+                  appointmentData.consultant.firstName +
                     " " +
-                    appointmentData.consultant?.lastName}
+                    appointmentData.consultant.lastName}
+
               </Typography>
 
               <Typography sx={meetingInfoStyles}>
                 <TimelapseIcon />
                 Time elapsed here...or remaining
               </Typography>
-            </Box>
+            </Box> */}
 
             {/* 🎃 CHAT */}
-            <Chat socket={socket} />
+            <Chat socket={socket} meetingId={meetingId} />
+
           </Grid>
 
           {/* 🎃 BUTTONS */}

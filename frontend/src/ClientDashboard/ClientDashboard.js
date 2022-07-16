@@ -16,13 +16,18 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useHistory } from "react-router-dom";
 import { handleAuth, handleUserRole } from "../shared/utils/auth";
 import { io } from "socket.io-client";
-
+import { showSuccessMessage } from "../store/reducers/alertReducer";
+import DialogPopUp from "../shared/components/DialogPopUp";
+import ConfirmModal from "../shared/components/ConfirmModal";
+import { updateSelectedNavigatorItem } from "../store/reducers/dashboardReducer";
 import {
   appointmentBookingCancel,
   getAllAppointments,
   deleteOneAppointment,
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
+import { updateMeetingId } from "../store/reducers/meetingReducer";
+
 const socket = io("http://localhost:5002");
 const filterLists = [
   { name: "Show All", color: "#191970" },
@@ -46,19 +51,44 @@ const ClientDashboard = () => {
   handleAuth();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(false);
+  const [message, setMessage] = useState("");
   // return user if not logged in
-
+  const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
+  const { meetingId } = useSelector((state) => state.meeting);
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    console.log("CLIENT DASHBOARD USER", meetingId);
     if (user.role !== "client") {
       history.push("/consultantDashboard");
     }
+    socket.emit("connected", user.userId);
+    socket.on("join_meeting", (appointment) => {
+      if (!JSON.parse(localStorage.getItem("activeMeeting"))) {
+        dispatch(updateMeetingId(appointment.appointmentId));
+        console.log(appointment);
+        user && user.role === "client"
+          ? setMessage(appointment.consultant)
+          : setMessage(appointment.client);
+        setConfirm(true);
+      }
+      // dispatch(showSuccessMessage("Please join the meeting!"));
+    });
+    console.log("CLIENT DASHBOARD USER", meetingId);
   }, []);
+  const handleDismissOnClick = () => {
+    const activeMeeting = localStorage.getItem("activeMeeting");
+    if (activeMeeting) {
+      localStorage.removeItem("activeMeeting");
+    }
+    setConfirm(false);
+  };
 
-  const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
-  const { meetingId } = useSelector((state) => state.meeting);
+  const handleConfirmClose = () => {
+    localStorage.setItem("activeMeeting", JSON.stringify(meetingId));
+    dispatch(updateSelectedNavigatorItem("Meeting"));
+    setConfirm(false);
+  };
 
   const handleCardButton = (appointmentId) => {
     dispatch(appointmentBookingCancel(appointmentId));
@@ -105,6 +135,13 @@ const ClientDashboard = () => {
           </Box>
         </Box>
       </Box>
+      <DialogPopUp open={confirm}>
+        <ConfirmModal
+          onConfirm={handleConfirmClose}
+          onCancel={handleDismissOnClick}
+          message={`${message} joined your meeting! Do you want to join?`}
+        />
+      </DialogPopUp>
     </ThemeProvider>
   );
 };

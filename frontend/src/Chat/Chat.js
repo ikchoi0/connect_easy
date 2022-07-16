@@ -8,7 +8,7 @@ import { Button, TextField } from "@mui/material";
 
 let index = 0;
 const mg = [];
-export default function Chat({ socket }) {
+export default function Chat({ socket, meetingId }) {
   const userId = JSON.parse(localStorage.getItem("user")).userId;
 
   socket.on("chat", (data) => {
@@ -32,7 +32,7 @@ export default function Chat({ socket }) {
 
   const handleSend = () => {
     setMessages([...messages, { sender: userId, message: values }]);
-    socket.emit("chat", { sender: userId, message: values });
+    socket.emit("chat", { sender: userId, message: values }, meetingId);
     setIsInputValid(false);
     setValues("");
   };

@@ -43,7 +43,10 @@ const CategoryCard = ({
 
   return (
     <>
-      <Card onClick={handleClick}>
+      <Card onClick={handleClick}
+      sx={{
+        // height: "100%",
+      }}>
         <CardMedia
           component="img"
           height="120px"

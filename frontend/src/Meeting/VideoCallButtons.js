@@ -8,13 +8,10 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import { Grid, Button } from "@mui/material";
 
-
-
 export default function VideoCallButtons({ myStream, handleEndMeeting }) {
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   // const [isScreenSharing, setIsScreenSharing] = useState(false);
-
 
   function handleMuteClick() {
     myStream.current
@@ -64,7 +61,8 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
       <Button id="camera" onClick={handleCameraClick}>
         {isCameraOff ? (
           <VideocamOffIcon style={{ color: "#B53D2D" }} fontSize="large" />
-          ) : (
+        ) : (
+
           <VideoCameraFrontIcon style={{ color: "#09995F" }} fontSize="large" />
         )}
       </Button>
@@ -72,7 +70,8 @@ export default function VideoCallButtons({ myStream, handleEndMeeting }) {
       <Button id="mute" onClick={handleMuteClick}>
         {isMuted ? (
           <MicOffIcon style={{ color: "#B53D2D" }} fontSize="large" />
-          ) : (
+        ) : (
+
           <MicIcon style={{ color: "#09995F" }} fontSize="large" />
         )}
       </Button>

@@ -12,7 +12,7 @@ function HomePageHeroLayout(props) {
         backgroundColor: "grey.800",
         color: "#fff",
         mb: 4,
-        mt: 4,
+        mt: 6,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
@@ -34,7 +34,7 @@ function HomePageHeroLayout(props) {
           bottom: 0,
           right: 0,
           left: 0,
-          backgroundColor: "rgba(0,0,0,.3)",
+
         }}
       />
       <Grid container>
@@ -50,11 +50,16 @@ function HomePageHeroLayout(props) {
               variant="h5"
               color="inherit"
               gutterBottom
+              sx={{
+                fontWeight: "bold",
+              }}
             >
               Everything you need to manage your business as a service
               professional
             </Typography>
-            <Typography variant="h7" color="inherit" paragraph>
+            <Typography variant="h7" color="inherit" paragraph 
+            sx={{ 
+              fontStyle: "italic" }}>
               Schedule meetings, host video calls, and collect payments all in
               one place.
             </Typography>

@@ -100,19 +100,6 @@ const AppointmentCard = ({
           <Typography {...typographyProps}>{email}</Typography>
         </Box>
 
-        {/* <Typography variant="subtitle1">
-          {moment(date).format("MMM Do, YYYY")} &nbsp;
-        </Typography>
-        <Typography color="text.secondary" align="center">
-          {startTime}
-        </Typography>
-        <Typography sx={{ marginX: 1 }} align="center">
-          -
-        </Typography>
-        <Typography color="text.secondary" align="center">
-          {endTime}
-        </Typography> */}
-
         <Typography
           sx={{
             my: 5,
@@ -208,73 +195,6 @@ const AppointmentCard = ({
           {body}
         </Typography>
       </Box>
-    </>
-  );
-  const bodyContent = (
-    <>
-      <Typography
-        sx={{
-          ...typographyStyle,
-          mt: '15px',
-          mb: '2px',
-        }}
-        {...typographyProps}
-        fontWeight="bold"
-      >
-        {title}
-      </Typography>
-      <Typography
-        sx={{
-          ...typographyStyle,
-          mt: '2px',
-          mb: '15px',
-        }}
-        {...typographyProps}
-      >
-        {name}
-      </Typography>
-      <Typography
-        sx={{
-          ...typographyStyle,
-          mt: '2px',
-          mb: '2px',
-        }}
-        {...typographyProps}
-        fontWeight="bold"
-      >
-        {inquiry}
-      </Typography>
-      <Typography
-        sx={{
-          ...typographyStyle,
-          mt: '2px',
-          mb: '15px',
-        }}
-        {...typographyProps}
-      >
-        {body}
-      </Typography>
-      <Typography
-        sx={{
-          ...typographyStyle,
-          mt: '2px',
-          mb: '2px',
-        }}
-        {...typographyProps}
-        fontWeight="bold"
-      >
-        {clientEmailString || consultantEmailString}
-      </Typography>
-      <Typography
-        sx={{
-          ...typographyStyle,
-          mt: '2px',
-          mb: '15px',
-        }}
-        {...typographyProps}
-      >
-        {email}
-      </Typography>
     </>
   );
 

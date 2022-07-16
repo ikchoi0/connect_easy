@@ -12,6 +12,7 @@ import {
 } from "../store/reducers/meetingReducer";
 import Chat from "../Chat/Chat";
 import { showAlertMessage } from "../store/reducers/alertReducer";
+import { getAllAppointments } from "../api";
 
 const Meeting = ({ meetingId }) => {
   const dispatch = useDispatch();
@@ -79,8 +80,11 @@ const Meeting = ({ meetingId }) => {
       // add router to show alert before redirecting to dashboard
       localStorage.removeItem("activeMeeting");
       dispatch(postEndMeeting(meetingId));
-      alert("End meeting");
-      window.location.replace("/dashboard");
+      socket.emit("meeting_ended");
+      setTimeout(() => {
+        alert("End meeting");
+        window.location.replace("/dashboard");
+      }, 1000);
     } else {
       dispatch(showAlertMessage("You must be connected to end meeting"));
     }
@@ -187,7 +191,7 @@ const Meeting = ({ meetingId }) => {
       setTimeout(() => {
         localStorage.removeItem("activeMeeting");
         window.location.replace("/dashboard");
-      }, 1000);
+      }, 2000);
     });
 
     return () => {

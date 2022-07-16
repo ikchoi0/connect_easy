@@ -47,12 +47,14 @@ const socketHandler = (wsServer) => {
       socket.to(roomName).emit("peer_left");
       delete onlineUsers[socketIdToUserId[socket.id]];
       delete socketIdToUserId[socket.id];
+      console.log("logging: ", onlineUsers);
     });
     socket.on("meeting_ended", () => {
       const roomName = rooms[socket.id];
       socket.to(roomName).emit("meeting_ended");
     });
     socket.on("chat", (message) => {
+      // console.log(message);
       const roomName = rooms[socket.id];
       socket.to(roomName).emit("chat", message);
     });

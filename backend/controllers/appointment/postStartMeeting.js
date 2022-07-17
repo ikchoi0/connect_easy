@@ -18,7 +18,6 @@ const postStartMeeting = async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
     if (!appointment.hasOwnProperty("videoStartTime")) {
       await appointment.updateOne({
         videoStartTime: new Date(),

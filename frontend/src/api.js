@@ -248,9 +248,7 @@ export const updateUserProfile = async (userData) => {
     // if imageFile is not null, then upload image
     if (userData.imageFile) {
       // issue GET request to get the presigned image url
-      const uploadConfig = await apiClient.get(
-        'http://localhost:5002/api/upload'
-      );
+      const uploadConfig = await apiClient.get('/upload');
 
       /**
        * uploadConfig.data.url is the presigned image url
@@ -342,6 +340,18 @@ export const postEndMeeting = async (appointmentData) => {
     return await apiClient.post(`/appointment/postEndMeeting`, {
       appointmentId: appointmentData,
     });
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      message: exception.response.data,
+    };
+  }
+};
+
+export const getPastMessages = async (appointmentId) => {
+  try {
+    return await apiClient.get(`/socket/messages/${appointmentId}`);
   } catch (exception) {
     checkResponseCode(exception);
     return {

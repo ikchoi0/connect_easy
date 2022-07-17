@@ -171,7 +171,7 @@ export default function Availability() {
       if (compareEnd.isSameOrAfter(compareStart)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
-
+        dispatch(getAllAppointments(user.userId));
         return;
       } else {
         dispatch(showAlertMessage('Start time must be before end time'));
@@ -208,7 +208,7 @@ export default function Availability() {
       } else {
         dispatch(showSuccessMessage('Appointment created'));
         dispatch(setOneAppointment(card));
-
+        dispatch(getAllAppointments(user.userId));
         setStartTime(moment(endTime).toISOString());
 
         return;

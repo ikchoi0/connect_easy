@@ -1,15 +1,27 @@
-const Message = require("../models/message");
-const Appointment = require("../models/appointment");
-const User = require("../models/user");
-const Types = require("mongoose").Types;
+const Message = require('../models/message');
+const Appointment = require('../models/appointment');
+const User = require('../models/user');
+const Types = require('mongoose').Types;
 
-const addChatMessage = async (meetingId, message) => {
+const addChatMessage = async (appointmentId, message) => {
   const newMessage = await Message.create(message);
   //
-  const conv = await Appointment.findById(meetingId);
-  conv.conversation.push(newMessage._id);
-  await conv.save();
+  const appointment = await Appointment.findById(appointmentId);
+  appointment.conversation.push(newMessage._id);
+  await appointment.save();
   // console.log(conv);
 };
 
-module.exports = addChatMessage;
+const getChatMessages = async (appointmentId) => {
+  const appointment = await Appointment.findById(appointmentId).populate(
+    'conversation'
+  );
+
+  const messages = appointment.conversation.map((msgInfo) => {
+    return { sender: msgInfo.sender, message: msgInfo.message };
+  });
+
+  return messages;
+};
+
+module.exports = { addChatMessage, getChatMessages };

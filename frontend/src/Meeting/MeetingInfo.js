@@ -11,13 +11,10 @@ const MeetingInfo = ({ meetingId }) => {
   const [time, setTime] = useState(0);
   const { appointmentData } = useSelector((state) => state.meeting);
 
-  console.log("APPOINTMENT DATA: ", appointmentData);
-
   useEffect(() => {
     dispatch(getAppointmentByAppointmentId(meetingId));
   }, []);
 
-  // 
   useEffect(() => {
     let meetingStartTime = moment(new Date());
     if (appointmentData?.videoStartTime) {

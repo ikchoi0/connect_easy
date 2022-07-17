@@ -34,7 +34,6 @@ function HomePageHeroLayout(props) {
           bottom: 0,
           right: 0,
           left: 0,
-
         }}
       />
       <Grid container>
@@ -52,14 +51,21 @@ function HomePageHeroLayout(props) {
               gutterBottom
               sx={{
                 fontWeight: "bold",
+                textShadow: "2px 2px 2px #575757;",
               }}
             >
               Everything you need to manage your business as a service
               professional
             </Typography>
-            <Typography variant="h7" color="inherit" paragraph 
-            sx={{ 
-              fontStyle: "italic" }}>
+            <Typography
+              variant="h7"
+              color="inherit"
+              paragraph
+              sx={{
+                fontStyle: "italic",
+                textShadow: "2px 2px 2px #575757;",
+              }}
+            >
               Schedule meetings, host video calls, and collect payments all in
               one place.
             </Typography>

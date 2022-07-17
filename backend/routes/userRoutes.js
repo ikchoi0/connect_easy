@@ -73,7 +73,8 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
 });
 
 router.get('/profile', auth(['consultant']), async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
+  console.log(req.user);
+  const user = await User.findById(req.user._id).select('-password');
   console.log(user);
 
   const category = await Category.findOne({ users: req.user.id });

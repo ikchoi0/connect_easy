@@ -232,6 +232,7 @@ export const cancelBookedAppointment = async (appointmentId) => {
 // get user profile
 export const getUserProfile = async () => {
   try {
+    console.log('user profile');
     return await apiClient.get('/user/profile');
   } catch (exception) {
     checkResponseCode(exception);

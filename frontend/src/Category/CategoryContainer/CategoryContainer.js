@@ -42,7 +42,7 @@ export default function CategoryContainer() {
 
   return (
     <Container maxWidth="lg" color="primary.main">
-      <Typography variant="h3" align="center" mt={5} color="#262626">
+      <Typography variant="h3" align="center" mt={5} color="#36454F">
         {category && category.selectedCategory}
       </Typography>
       <Box

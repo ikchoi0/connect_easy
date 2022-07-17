@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import VideoCallButtons from './VideoCallButtons';
-import { Box, Container, Typography, CardMedia, Grid } from '@mui/material';
+import { Container, CardMedia, Grid } from '@mui/material';
 import {
   postStartMeeting,
   postEndMeeting,
@@ -275,8 +275,6 @@ const Meeting = ({ meetingId, socket }) => {
             item
             md={8}
             sx={{
-              // height: "100%",
-              // width: "100%",
               padding: 0,
               display: display === 'none' ? 'block' : 'none',
             }}

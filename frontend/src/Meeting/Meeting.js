@@ -144,21 +144,26 @@ const Meeting = ({ meetingId, socket }) => {
           const user = JSON.parse(localStorage.getItem('user'));
           const activeMeeting = JSON.parse(
             localStorage.getItem('activeMeeting')
-          );
-          connectionMade = true;
 
+          );
+          console.log("Active Meeting:", activeMeeting);
+          connectionMade = true;
+          console.log("ICE::::::", ice)
           // update video start time here
           // if there is no active meeting, then update the start time
-          if (!activeMeeting) {
-            dispatch(
-              postStartMeeting({
-                appointmentData: {
-                  appointmentId: meetingId,
-                  userId: user.userId,
-                },
-                history,
-              })
-            );
+          
+            console.log("Don is the man:", activeMeeting);
+            if (user.role === "consultant"){
+              dispatch(
+                postStartMeeting({
+                  appointmentData: {
+                    appointmentId: meetingId,
+                    userId: user.userId,
+                  },
+                  history,
+                })
+              );
+            
           }
         } else {
           peer_left = true;

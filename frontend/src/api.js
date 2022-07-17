@@ -320,7 +320,9 @@ export const submitImage = async (imageFile) => {
   }
 };
 
+
 export const postStartMeeting = async (appointmentData) => {
+  console.log("MONKEY FUZZ::::::", appointmentData)
   try {
     return await apiClient.post(
       `/appointment/postStartMeeting`,

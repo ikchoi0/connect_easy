@@ -34,8 +34,8 @@ import ConfirmModal from '../shared/components/ConfirmModal';
 import { updateSelectedNavigatorItem } from '../store/reducers/dashboardReducer';
 import { updateMeetingId } from '../store/reducers/meetingReducer';
 
-const socket = io('http://localhost:5002');
-// const socket = io('https://connect-easy-rid.herokuapp.com');
+// const socket = io('http://localhost:5002');
+const socket = io('https://connect-easy-rid.herokuapp.com');
 
 const drawerWidth = 300;
 const menuItems = [

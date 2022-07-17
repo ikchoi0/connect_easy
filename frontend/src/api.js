@@ -3,8 +3,8 @@ import { logout } from './shared/utils/auth';
 import { showAlertMessage } from './store/reducers/alertReducer';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5002/api',
-  // baseURL: 'https://connect-easy-rid.herokuapp.com/api',
+  // baseURL: 'http://localhost:5002/api',
+  baseURL: 'https://connect-easy-rid.herokuapp.com/api',
   timeout: 1000,
 });
 
@@ -336,7 +336,6 @@ export const postStartMeeting = async (appointmentData) => {
 
 export const postEndMeeting = async (appointmentData) => {
   try {
-    console.log('FROM API.JS', appointmentData);
     return await apiClient.post(`/appointment/postEndMeeting`, {
       appointmentId: appointmentData,
     });

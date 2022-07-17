@@ -3,8 +3,8 @@ import * as api from '../../api';
 import { showAlertMessage, showSuccessMessage } from './alertReducer';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:5002');
-// const socket = io('https://connect-easy-rid.herokuapp.com');
+// const socket = io('http://localhost:5002');
+const socket = io('https://connect-easy-rid.herokuapp.com');
 
 const schedulerState = {
   openingAppointmentsList: [],

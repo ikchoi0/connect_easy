@@ -40,19 +40,16 @@ const socketHandler = (wsServer) => {
     });
 
     socket.on('disconnect', () => {
-      console.log(rooms);
-      // console.log(socket.adapter);
+      7;
+
       const roomName = rooms[socket.id];
-      console.log('disconnected: ', rooms[socket.id]);
+
       delete rooms[socket.id];
       socket.to(roomName).emit('peer_left');
       delete onlineUsers[socketIdToUserId[socket.id]];
       delete socketIdToUserId[socket.id];
-      // console.log("logging: ", onlineUsers);
     });
     socket.on('meeting_ended', (roomName) => {
-      // const roomName = rooms[socket.id];
-      // console.log("meeting ended: ", roomName);
       socket.to(roomName).emit('meeting_ended');
     });
     socket.on('chat', (message, meetingId) => {

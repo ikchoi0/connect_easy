@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const User = require('../models/user');
 const Category = require('../models/category');
+const { $where } = require('../models/message');
 const Types = require('mongoose').Types;
 
 router.patch('/edit', auth(['consultant']), async (req, res) => {
@@ -21,42 +22,45 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
     imageUrl,
   } = req.body;
 
-  console.log(req.body);
-
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user._id);
 
   if (!user) {
     return res.status(404).send('User not found');
   }
 
   // remove current user from old category
-  const oldCategory = await Category.findOne({ users: user._id });
-  console.log(oldCategory);
+  const oldCategory = await Category.findOne({
+    users: { _id: Types.ObjectId(user._id) },
+  });
+  console.log('OLD CATEGORY::::::::::::', oldCategory);
   const filteredUsers = oldCategory.users.filter(
     (id) => id.toString() !== user._id.toString()
   );
-  console.log('oldCategory', filteredUsers);
-  oldCategory.users = filteredUsers;
-  await oldCategory.save();
+  await oldCategory.updateOne({
+    users: filteredUsers,
+  });
 
-  // update category
+  // update category if user not in new category
   const category = await Category.findOne({
     _id: Types.ObjectId(selectedCategory),
-  });
-  console.log('update category', category);
-  category.users.push(user._id);
-  await category.save();
-  //
+    users: { _id: Types.ObjectId(user._id) },
+  }).populate('users');
 
-  /**
-   *
-   * CATEGORY ISSUE
-   */
+  if (!category) {
+    console.log('user not found in category');
+    const newCategory = await Category.findOne({
+      _id: Types.ObjectId(selectedCategory),
+    });
+
+    newCategory.users.push(user._id);
+    await newCategory.save();
+  }
 
   // update user
   user.firstName = firstName;
   user.lastName = lastName;
   user.email = email;
+  user.category = Types.ObjectId(selectedCategory);
   user.options.description = description;
   user.options.street = street;
   user.options.city = city;
@@ -73,17 +77,20 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
 });
 
 router.get('/profile', auth(['consultant']), async (req, res) => {
-  console.log(req.user);
   const user = await User.findById(req.user._id).select('-password');
-  console.log(user);
 
-  const category = await Category.findOne({ users: req.user.id });
+  // const category = await Category.findOne({
+  //   users: { $elemMatch: { email: user.email } },
+  // });
+  const category = await Category.findOne({
+    'user._id': user._id,
+  });
 
   if (!user || !category) {
     return res.status(404).send('User or category not found');
   }
 
-  return res.send({ user, categoryId: category.id });
+  return res.send({ user, categoryId: category._id });
 });
 
 module.exports = router;

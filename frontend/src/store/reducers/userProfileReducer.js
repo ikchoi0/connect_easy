@@ -38,6 +38,7 @@ export const updateUserProfile = createAsyncThunk(
   'user/setUserProfile',
   async (data, thunkApi) => {
     const response = await api.updateUserProfile(data);
+    console.log(response);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);

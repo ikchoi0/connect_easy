@@ -3,8 +3,8 @@ import { logout } from './shared/utils/auth';
 import { showAlertMessage } from './store/reducers/alertReducer';
 
 const apiClient = axios.create({
-  // baseURL: 'http://localhost:5002/api',
-  baseURL: 'https://connect-easy-rid.herokuapp.com/api',
+  baseURL: 'http://localhost:5002/api',
+  // baseURL: 'https://connect-easy-rid.herokuapp.com/api',
   timeout: 1000,
 });
 
@@ -232,7 +232,6 @@ export const cancelBookedAppointment = async (appointmentId) => {
 // get user profile
 export const getUserProfile = async () => {
   try {
-    console.log('user profile');
     return await apiClient.get('/user/profile');
   } catch (exception) {
     checkResponseCode(exception);

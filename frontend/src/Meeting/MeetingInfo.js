@@ -13,11 +13,14 @@ const MeetingInfo = ({ meetingId }) => {
     dispatch(getAppointmentByAppointmentId(meetingId));
   }, []);
 
+  console.log("appointmentData: ", appointmentData);
+
   const meetingInfoStyles = {
     fontSize: "0.9rem",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
+    color: "#36454F",
   };
   return (
     <Box
@@ -30,7 +33,7 @@ const MeetingInfo = ({ meetingId }) => {
     >
       <Typography sx={meetingInfoStyles}>
         <AccountBoxIcon />
-        Consultant:{" "}
+        <b>Consultant:&nbsp; </b>
         {appointmentData &&
           appointmentData.consultant.firstName +
             " " +
@@ -38,7 +41,7 @@ const MeetingInfo = ({ meetingId }) => {
       </Typography>
       <Typography sx={meetingInfoStyles}>
         <AccountBoxIcon />
-        Client:{" "}
+        <b>Client:&nbsp; </b>
         {appointmentData &&
           appointmentData.client.firstName +
             " " +

@@ -276,7 +276,7 @@ const Meeting = ({ meetingId, socket }) => {
               display: display === 'none' ? 'block' : 'none',
             }}
           >
-            <PersonOffIcon sx={{ width: '70%', height: '70%' }}></PersonOffIcon>
+            <PersonOffIcon sx={{ width: '70%', height: '70%', color: "gray" }}></PersonOffIcon>
           </Grid>
 
           <Grid

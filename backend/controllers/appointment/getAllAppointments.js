@@ -94,6 +94,7 @@ const getAllAppointments = async (req, res) => {
         videoEndTime: appointment.videoEndTime || null,
         // isMeetingLive: appointment.isMeetingLive,
         peerId: appointment.client?._id,
+        consultantPrice: appointment.consultant.options.price,
       };
     });
 

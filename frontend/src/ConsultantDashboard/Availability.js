@@ -170,6 +170,7 @@ export default function Availability() {
 
       if (compareEnd.isSameOrAfter(compareStart)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
+        console.log(card);
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));
         return;
@@ -206,6 +207,7 @@ export default function Availability() {
         );
         return;
       } else {
+        console.log(card);
         dispatch(showSuccessMessage('Appointment created'));
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));

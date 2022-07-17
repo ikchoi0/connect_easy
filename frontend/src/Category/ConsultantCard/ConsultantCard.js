@@ -49,7 +49,17 @@ const CategoryCard = ({
         <ConsultantPicture profilePicture={profilePicture} />
         <CardContent sx={{ flex: "1 0 auto" }}>
           <ConsultantName firstName={firstName} lastName={lastName} />
-          <ConsultantDescription description={description} />
+          <Box
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "1",
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            <ConsultantDescription description={description} />
+          </Box>
           <ConsultantPrice price={price} />
         </CardContent>
       </Card>

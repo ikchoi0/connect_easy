@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import AppointmentCard from './AppointmentCard';
-import Button from '@mui/material/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteOneAppointment } from '../../store/reducers/scheduleReducer';
-import { handleAuth } from '../utils/auth';
-import { updateSelectedNavigatorItem } from '../../store/reducers/dashboardReducer';
-import { updateMeetingId } from '../../store/reducers/meetingReducer';
-import moment from 'moment';
-import { updateSelectedStatusFilter } from '../../store/reducers/appointmentReducer';
-import { filterAppointments } from '../utils/filterAppointments';
+import React, { useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import AppointmentCard from "./AppointmentCard";
+import Button from "@mui/material/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteOneAppointment } from "../../store/reducers/scheduleReducer";
+import { handleAuth } from "../utils/auth";
+import { updateSelectedNavigatorItem } from "../../store/reducers/dashboardReducer";
+import { updateMeetingId } from "../../store/reducers/meetingReducer";
+import moment from "moment";
+import { updateSelectedStatusFilter } from "../../store/reducers/appointmentReducer";
+import { filterAppointments } from "../utils/filterAppointments";
 
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
-const socket = io('http://localhost:5002');
+const socket = io("http://localhost:5002");
 // const socket = io('https://connect-easy-rid.herokuapp.com');
 
 export default function Home({
@@ -29,7 +29,7 @@ export default function Home({
   handleAuth();
   // GRAB the all appointments for the user above from the store:
   const { appointments } = useSelector((state) => state.scheduler);
-  const userDetails = JSON.parse(localStorage.getItem('user'));
+  const userDetails = JSON.parse(localStorage.getItem("user"));
 
   // FILTER menu for appointment status types:
   const selectedStatusFilter = useSelector(
@@ -57,11 +57,11 @@ export default function Home({
     // we need to remove the line below? maybe not.
     dispatch(updateMeetingId(appointment.appointmentId));
     localStorage.setItem(
-      'activeMeeting',
+      "activeMeeting",
       JSON.stringify(appointment.appointmentId)
     );
-    socket.emit('join_meeting', appointment);
-    dispatch(updateSelectedNavigatorItem('Meeting'));
+    socket.emit("join_meeting", appointment);
+    dispatch(updateSelectedNavigatorItem("Meeting"));
   };
 
   const filteredAppointmentsList = filterAppointments(
@@ -74,7 +74,7 @@ export default function Home({
     (appointment, index) => {
       let disableMeeting = true;
       let cancelButtonStatus = false;
-      const activeMeeting = JSON.parse(localStorage.getItem('activeMeeting'));
+      const activeMeeting = JSON.parse(localStorage.getItem("activeMeeting"));
 
       /**
        * TODO: DO SOMETHING WITH THIS
@@ -83,6 +83,8 @@ export default function Home({
       if (activeMeeting) {
         if (activeMeeting === appointment.appointmentId) {
           disableMeeting = false;
+          cancelButtonStatus = true;
+        } else {
           cancelButtonStatus = false;
         }
       } else {
@@ -96,11 +98,12 @@ export default function Home({
       }
       if (appointment.videoEndTime) {
         cancelButtonStatus = true;
+        disableMeeting = true;
       }
 
       return (
         <AppointmentCard
-          role={JSON.parse(localStorage.getItem('user')).role}
+          role={JSON.parse(localStorage.getItem("user")).role}
           clientName={appointment.client}
           consultantName={appointment.consultant}
           // email={userDetails.email}
@@ -108,8 +111,8 @@ export default function Home({
           id={appointment.appointmentId}
           description={appointment.description}
           date={appointment.date}
-          startTime={moment(appointment.start).format('h:mm a')}
-          endTime={moment(appointment.end).format('h:mm a')}
+          startTime={moment(appointment.start).format("h:mm a")}
+          endTime={moment(appointment.end).format("h:mm a")}
           buttonLabel={buttonLabel}
           handleCardButton={handleCardButton}
           appointmentBooked={appointment.appointmentBooked}
@@ -139,34 +142,34 @@ export default function Home({
   return (
     <Box
       sx={{
-        maxWidth: '70%',
-        minHeight: '50vh',
-        padding: '20px',
-        height: 'auto',
-        backgroundColor: '#fafafa',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '5px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        maxWidth: "70%",
+        minHeight: "50vh",
+        padding: "20px",
+        height: "auto",
+        backgroundColor: "#fafafa",
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: "5px",
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
         }}
       >
-        <Typography variant="h5" mb={'40px'}>
+        <Typography variant="h5" mb={"40px"}>
           Welcome,
           <Typography
-            mb={'40px'}
+            mb={"40px"}
             fontStyle="italic"
-            fontWeight={'600'}
-            fontSize={'1.5rem'}
+            fontWeight={"600"}
+            fontSize={"1.5rem"}
           >
-            {userDetails && userDetails.firstName}{' '}
+            {userDetails && userDetails.firstName}{" "}
             {userDetails && userDetails.lastName}!
           </Typography>
         </Typography>
@@ -174,7 +177,7 @@ export default function Home({
 
       <FormControl
         sx={{
-          maxWidth: '30%',
+          maxWidth: "30%",
         }}
       >
         <InputLabel id="demo-simple-select-label">Filter by Status</InputLabel>
@@ -191,18 +194,18 @@ export default function Home({
 
       <Box
         sx={{
-          marginTop: '20px',
-          maxWidth: '100%',
-          minHeight: '50vh',
-          padding: '20px',
-          height: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          borderRadius: '5px',
+          marginTop: "20px",
+          maxWidth: "100%",
+          minHeight: "50vh",
+          padding: "20px",
+          height: "auto",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "5px",
         }}
       >
-        <Typography variant="h4" component="h1" mb={'30px'}>
-          {mappedAppointments.length ? mappedAppointments : 'No appointments'}
+        <Typography variant="h4" component="h1" mb={"30px"}>
+          {mappedAppointments.length ? mappedAppointments : "No appointments"}
         </Typography>
       </Box>
     </Box>

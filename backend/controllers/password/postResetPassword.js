@@ -17,7 +17,7 @@ const postResetPassword = async (req, res) => {
         process.env.TOKEN_KEY,
         {
           //change this to 10m later
-          expiresIn: "24h",
+          expiresIn: "10m",
         }
       );
       const params = email + "/" + token;
@@ -31,7 +31,11 @@ const postResetPassword = async (req, res) => {
           "Reset password link" +
           "</a>"
       );
-      return res.status(200).send("Password reset link sent to your email.");
+      return res
+        .status(200)
+        .send(
+          "Password reset link sent to your email. The link will expire in 10 minutes."
+        );
       // send email with reset link
     }
 

@@ -78,8 +78,18 @@ const CategoryCard = ({
               }}
             >
               <ConsultantPicture profilePicture={profilePicture} />
+
               <ConsultantName firstName={firstName} lastName={lastName} />
-              <ConsultantDescription description={description} />
+
+              <Box
+                sx={{
+                  marginBottom: "20px",
+                  marginTop: "20px",
+                  fontStyle: "italic",
+                }}
+              >
+                <ConsultantDescription description={description} />
+              </Box>
               <ConsultantPrice price={price} />
             </Box>
           </Grid>

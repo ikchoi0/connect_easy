@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,6 +9,11 @@ import Scheduler from '../../Scheduler/Scheduler';
 import DialogPopUp from '../../shared/components/DialogPopUp';
 import { useDispatch } from 'react-redux';
 import { clearAppointmentsList } from '../../store/reducers/scheduleReducer';
+import { Grid } from '@mui/material';
+import ConsultantName from './ConsultantName';
+import ConsultantPicture from './ConsultantPicture';
+import ConsultantDescription from './ConsultantDescription';
+import ConsultantPrice from './ConsultantPrice';
 
 const CategoryCard = ({
   consultantId,
@@ -40,48 +44,57 @@ const CategoryCard = ({
   return (
     <>
       <Card onClick={handleClick}>
-        <CardMedia
-          component="img"
-          height="120px"
-          width="100%"
-          image={
-            profilePicture
-              ? 'https://connect-easy-images.s3.us-west-2.amazonaws.com/' +
-                profilePicture
-              : 'https://i.ibb.co/9tCfDKv/defaultprofilepicture.png'
-          }
-          alt="profile picture"
-        />
+        <ConsultantPicture profilePicture={profilePicture} />
         <CardContent sx={{ flex: '1 0 auto' }}>
-          <Typography
-            component="span"
-            variant="h6"
-            color="text.primary"
-            sx={{ width: 250 }}
+          <ConsultantName firstName={firstName} lastName={lastName} />
+          <Box
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: '1',
+              WebkitBoxOrient: 'vertical',
+            }}
           >
-            {firstName} {lastName}
-          </Typography>
-
-          <Typography component="div" variant="body1" color="text.secondary">
-            {description || (
-              <Box sx={{ fontStyle: 'italic' }}>
-                Service description pending
-              </Box>
-            )}
-          </Typography>
-
-          <Typography variant="body2" color="text.secondary" component="div">
-            {rating && `Rating: ${rating}`}
-            {!rating && '-'}
-          </Typography>
-
-          <Typography variant="body2" color="text.secondary" component="div">
-            Price per hour: ${price}
-          </Typography>
+            <ConsultantDescription description={description} />
+          </Box>
+          <ConsultantPrice price={price} />
         </CardContent>
       </Card>
+
       <DialogPopUp onClose={handleClose} open={open}>
-        <Scheduler selectable consultantId={consultantId} />
+        <Grid
+          container
+          spacing={4}
+          sx={{ display: 'flex', flexDirection: 'row' }}
+        >
+          <Grid item md={2} mt="91px">
+            <Box
+              sx={{
+                marginLeft: '20px',
+                marginTop: '20px',
+              }}
+            >
+              <ConsultantPicture profilePicture={profilePicture} />
+
+              <ConsultantName firstName={firstName} lastName={lastName} />
+
+              <Box
+                sx={{
+                  marginBottom: '20px',
+                  marginTop: '20px',
+                  fontStyle: 'italic',
+                }}
+              >
+                <ConsultantDescription description={description} />
+              </Box>
+              <ConsultantPrice price={price} />
+            </Box>
+          </Grid>
+          <Grid item md={10} sx={{ padding: 0 }}>
+            <Scheduler selectable consultantId={consultantId} />
+          </Grid>
+        </Grid>
       </DialogPopUp>
     </>
   );

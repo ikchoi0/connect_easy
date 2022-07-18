@@ -13,6 +13,7 @@ const getAppointment = async (req, res) => {
       .populate("consultant");
 
 
+
     if (!appointment) return res.status(404).send("Appointment not found");
     /**
      * Event {
@@ -24,6 +25,13 @@ const getAppointment = async (req, res) => {
       }
      */
 
+      // Set videoStartTime if property is not set yet:
+      // if (!appointment.hasOwnProperty("videoStartTime")) {
+      //   await appointment.updateOne({
+      //     videoStartTime: new Date(),
+      //   });
+      // }
+
     const parsedAppointment = {
       client: appointment.client,
       consultant: appointment.consultant,
@@ -34,6 +42,7 @@ const getAppointment = async (req, res) => {
       end: moment(appointment.appointmentEndTime).toDate(),
       allDay: false,
       resource: appointment.client,
+      videoStartTime: moment(appointment.videoStartTime).toDate(),
     };
 
     return res.status(200).send(parsedAppointment);

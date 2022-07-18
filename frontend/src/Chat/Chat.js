@@ -43,6 +43,12 @@ export default function Chat({ socket, meetingId, pastMessages }) {
     setValues('');
   };
 
+  const onKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }}
+
+
   const content =
     // messages.length &&
     messages &&
@@ -91,6 +97,7 @@ export default function Chat({ socket, meetingId, pastMessages }) {
           id="standard-name"
           label="Enter your message"
           value={values}
+          onKeyPress={onKeyPress}
           onChange={(event) => {
             setValues(event.target.value);
           }}

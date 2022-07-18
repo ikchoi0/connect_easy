@@ -12,6 +12,7 @@ import {
 import Chat from '../Chat/Chat';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import MeetingInfo from './MeetingInfo';
+import "./Meeting.css";
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
 
@@ -143,21 +144,26 @@ const Meeting = ({ meetingId, socket }) => {
           const user = JSON.parse(localStorage.getItem('user'));
           const activeMeeting = JSON.parse(
             localStorage.getItem('activeMeeting')
-          );
-          connectionMade = true;
 
+          );
+          console.log("Active Meeting:", activeMeeting);
+          connectionMade = true;
+          console.log("ICE::::::", ice)
           // update video start time here
           // if there is no active meeting, then update the start time
-          if (!activeMeeting) {
-            dispatch(
-              postStartMeeting({
-                appointmentData: {
-                  appointmentId: meetingId,
-                  userId: user.userId,
-                },
-                history,
-              })
-            );
+          
+            console.log("Don is the man:", activeMeeting);
+            if (user.role === "consultant"){
+              dispatch(
+                postStartMeeting({
+                  appointmentData: {
+                    appointmentId: meetingId,
+                    userId: user.userId,
+                  },
+                  history,
+                })
+              );
+            
           }
         } else {
           peer_left = true;
@@ -257,6 +263,7 @@ const Meeting = ({ meetingId, socket }) => {
               autoPlay
               playsInline
               onClick={handleScreenSwitch}
+              
               sx={{
                 display: { display },
                 border: '2px solid white',
@@ -271,13 +278,11 @@ const Meeting = ({ meetingId, socket }) => {
             item
             md={8}
             sx={{
-              // height: "100%",
-              // width: "100%",
               padding: 0,
               display: display === 'none' ? 'block' : 'none',
             }}
           >
-            <PersonOffIcon sx={{ width: '70%', height: '70%' }}></PersonOffIcon>
+            <PersonOffIcon sx={{ width: '70%', height: '70%', color: "gray" }}></PersonOffIcon>
           </Grid>
 
           <Grid

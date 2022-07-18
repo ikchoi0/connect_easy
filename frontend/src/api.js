@@ -151,7 +151,6 @@ export const getAllAppointments = async (consultantId) => {
 };
 
 // get one single appointment
-
 export const getAppointmentByAppointmentId = async (appointmentId) => {
   try {
     return await apiClient.get(`/appointment/single/${appointmentId}`);
@@ -319,7 +318,9 @@ export const submitImage = async (imageFile) => {
   }
 };
 
+
 export const postStartMeeting = async (appointmentData) => {
+  console.log("MONKEY FUZZ::::::", appointmentData)
   try {
     return await apiClient.post(
       `/appointment/postStartMeeting`,

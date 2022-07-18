@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
-
-import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAppointmentsForTheDay } from '../store/reducers/scheduleReducer';
@@ -11,15 +9,6 @@ import { bookAppointment } from '../store/reducers/scheduleReducer';
 import { useHistory } from 'react-router-dom';
 import DialogPopUp from '../shared/components/DialogPopUp';
 import ConfirmModal from '../shared/components/ConfirmModal';
-
-const Item = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  border: '2px solid #e0e0e0',
-}));
 
 export default function TimeSlots(props) {
   const [selectedDateText, setSelectedDateText] = useState('');
@@ -59,7 +48,6 @@ export default function TimeSlots(props) {
       description: props.description,
       selectedAppointmentId: props.selectedAppointmentId,
     };
-    console.log(appointmentData);
 
     dispatch(bookAppointment({ appointmentData, history }));
     setConfirm(false);
@@ -69,7 +57,6 @@ export default function TimeSlots(props) {
     <div key={item.appointmentId}>
       <Button
         onClick={() => {
-          // console.log(item);
           const start = moment(item.start).format('h:mm a');
           const end = moment(item.end).format('h:mm a');
           const timeSlot = `${start} - ${end}`;
@@ -131,6 +118,7 @@ export default function TimeSlots(props) {
                 description={props.description}
                 setDescription={props.setDescription}
               />
+
               {props.description.length > 0 && (
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Button onClick={handleDismissOnClick}>Dismiss</Button>

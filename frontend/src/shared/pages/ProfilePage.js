@@ -14,7 +14,7 @@ import {
 
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import CancelIcon from '@mui/icons-material/Cancel';
+
 import { Avatar } from '@mui/material';
 import TextFieldWithLabel from '../components/TextFieldWithLabel';
 
@@ -58,10 +58,6 @@ const ProfilePage = () => {
     setPrice(userProfile.price);
     setOriginalImage(userProfile.profilePicture);
     setSelectedCategory(userProfile.category);
-
-    console.log(userProfile.category);
-
-    console.log(categoryList.filter((c) => c.id === userProfile.category));
   };
 
   const handleCategoryOnChange = (event) => {
@@ -285,15 +281,14 @@ const ProfilePage = () => {
             <FormHelperText>Required</FormHelperText>
           </FormControl>
 
-          <Box sx={{ display: 'flex', width: '100%', gap: '2rem' }}>
-            <Button
-              variant="contained"
-              type="submit"
-              color="secondary"
-              startIcon={<CancelIcon />}
-            >
-              Cancel
-            </Button>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row-reverse',
+              width: '100%',
+              gap: '2rem',
+            }}
+          >
             <Button
               disabled={userProfile.isSaving}
               onClick={handleOnSaveButtonClick}

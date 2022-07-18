@@ -119,7 +119,6 @@ export default function Availability() {
         true
       ),
       appointmentEndTime: moment(newDate + ' ' + newEndTime).toISOString(true),
-      // description,
     };
 
     ///////////////////////////////
@@ -127,7 +126,6 @@ export default function Availability() {
     let isOverlapDb = false;
 
     for (const ap of appointments) {
-      console.log(ap);
       if (ap.appointmentBooked || ap.appointmentCancel) {
         continue;
       }
@@ -145,7 +143,6 @@ export default function Availability() {
         cardStartTime.isBetween(newStartTime, newEndTime, 'minutes', '[]') ||
         cardEndTime.isBetween(newStartTime, newEndTime, 'minutes', '[]')
       ) {
-        console.log('overlap');
         isOverlapDb = true;
         break;
       }
@@ -153,7 +150,6 @@ export default function Availability() {
         newStartTime.isAfter(cardStartTime) &&
         newEndTime.isBefore(cardEndTime)
       ) {
-        console.log('overlap');
         isOverlapDb = true;
         break;
       }
@@ -162,7 +158,6 @@ export default function Availability() {
       dispatch(showAlertMessage('Appointment overlaps with DB'));
       return;
     }
-    console.log(isOverlapDb);
 
     if (!openingAppointmentsList.length && !isOverlapDb) {
       const compareStart = moment(card.appointmentStartTime);
@@ -170,7 +165,6 @@ export default function Availability() {
 
       if (compareEnd.isSameOrAfter(compareStart)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
-        console.log(card);
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));
         return;
@@ -256,10 +250,6 @@ export default function Availability() {
               value={startTime}
               onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
-              // onError={(error) => {
-              //   dispatch(showAlertMessage('please select a valid time'));
-              //   setStartTime(new Date());
-              // }}
               shouldDisableTime={(timeValue, clockType) => {
                 if (clockType === 'minutes' && timeValue % 5) {
                   return true;
@@ -273,10 +263,6 @@ export default function Availability() {
               value={endTime}
               onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
-              // onError={(error) => {
-              //   dispatch(showAlertMessage('please select a valid time'));
-              //   setEndTime(new Date());
-              // }}
               shouldDisableTime={(timeValue, clockType) => {
                 if (clockType === 'minutes' && timeValue % 5) {
                   return true;

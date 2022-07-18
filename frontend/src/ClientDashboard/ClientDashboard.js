@@ -8,6 +8,7 @@ import Scheduler from "../Scheduler/Scheduler";
 import Meeting from "../Meeting/Meeting";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "../shared/components/theme";
+import Invoice from "../Invoice/Invoice";
 import Copyright from "../shared/components/Copyright";
 import Home from "../shared/components/Home";
 import PeopleIcon from "@mui/icons-material/People";
@@ -135,7 +136,7 @@ const ClientDashboard = () => {
             {selectedNavigatorItem === "Calendar" && (
               <Scheduler filterLists={filterLists} />
             )}
-            {selectedNavigatorItem === "Payments" && <>payments</>}
+            {selectedNavigatorItem === "Payments" && <Invoice />}
             {selectedNavigatorItem === "Meeting" && (
               <Meeting meetingId={meetingId} socket={socket} />
             )}

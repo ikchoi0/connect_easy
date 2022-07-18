@@ -70,7 +70,7 @@ export default function ColumnGroupingTable() {
       id: "description",
       label: "Description",
       minWidth: 150,
-      align: "right",
+      align: "left",
     },
     {
       id: "hourlyRate",
@@ -304,7 +304,7 @@ export default function ColumnGroupingTable() {
                       fontWeight: "bold",
                     }}
                   >
-                    {user.firstName}, {user.lastName}
+                    {user.firstName} {user.lastName}
                   </span>{" "}
                   ,
                 </Typography>

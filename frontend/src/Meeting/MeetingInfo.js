@@ -25,7 +25,6 @@ const MeetingInfo = ({ meetingId }) => {
   }, [appointmentData?.videoStartTime]);
 
   const timeNow = moment().hour(0).minute(0).second(time).format("HH:mm:ss");
-  // console.log("timeNow::::::::::::", timeNow);
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(time + 1);

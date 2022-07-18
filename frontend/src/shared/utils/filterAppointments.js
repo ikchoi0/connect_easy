@@ -1,3 +1,5 @@
+// import moment from 'moment';
+
 export const filterAppointments = (appointments, selectedStatusFilter) => {
   let filteredAppointmentsList;
   switch (selectedStatusFilter) {

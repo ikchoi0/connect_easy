@@ -4,8 +4,6 @@ const getConsultantsWithinCategory = async (req, res) => {
   try {
     const { categoryName } = req.params;
 
-    console.log(categoryName);
-
     if (!categoryName) {
       return res.status(400).send('Please provide a category name');
     }

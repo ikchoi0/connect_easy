@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showAlertMessage } from './alertReducer';
+import { showAlertMessage, showSuccessMessage } from './alertReducer';
 import * as api from '../../api';
 
 const userState = {
@@ -19,6 +19,7 @@ const userState = {
 
   previewImage: '',
   available: false,
+  isSaving: false,
 };
 
 export const getUserProfile = createAsyncThunk(
@@ -38,13 +39,15 @@ export const updateUserProfile = createAsyncThunk(
   'user/setUserProfile',
   async (data, thunkApi) => {
     const response = await api.updateUserProfile(data);
+
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
 
     // SHOW SUCCESS MESSAGE
-    thunkApi.dispatch(showAlertMessage(response.message));
+    thunkApi.dispatch(showSuccessMessage('User profile updated'));
+    return response.data;
   }
 );
 
@@ -68,6 +71,17 @@ const userSlice = createSlice({
       state.category = action.payload.categoryId;
       state.profilePicture = action.payload.user.options?.profilePicture || '';
       state.available = action.payload.user.options?.available || '';
+    },
+    [updateUserProfile.pending]: (state, action) => {
+      state.isSaving = true;
+    },
+    [updateUserProfile.fulfilled]: (state, action) => {
+      console.log(action.payload);
+
+      state.isSaving = false;
+    },
+    [updateUserProfile.rejected]: (state, action) => {
+      state.isSaving = false;
     },
   },
 });

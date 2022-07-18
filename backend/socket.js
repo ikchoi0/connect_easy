@@ -1,4 +1,4 @@
-const addChatMessage = require("./utils/chatHelper");
+const { addChatMessage, getChatMessages } = require("./utils/chatHelper");
 const socketHandler = (wsServer) => {
   const rooms = {};
   const onlineUsers = {};
@@ -40,7 +40,7 @@ const socketHandler = (wsServer) => {
 
     socket.on("disconnect", () => {
       const roomName = rooms[socket.id];
-      console.log("disconnected: ", rooms[socket.id]);
+
       delete rooms[socket.id];
       socket.to(roomName).emit("peer_left");
       delete onlineUsers[socketIdToUserId[socket.id]];
@@ -51,6 +51,7 @@ const socketHandler = (wsServer) => {
     });
     socket.on("chat", (message, meetingId) => {
       addChatMessage(meetingId, message);
+
       socket.to(meetingId).emit("chat", message);
     });
   });

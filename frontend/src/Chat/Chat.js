@@ -1,40 +1,46 @@
-import React, { useState, useRef, useEffect } from "react";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
-import { Typography } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import { Button, TextField } from "@mui/material";
+import React, { useState, useRef, useEffect } from 'react';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+
+import { Typography } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import { Button, TextField } from '@mui/material';
 
 let index = 0;
-const mg = [];
-export default function Chat({ socket, meetingId }) {
-  const userId = JSON.parse(localStorage.getItem("user")).userId;
 
-  socket.on("chat", (data) => {
-    setMessages([...messages, data]);
-    console.log("data: ", data);
-  });
-  const [values, setValues] = React.useState("");
+export default function Chat({ socket, meetingId, pastMessages }) {
+  const userId = JSON.parse(localStorage.getItem('user')).userId;
+
+  const [values, setValues] = useState('');
   const scrollRef = useRef(null);
-
 
   // const [list, setList] = useState([]);
   const [isInputValid, setIsInputValid] = useState(false);
-  const [messages, setMessages] = useState([...mg]);
+  const [messages, setMessages] = useState([]);
+
+  socket.on('chat', (data) => {
+    setMessages([...messages, data]);
+    console.log('data: ', data);
+  });
+
   useEffect(() => {
     if (scrollRef.current)
-      scrollRef.current.scrollIntoView({ behaviour: "smooth" });
+      scrollRef.current.scrollIntoView({ behaviour: 'smooth' });
   }, [messages]);
+
   useEffect(() => {
-    if (values !== "") setIsInputValid(true);
+    if (values !== '') setIsInputValid(true);
   }, [values]);
+
+  useEffect(() => {
+    setMessages(pastMessages);
+  }, [pastMessages]);
 
   const handleSend = () => {
     setMessages([...messages, { sender: userId, message: values }]);
-    socket.emit("chat", { sender: userId, message: values }, meetingId);
+    socket.emit('chat', { sender: userId, message: values }, meetingId);
     setIsInputValid(false);
-    setValues("");
+    setValues('');
   };
 
   const onKeyPress = (e) => {
@@ -52,12 +58,12 @@ export default function Chat({ socket, meetingId }) {
           key={index++}
           ref={scrollRef}
           sx={{
-            textAlignLast: sender !== userId ? "left" : "right",
+            textAlignLast: sender !== userId ? 'left' : 'right',
           }}
         >
-          <Paper key={message} elevation={2} sx={{ paddingX: "10px" }}>
-            <PersonIcon /> {sender !== userId ? "Them" : "Me"}
-            <Typography sx={{ wordWrap: "break-word" }}>{message}</Typography>
+          <Paper key={message} elevation={2} sx={{ paddingX: '10px' }}>
+            <PersonIcon /> {sender !== userId ? 'Them' : 'Me'}
+            <Typography sx={{ wordWrap: 'break-word' }}>{message}</Typography>
           </Paper>
         </Box>
       );
@@ -66,27 +72,27 @@ export default function Chat({ socket, meetingId }) {
   return (
     <Box
       sx={{
-        height: "100%",
+        height: '100%',
       }}
     >
       <Box
         sx={{
-          height: "420px",
-          bgcolor: "white",
-          display: "flex",
+          height: '420px',
+          bgcolor: 'white',
+          display: 'flex',
           gap: 2,
-          justifyContent: "start",
-          flexDirection: "column",
-          overflowY: "scroll",
-          borderRadius: "10px",
-          marginBottom: "10px",
-          padding: "5px",
+          justifyContent: 'start',
+          flexDirection: 'column',
+          overflowY: 'scroll',
+          borderRadius: '10px',
+          marginBottom: '10px',
+          padding: '5px',
         }}
       >
         {content}
       </Box>
 
-      <Box sx={{ display: "flex", gap: "0.5rem" }}>
+      <Box sx={{ display: 'flex', gap: '0.5rem' }}>
         <TextField
           id="standard-name"
           label="Enter your message"

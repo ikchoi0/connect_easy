@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../api";
 import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 import { io } from "socket.io-client";
-import moment from "moment";
 
 const socket = io("http://localhost:5002");
+// const socket = io('https://connect-easy-rid.herokuapp.com');
 
 // const socket = io("https://connect-easy-rid.herokuapp.com");
 const schedulerState = {

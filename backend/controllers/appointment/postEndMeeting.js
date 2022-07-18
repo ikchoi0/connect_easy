@@ -27,13 +27,13 @@ const postEndMeeting = async (req, res) => {
         hasActiveMeeting: false,
         activeMeetingId: "",
       };
-      appointment.client.save();
+      await appointment.client.save();
       appointment.consultant.options = {
         ...appointment.consultant.options,
         hasActiveMeeting: false,
         activeMeetingId: "",
       };
-      appointment.consultant.save();
+      await appointment.consultant.save();
       // await appointment.client.updateOne({
       //   options: {
       //     hasActiveMeeting: false,

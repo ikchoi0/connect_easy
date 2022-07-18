@@ -14,10 +14,11 @@ import { updateMeetingId } from "../../store/reducers/meetingReducer";
 import moment from "moment";
 import { updateSelectedStatusFilter } from "../../store/reducers/appointmentReducer";
 import { filterAppointments } from "../utils/filterAppointments";
-import { getMe } from "../../store/reducers/authReducer";
+
 import { io } from "socket.io-client";
+
 const socket = io("http://localhost:5002");
-// const socket = io("https://connect-easy-rid.herokuapp.com");
+// const socket = io('https://connect-easy-rid.herokuapp.com');
 
 export default function Home({
   getAppointmentAction,

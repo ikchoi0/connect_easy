@@ -42,12 +42,16 @@ const getAllAppointments = async (req, res) => {
       );
       const endTime = moment(appointment.appointmentEndTime).format("HH:mm");
 
-      const newStartTime = moment(newDate + " " + startTime).format(
-        "YYYY-MM-DD HH:mm"
-      );
-      const newEndTime = moment(newDate + " " + endTime).format(
-        "YYYY-MM-DD HH:mm"
-      );
+      // const newStartTime = moment(newDate + ' ' + startTime).format(
+      //   'YYYY-MM-DD HH:mm'
+      // );
+      // const newEndTime = moment(newDate + ' ' + endTime).format(
+      //   'YYYY-MM-DD HH:mm'
+      // );
+
+      const newStartTime = moment(newDate + " " + startTime);
+      const newEndTime = moment(newDate + " " + endTime);
+
       const titleStartTime = moment(newDate + " " + startTime).format("h:mm a");
       const titleEndTime = moment(newDate + " " + endTime).format("h:mm a");
 

@@ -1,6 +1,6 @@
-import React from "react";
-import { CardMedia } from "@mui/material";
-import ConsultantCard from "./ConsultantCard";
+import React from 'react';
+import { CardMedia } from '@mui/material';
+import ConsultantCard from './ConsultantCard';
 
 const ConsultantPicture = ({ profilePicture }) => {
   return (
@@ -9,7 +9,10 @@ const ConsultantPicture = ({ profilePicture }) => {
       height="120px"
       width="100%"
       image={
-        profilePicture || "https://i.ibb.co/9tCfDKv/defaultprofilepicture.png"
+        profilePicture
+          ? 'https://connect-easy-images.s3.us-west-2.amazonaws.com/' +
+            profilePicture
+          : 'https://i.ibb.co/9tCfDKv/defaultprofilepicture.png'
       }
       alt="profile picture"
     />

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showAlertMessage } from './alertReducer';
+import { showAlertMessage, showSuccessMessage } from './alertReducer';
 import * as api from '../../api';
 
 const userState = {
@@ -38,14 +38,15 @@ export const updateUserProfile = createAsyncThunk(
   'user/setUserProfile',
   async (data, thunkApi) => {
     const response = await api.updateUserProfile(data);
-    console.log(response);
+
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     }
 
     // SHOW SUCCESS MESSAGE
-    thunkApi.dispatch(showAlertMessage(response.message));
+    thunkApi.dispatch(showSuccessMessage('User profile updated'));
+    return response.data;
   }
 );
 

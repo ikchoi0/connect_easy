@@ -32,7 +32,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   const oldCategory = await Category.findOne({
     users: { _id: Types.ObjectId(user._id) },
   });
-  console.log('OLD CATEGORY::::::::::::', oldCategory);
+
   const filteredUsers = oldCategory.users.filter(
     (id) => id.toString() !== user._id.toString()
   );
@@ -47,7 +47,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   }).populate('users');
 
   if (!category) {
-    console.log('user not found in category');
+    console.log('user not found in category will do update category');
     const newCategory = await Category.findOne({
       _id: Types.ObjectId(selectedCategory),
     });
@@ -83,7 +83,7 @@ router.get('/profile', auth(['consultant']), async (req, res) => {
   //   users: { $elemMatch: { email: user.email } },
   // });
   const category = await Category.findOne({
-    'user._id': user._id,
+    users: { _id: Types.ObjectId(user._id) },
   });
 
   if (!user || !category) {

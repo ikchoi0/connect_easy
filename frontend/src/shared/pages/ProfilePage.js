@@ -56,9 +56,12 @@ const ProfilePage = () => {
     setCountry(userProfile.country);
     setPostalCode(userProfile.postalCode);
     setPrice(userProfile.price);
-    setSelectedCategory('');
     setOriginalImage(userProfile.profilePicture);
     setSelectedCategory(userProfile.category);
+
+    console.log(userProfile.category);
+
+    console.log(categoryList.filter((c) => c.id === userProfile.category));
   };
 
   const handleCategoryOnChange = (event) => {

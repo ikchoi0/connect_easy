@@ -79,6 +79,7 @@ const getAppointmentsForClientId = async (req, res) => {
         videoStartTime: appointment.videoStartTime || null,
         videoEndTime: appointment.videoEndTime || null,
         peerId: appointment.consultant._id,
+        consultantPrice: appointment.consultant.options.price,
       };
     });
 

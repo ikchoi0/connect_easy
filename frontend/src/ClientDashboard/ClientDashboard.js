@@ -27,6 +27,7 @@ import {
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
 import { updateMeetingId } from "../store/reducers/meetingReducer";
+// const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const socket = io("http://localhost:5002");
 const filterLists = [

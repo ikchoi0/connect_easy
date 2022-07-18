@@ -19,7 +19,6 @@ const socketHandler = (wsServer) => {
       socket
         .to([onlineUsers[appointment.peerId]])
         .emit("join_meeting", appointment);
-      console.log(appointment);
     });
     socket.on("join_room", (roomName) => {
       rooms[socket.id] = roomName;
@@ -40,23 +39,17 @@ const socketHandler = (wsServer) => {
     });
 
     socket.on("disconnect", () => {
-      console.log(rooms);
-      // console.log(socket.adapter);
       const roomName = rooms[socket.id];
       console.log("disconnected: ", rooms[socket.id]);
       delete rooms[socket.id];
       socket.to(roomName).emit("peer_left");
       delete onlineUsers[socketIdToUserId[socket.id]];
       delete socketIdToUserId[socket.id];
-      // console.log("logging: ", onlineUsers);
     });
     socket.on("meeting_ended", (roomName) => {
-      // const roomName = rooms[socket.id];
-      // console.log("meeting ended: ", roomName);
       socket.to(roomName).emit("meeting_ended");
     });
     socket.on("chat", (message, meetingId) => {
-      // console.log(message);
       addChatMessage(meetingId, message);
       socket.to(meetingId).emit("chat", message);
     });

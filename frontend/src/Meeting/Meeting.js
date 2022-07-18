@@ -148,17 +148,17 @@ const Meeting = ({ meetingId, socket }) => {
 
           // update video start time here
           // if there is no active meeting, then update the start time
-          if (!activeMeeting) {
-            dispatch(
-              postStartMeeting({
-                appointmentData: {
-                  appointmentId: meetingId,
-                  userId: user.userId,
-                },
-                history,
-              })
-            );
-          }
+          // if (!activeMeeting) {
+          dispatch(
+            postStartMeeting({
+              appointmentData: {
+                appointmentId: meetingId,
+                userId: user.userId,
+              },
+              history,
+            })
+          );
+          // }
         } else {
           peer_left = true;
         }

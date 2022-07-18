@@ -7,14 +7,12 @@ import Scheduler from "../Scheduler/Scheduler";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "../shared/components/theme";
 import Copyright from "../shared/components/Copyright";
-import { logout } from "../shared/utils/auth";
-import { setUser } from "../store/reducers/authReducer";
+import Invoice from "../Invoice/Invoice";
 import Home from "../shared/components/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import PaymentIcon from "@mui/icons-material/Payment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import VideoCameraFrontIcon from "@mui/icons-material/VideoCameraFront";
 import Availability from "./Availability";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import { useHistory } from "react-router-dom";
@@ -34,6 +32,7 @@ import ConfirmModal from "../shared/components/ConfirmModal";
 import { updateSelectedNavigatorItem } from "../store/reducers/dashboardReducer";
 import { updateMeetingId } from "../store/reducers/meetingReducer";
 const socket = io("http://localhost:5002");
+// const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const drawerWidth = 300;
 const menuItems = [
@@ -162,7 +161,7 @@ const ConsultantDashboard = () => {
             {selectedNavigatorItem === "Calendar" && (
               <Scheduler filterLists={filterLists} />
             )}
-            {selectedNavigatorItem === "Payments" && <>payments</>}
+            {selectedNavigatorItem === "Payments" && <Invoice />}
             {selectedNavigatorItem === "Settings" && <ProfilePage />}
             {selectedNavigatorItem === "Meeting" && (
               <Meeting meetingId={meetingId} socket={socket} />

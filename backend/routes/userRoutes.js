@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const auth = require('../middleware/auth');
-const User = require('../models/user');
-const Category = require('../models/category');
-const Types = require('mongoose').Types;
+const auth = require("../middleware/auth");
+const User = require("../models/user");
+const Category = require("../models/category");
+const Types = require("mongoose").Types;
 
-router.patch('/edit', auth(['consultant']), async (req, res) => {
+router.patch("/edit", auth(["consultant"]), async (req, res) => {
   const {
     firstName,
     lastName,
@@ -26,7 +26,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   const user = await User.findById(req.user.id);
 
   if (!user) {
-    return res.status(404).send('User not found');
+    return res.status(404).send("User not found");
   }
 
   // remove current user from old category
@@ -35,7 +35,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   const filteredUsers = oldCategory.users.filter(
     (id) => id.toString() !== user._id.toString()
   );
-  console.log('oldCategory', filteredUsers);
+  console.log("oldCategory", filteredUsers);
   oldCategory.users = filteredUsers;
   await oldCategory.save();
 
@@ -43,7 +43,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   const category = await Category.findOne({
     _id: Types.ObjectId(selectedCategory),
   });
-  console.log('update category', category);
+  console.log("update category", category);
   category.users.push(user._id);
   await category.save();
   //
@@ -72,14 +72,14 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   return res.send({ user });
 });
 
-router.get('/profile', auth(['consultant']), async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
+router.get("/profile", auth(["consultant"]), async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
   console.log(user);
 
   const category = await Category.findOne({ users: req.user.id });
 
   if (!user || !category) {
-    return res.status(404).send('User or category not found');
+    return res.status(404).send("User or category not found");
   }
 
   return res.send({ user, categoryId: category.id });

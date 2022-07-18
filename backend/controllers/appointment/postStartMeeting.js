@@ -10,7 +10,6 @@ const postStartMeeting = async (req, res) => {
       Types.ObjectId(appointmentId)
     );
     const user = await User.findById(Types.ObjectId(userId));
-
     if (!appointment) {
       return res.status(404).send("Appointment not found");
     }
@@ -25,12 +24,12 @@ const postStartMeeting = async (req, res) => {
       });
     }
 
-    await user.updateOne({
-      options: {
-        hasActiveMeeting: true,
-        activeMeetingId: appointmentId,
-      },
-    });
+    user.options = {
+      ...user.options,
+      hasActiveMeeting: true,
+      activeMeetingId: appointmentId,
+    };
+    user.save();
 
     return res.status(200).send({
       data: { appointment, user },

@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,61 +14,79 @@ import {
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
 import { filterAppointments } from "../shared/utils/filterAppointments";
-const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
-  {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
-  },
-  {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toFixed(2),
-  },
-];
-
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263),
-  createData("China", "CN", 1403500365, 9596961),
-  createData("Italy", "IT", 60483973, 301340),
-  createData("United States", "US", 327167434, 9833520),
-  createData("Canada", "CA", 37602103, 9984670),
-  createData("Australia", "AU", 25475400, 7692024),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126317000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 17098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
-];
-
+import { filterAppointmentsByOptions } from "../shared/utils/filterAppointmentsByOptions";
+import {
+  FormControl,
+  Typography,
+  Grid,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  TextField,
+  Box,
+} from "@mui/material";
+import { sortHelper } from "../shared/utils/sortHelper";
+import { calculateTotalPrice } from "../shared/utils/calculator";
+let filteredAppointments = [];
 export default function ColumnGroupingTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [listData, setListData] = useState([]);
+  const [show, setShow] = useState("Show Invoice");
+  const [totalPriceLimits, setTotalPriceLimits] = useState({
+    min: 0,
+    max: 0,
+  });
+  const [options, setOptions] = useState({
+    sortName: "",
+    desc: true,
+    selectNameChoice: "",
+    filterOption: "",
+  });
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
   const { appointments } = useSelector((state) => state.scheduler);
+  const columns = [
+    {
+      id: "email",
+      label: user.role === "consultant" ? "Client Email" : "Consultant Email",
+      minWidth: 150,
+      align: "left",
+    },
+    {
+      id: "peerName",
+      label: user.role === "consultant" ? "Client Name" : "Consultant Name",
+      minWidth: 100,
+      align: "left",
+    },
+    {
+      id: "time",
+      label: "Time",
+      minWidth: 150,
+      align: "left",
+    },
+    {
+      id: "description",
+      label: "Description",
+      minWidth: 150,
+      align: "right",
+    },
+    {
+      id: "hourlyRate",
+      label: "Hourly Rate",
+      minWidth: 150,
+      align: "right",
+      format: (value) => value.toFixed(2),
+    },
+    {
+      id: "totalPrice",
+      label: "Total Price",
+      minWidth: 150,
+      align: "right",
+      format: (value) => value.toFixed(2),
+    },
+  ];
   // console.log(user);
   useEffect(() => {
     if (user.role === "consultant") {
@@ -75,16 +94,66 @@ export default function ColumnGroupingTable() {
     } else {
       dispatch(getAppointmentsForClientId(user.userId));
     }
+    filteredAppointments = filterAppointments(appointments, "Past");
+    setListData(filteredAppointments);
   }, []);
 
-  // const filteredAppointmentsList = appointments.filter((appointment) => {
-  //   if (appointment.appointmentBooked) {
-  //     return appointment;
-  //   }
-  // });
-  // console.log(filteredAppointmentsList);
-  const filteredAppointments = filterAppointments(appointments, "Past");
-  console.log(appointments, filteredAppointments);
+  useEffect(() => {
+    filteredAppointments = filterAppointmentsByOptions(
+      listData,
+      options.filterOption,
+      user.role,
+      options.selectNameChoice
+    );
+    setListData(filteredAppointments);
+
+    // console.log(listData);
+  }, [options, setListData]);
+
+  // const filteredAppointments = filterAppointments(appointments, "Past");
+  // console.log(appointments, filteredAppointments);
+  const sortedAppointments = sortHelper(
+    listData,
+    options.sortName,
+    user.role,
+    options.desc
+  );
+
+  const nameList = new Set();
+  const data = sortedAppointments.map((appointment) => {
+    // const data = appointments.map((appointment) => {
+    const totalCost = calculateTotalPrice(appointment);
+    const peerName =
+      user.role === "consultant" ? appointment.client : appointment.consultant;
+    const email =
+      user.role === "consultant"
+        ? appointment.clientEmail
+        : appointment.consultantEmail;
+    const time =
+      moment(appointment.date).format("MM/DD/YYYY") + " " + appointment.title;
+    nameList.add(peerName);
+    return {
+      peerName: peerName,
+      email: email,
+      time: time,
+      description: appointment.description,
+      hourlyRate: appointment.consultantPrice,
+      totalPrice: totalCost,
+    };
+  });
+  // console.log(data);
+
+  const handleSort = (event) => {
+    const name = event.target.getAttribute("value");
+    setOptions({
+      ...options,
+      desc: !options.desc,
+      sortName: name,
+    });
+    // setDesc(!desc);
+    // setSortName(name);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -93,24 +162,132 @@ export default function ColumnGroupingTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const handleSelectChange = (event) => {
+    const nameChoice = event.target.value;
+    // setSelectNameChoice(nameChoice);
+    // setFilterOption("name");
+    setOptions({
+      ...options,
+      selectNameChoice: nameChoice,
+      filterOption: "name",
+    });
+  };
+  const handleReset = () => {
+    if (show === "Show Invoice") {
+      setShow("Reset Filter");
+    }
+    setOptions({
+      ...options,
+      desc: true,
+      sortName: "",
+      selectNameChoice: "",
+      filterOption: "",
+    });
+    setListData(filterAppointments(appointments, "Past"));
+  };
+  const nameListItems = [];
 
+  for (let name of nameList) {
+    nameListItems.push(
+      <MenuItem key={name} value={name}>
+        {name}
+      </MenuItem>
+    );
+  }
+  const nameSelectField = (
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <Box
+          component="form"
+          sx={{
+            "& > :not(style)": { m: 1, width: "25ch" },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <InputLabel>Filter By Name</InputLabel>
+
+          <Select
+            required
+            value={options.selectNameChoice}
+            label="nameFilter"
+            onChange={handleSelectChange}
+          >
+            {nameList && nameListItems}
+          </Select>
+          <TextField
+            id="filled-basic"
+            label="Min Total Price"
+            variant="filled"
+          />
+          <TextField
+            id="filled-basic"
+            label="Max Total Price"
+            variant="filled"
+          />
+        </Box>
+
+        <Button
+          variant={show === "Show Invoice" ? "contained" : "outlined"}
+          color={show === "Show Invoice" ? "error" : "success"}
+          onClick={handleReset}
+        >
+          {show}
+        </Button>
+      </FormControl>
+    </Grid>
+  );
   return (
     <Paper sx={{ width: "100%" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      {nameSelectField}
+      <TableContainer sx={{ height: "100%" }}>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="center" colSpan={2}>
-                Country
-              </TableCell>
-              <TableCell align="center" colSpan={3}>
-                Details
+              <TableCell align="center" colSpan={12}>
+                <Typography sx={{ fontSize: "2rem" }}>
+                  Hello{" "}
+                  <span
+                    style={{
+                      color: "#3CB371",
+                      fontStyle: "italic",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {user.firstName}, {user.lastName}
+                  </span>{" "}
+                  ,
+                </Typography>
+                <Typography sx={{ fontSize: "2rem" }}>
+                  Your are registered as{" "}
+                  <span
+                    style={{
+                      color: "#3CB371",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    {user.role}
+                  </span>{" "}
+                  !
+                </Typography>
               </TableCell>
             </TableRow>
+
             <TableRow>
               {columns.map((column) => (
                 <TableCell
+                  onClick={handleSort}
                   key={column.id}
+                  value={column.id}
                   align={column.align}
                   style={{ top: 57, minWidth: column.minWidth }}
                 >
@@ -120,18 +297,21 @@ export default function ColumnGroupingTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+              .map((row, index) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                          <span>
+                            {typeof value === "number" ? "$" : ""}
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </span>
                         </TableCell>
                       );
                     })}
@@ -139,17 +319,9 @@ export default function ColumnGroupingTable() {
                 );
               })}
           </TableBody>
+          {/* <TableRow sx={{ height: "100px" }}>Total</TableRow> */}
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </Paper>
   );
 }

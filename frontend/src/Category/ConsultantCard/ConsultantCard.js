@@ -1,18 +1,18 @@
-import React from 'react';
-import { useState } from 'react';
+import React from "react";
+import { useState } from "react";
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { CardMedia } from '@mui/material';
-import Scheduler from '../../Scheduler/Scheduler';
-import DialogPopUp from '../../shared/components/DialogPopUp';
-import { useDispatch } from 'react-redux';
-import { clearAppointmentsList } from '../../store/reducers/scheduleReducer';
-import { red } from '@mui/material/colors';
-import AlertNotification from '../../shared/components/AlertNotification';
-import { Alert } from '@mui/material';
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { CardMedia } from "@mui/material";
+import Scheduler from "../../Scheduler/Scheduler";
+import DialogPopUp from "../../shared/components/DialogPopUp";
+import { useDispatch } from "react-redux";
+import { clearAppointmentsList } from "../../store/reducers/scheduleReducer";
+import { red } from "@mui/material/colors";
+import AlertNotification from "../../shared/components/AlertNotification";
+import { Alert } from "@mui/material";
 const CategoryCard = ({
   consultantId,
   firstName,
@@ -27,12 +27,12 @@ const CategoryCard = ({
 
   const handleClick = () => {
     if (!user) {
-      alert('Please login to book an appointment');
+      alert("Please login to book an appointment");
     }
     handleClickOpen();
   };
   const [open, setOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -49,12 +49,15 @@ const CategoryCard = ({
           height="120px"
           width="100%"
           image={
-            profilePicture ||
-            'https://i.ibb.co/9tCfDKv/defaultprofilepicture.png'
+            profilePicture !== undefined && profilePicture.indexOf("http") > -1
+              ? profilePicture
+              : "https://connect-easy-images.s3.us-west-2.amazonaws.com/" +
+                  profilePicture ||
+                "https://i.ibb.co/9tCfDKv/defaultprofilepicture.png"
           }
           alt="profile picture"
         />
-        <CardContent sx={{ flex: '1 0 auto' }}>
+        <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography
             component="span"
             variant="h6"
@@ -66,7 +69,7 @@ const CategoryCard = ({
 
           <Typography component="div" variant="body1" color="text.secondary">
             {description || (
-              <Box sx={{ fontStyle: 'italic' }}>
+              <Box sx={{ fontStyle: "italic" }}>
                 Service description pending
               </Box>
             )}
@@ -74,7 +77,7 @@ const CategoryCard = ({
 
           <Typography variant="body2" color="text.secondary" component="div">
             {rating && `Rating: ${rating}`}
-            {!rating && '-'}
+            {!rating && "-"}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" component="div">

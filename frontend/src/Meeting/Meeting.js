@@ -18,6 +18,7 @@ import Draggable from "react-draggable";
 
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
+  const [startTimer, setStartTimer] = useState(false);
 
   const [display, setDisplay] = useState("none");
   const history = useHistory();
@@ -144,6 +145,7 @@ const Meeting = ({ meetingId, socket }) => {
             localStorage.getItem("activeMeeting")
           );
           connectionMade = true;
+          setStartTimer(true);
           dispatch(
             postStartMeeting({
               appointmentData: {
@@ -268,7 +270,7 @@ const Meeting = ({ meetingId, socket }) => {
             }}
           >
             {/* 🎃 MEETING INFO */}
-            <MeetingInfo meetingId={meetingId} />
+            <MeetingInfo meetingId={meetingId} startTimer={startTimer} />
             {/* 🎃 CHAT */}
             <Chat
               socket={socket}

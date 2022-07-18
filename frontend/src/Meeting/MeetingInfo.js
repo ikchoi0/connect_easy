@@ -6,7 +6,7 @@ import moment from "moment";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
 
-const MeetingInfo = ({ meetingId }) => {
+const MeetingInfo = ({ meetingId, startTimer }) => {
   const dispatch = useDispatch();
   const [time, setTime] = useState(0);
   const { appointmentData } = useSelector((state) => state.meeting);
@@ -22,15 +22,17 @@ const MeetingInfo = ({ meetingId }) => {
     }
     const now = moment(new Date());
     setTime(now.diff(meetingStartTime, "seconds"));
-  }, [appointmentData?.videoStartTime]);
+  }, [appointmentData]);
 
   const timeNow = moment().hour(0).minute(0).second(time).format("HH:mm:ss");
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(time + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  });
+    if (startTimer) {
+      const interval = setInterval(() => {
+        setTime(time + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [startTimer, time]);
 
   const meetingInfoStyles = {
     fontSize: "0.9rem",

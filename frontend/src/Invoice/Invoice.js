@@ -9,10 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllAppointments,
-  getAppointmentsForClientId,
-} from "../store/reducers/scheduleReducer";
+
 import {
   getPastMessages,
   updateMeetingId,
@@ -39,6 +36,7 @@ import DialogPopUp from "../shared/components/DialogPopUp";
 import Chat from "../Chat/Chat";
 
 let filteredAppointments = [];
+let sumOfTotalPrice = 0;
 export default function ColumnGroupingTable({ socket }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -109,13 +107,7 @@ export default function ColumnGroupingTable({ socket }) {
       align: "right",
     },
   ];
-  // console.log(user);
   useEffect(() => {
-    // if (user.role === "consultant") {
-    //   dispatch(getAllAppointments(user.userId));
-    // } else {
-    //   dispatch(getAppointmentsForClientId(user.userId));
-    // }
     filteredAppointments = filterAppointments(appointments, "Past");
     setListData(filteredAppointments);
   }, []);
@@ -143,8 +135,6 @@ export default function ColumnGroupingTable({ socket }) {
     );
   }, [options, setListData]);
 
-  // const filteredAppointments = filterAppointments(appointments, "Past");
-  // console.log(appointments, filteredAppointments);
   const sortedAppointments = sortHelper(
     listData,
     options.sortName,
@@ -157,6 +147,7 @@ export default function ColumnGroupingTable({ socket }) {
   const data = listData.map((appointment) => {
     // const data = appointments.map((appointment) => {
     const totalCost = calculateTotalPrice(appointment);
+    sumOfTotalPrice += totalCost;
     const peerName =
       user.role === "consultant" ? appointment.client : appointment.consultant;
     const email =
@@ -177,7 +168,6 @@ export default function ColumnGroupingTable({ socket }) {
       chatCount: appointment.chatCount,
     };
   });
-  // console.log(data);
 
   const handleSort = (event) => {
     const name = event.target.getAttribute("value");
@@ -186,8 +176,6 @@ export default function ColumnGroupingTable({ socket }) {
       desc: !options.desc,
       sortName: name,
     });
-    // setDesc(!desc);
-    // setSortName(name);
   };
 
   const handleChangePage = (event, newPage) => {

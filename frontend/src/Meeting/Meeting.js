@@ -155,7 +155,7 @@ const Meeting = ({ meetingId, socket }) => {
           // if there is no active meeting, then update the start time
 
           console.log("Don is the man:", activeMeeting);
-          if (user.role === "consultant") {
+          if (user.role === "consultant" && !activeMeeting) {
             dispatch(
               postStartMeeting({
                 appointmentData: {

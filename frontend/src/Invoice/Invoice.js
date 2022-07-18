@@ -78,7 +78,7 @@ export default function ColumnGroupingTable({ socket }) {
     {
       id: "time",
       label: "Time",
-      width: 150,
+      width: 100,
       align: "left",
     },
     {
@@ -86,7 +86,6 @@ export default function ColumnGroupingTable({ socket }) {
       label: "Description",
       minWidth: 150,
       align: "left  ",
-      width: "300px",
       wordWrap: "break-word",
     },
     {

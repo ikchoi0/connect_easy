@@ -28,21 +28,21 @@ import {
 } from "@mui/material";
 import { sortHelper } from "../shared/utils/sortHelper";
 import { calculateTotalPrice } from "../shared/utils/calculator";
+import { showAlertMessage } from "../store/reducers/alertReducer";
 let filteredAppointments = [];
 export default function ColumnGroupingTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [listData, setListData] = useState([]);
   const [show, setShow] = useState("Show Invoice");
-  const [totalPriceLimits, setTotalPriceLimits] = useState({
-    min: 0,
-    max: 0,
-  });
+
   const [options, setOptions] = useState({
     sortName: "",
     desc: true,
     selectNameChoice: "",
     filterOption: "",
+    minPrice: "",
+    maxPrice: "",
   });
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -103,11 +103,13 @@ export default function ColumnGroupingTable() {
       listData,
       options.filterOption,
       user.role,
-      options.selectNameChoice
+      options.selectNameChoice,
+      options.minPrice,
+      options.maxPrice
     );
     setListData(filteredAppointments);
 
-    // console.log(listData);
+    console.log(listData);
   }, [options, setListData]);
 
   // const filteredAppointments = filterAppointments(appointments, "Past");
@@ -182,8 +184,43 @@ export default function ColumnGroupingTable() {
       sortName: "",
       selectNameChoice: "",
       filterOption: "",
+      minPrice: "",
+      maxPrice: "",
     });
     setListData(filterAppointments(appointments, "Past"));
+  };
+
+  const handleMinPrice = (event) => {
+    const minPrice = parseInt(event.target.value);
+    if (isNaN(minPrice)) {
+      dispatch(showAlertMessage("Please enter a number"));
+      setOptions({
+        ...options,
+        minPrice: "",
+      });
+    } else {
+      setOptions({
+        ...options,
+        minPrice: minPrice,
+        filterOption: "minPrice",
+      });
+    }
+  };
+  const handleMaxPrice = (event) => {
+    const maxPrice = parseInt(event.target.value);
+    if (isNaN(maxPrice)) {
+      dispatch(showAlertMessage("Please enter a number"));
+      setOptions({
+        ...options,
+        maxPrice: "",
+      });
+    } else {
+      setOptions({
+        ...options,
+        maxPrice: maxPrice,
+        filterOption: "maxPrice",
+      });
+    }
   };
   const nameListItems = [];
 
@@ -216,14 +253,18 @@ export default function ColumnGroupingTable() {
             {nameList && nameListItems}
           </Select>
           <TextField
+            onChange={handleMinPrice}
             id="filled-basic"
             label="Min Total Price"
             variant="filled"
+            value={options.minPrice}
           />
           <TextField
             id="filled-basic"
             label="Max Total Price"
             variant="filled"
+            value={options.maxPrice}
+            onChange={handleMaxPrice}
           />
         </Box>
 

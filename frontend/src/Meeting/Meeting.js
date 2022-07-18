@@ -12,18 +12,22 @@ import {
 import Chat from '../Chat/Chat';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import MeetingInfo from './MeetingInfo';
-import "./Meeting.css";
+import DialogPopUp from '../shared/components/DialogPopUp';
+
+import ConfirmModal from '../shared/components/ConfirmModal';
+import './Meeting.css';
+
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
 
   const [display, setDisplay] = useState('none');
+  const [meetingEndConfirm, setMeetingEndConfirm] = useState(false);
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
 
-  let meetingEnded = false;
   let connectionMade = false;
   let peer_left;
 
@@ -45,9 +49,14 @@ const Meeting = ({ meetingId, socket }) => {
     });
 
     myStream.current = await navigator.mediaDevices.getUserMedia({
-      video: true,
+      // set user media constraints
+      video: false,
       audio: true,
     });
+
+    // myStream.current.getTracks().forEach((track) => {
+    //   console.log(track);
+    // });
 
     if (videoRef.current) {
       videoRef.current.srcObject = myStream.current;
@@ -75,32 +84,10 @@ const Meeting = ({ meetingId, socket }) => {
       } else {
         setDisplay('block');
       }
-      console.log(
-        'ICE state changed to ',
-        peerConnectionRef.current.iceConnectionState
-      );
     };
 
     socket.emit('join_room', meetingId);
   }, [history, meetingId]);
-
-  const handleEndMeeting = () => {
-    // if (connectionMade) {
-    // add router to show alert before redirecting to dashboard
-    meetingEnded = true;
-    localStorage.removeItem('activeMeeting');
-
-    //// remove comment
-    dispatch(postEndMeeting(meetingId));
-    socket.emit('meeting_ended', meetingId);
-    setTimeout(() => {
-      alert('End meeting');
-      window.location.replace('/dashboard');
-    }, 1000);
-    // } else {
-    //   dispatch(showAlertMessage("You must be connected to end meeting"));
-    // }
-  };
 
   useEffect(() => {
     socket.on('welcome', async () => {
@@ -144,26 +131,23 @@ const Meeting = ({ meetingId, socket }) => {
           const user = JSON.parse(localStorage.getItem('user'));
           const activeMeeting = JSON.parse(
             localStorage.getItem('activeMeeting')
-
           );
-          console.log("Active Meeting:", activeMeeting);
+          console.log('Active Meeting:', activeMeeting);
           connectionMade = true;
-          console.log("ICE::::::", ice)
+
           // update video start time here
           // if there is no active meeting, then update the start time
-          
-            console.log("Don is the man:", activeMeeting);
-            if (user.role === "consultant"){
-              dispatch(
-                postStartMeeting({
-                  appointmentData: {
-                    appointmentId: meetingId,
-                    userId: user.userId,
-                  },
-                  history,
-                })
-              );
-            
+
+          if (user.role === 'consultant') {
+            dispatch(
+              postStartMeeting({
+                appointmentData: {
+                  appointmentId: meetingId,
+                  userId: user.userId,
+                },
+                history,
+              })
+            );
           }
         } else {
           peer_left = true;
@@ -174,7 +158,6 @@ const Meeting = ({ meetingId, socket }) => {
       }
     });
     socket.on('peer_left', async (ice) => {
-      console.log('Peer left, closing connection');
       setDisplay('none');
       peerConnectionRef?.current.close();
       peerConnectionRef.current = new RTCPeerConnection({
@@ -197,15 +180,14 @@ const Meeting = ({ meetingId, socket }) => {
 
     init();
 
-    // socket.on("meeting_ended", () => {
-    //   // add router to show alert before redirecting to dashboard
-    //   console.log("Meeting endedMeeting endedMeeting endedMeeting ended");
-    //   alert("Meeting ended");
-    //   localStorage.removeItem("activeMeeting");
-    //   setTimeout(() => {
-    //     window.location.replace("/dashboard");
-    //   }, 2000);
-    // });
+    socket.on('meeting_ended', () => {
+      // add router to show alert before redirecting to dashboard
+
+      localStorage.removeItem('activeMeeting');
+      setTimeout(() => {
+        window.location.replace('/dashboard');
+      }, 700);
+    });
 
     // get past meeting messages
     dispatch(getPastMessages(meetingId));
@@ -242,8 +224,40 @@ const Meeting = ({ meetingId, socket }) => {
     }
   }
 
+  const handleEndMeeting = () => {
+    setMeetingEndConfirm(true);
+  };
+
+  const handleOnCancel = () => {
+    setMeetingEndConfirm(false);
+  };
+
+  const handleOnConfirm = () => {
+    localStorage.removeItem('activeMeeting');
+
+    dispatch(postEndMeeting(meetingId));
+    socket.emit('meeting_ended', meetingId);
+    setMeetingEndConfirm(false);
+    setTimeout(() => {
+      window.location.replace('/dashboard');
+    }, 700);
+  };
+
   return (
     <>
+      {meetingEndConfirm && (
+        <DialogPopUp open={meetingEndConfirm}>
+          {/* <MeetingEnd onCancel={handleOnCancel} onConfirm={handleOnConfirm} /> */}
+          <ConfirmModal
+            onCancel={handleOnCancel}
+            onConfirm={handleOnConfirm}
+            message={'Meeting end ok?'}
+            timeSlot={null}
+            selectedDate={null}
+            consultantInfo={null}
+          />
+        </DialogPopUp>
+      )}
       <Container
         maxWidth="lg"
         color="primary.main"
@@ -263,7 +277,6 @@ const Meeting = ({ meetingId, socket }) => {
               autoPlay
               playsInline
               onClick={handleScreenSwitch}
-              
               sx={{
                 display: { display },
                 border: '2px solid white',
@@ -282,7 +295,9 @@ const Meeting = ({ meetingId, socket }) => {
               display: display === 'none' ? 'block' : 'none',
             }}
           >
-            <PersonOffIcon sx={{ width: '70%', height: '70%', color: "gray" }}></PersonOffIcon>
+            <PersonOffIcon
+              sx={{ width: '70%', height: '70%', color: 'gray' }}
+            ></PersonOffIcon>
           </Grid>
 
           <Grid

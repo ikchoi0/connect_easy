@@ -20,7 +20,6 @@ const socketHandler = (wsServer) => {
         .to([onlineUsers[appointment.peerId]])
         .emit('join_meeting', appointment);
       console.log(appointment);
-
     });
     socket.on('join_room', (roomName) => {
       rooms[socket.id] = roomName;
@@ -50,9 +49,11 @@ const socketHandler = (wsServer) => {
       delete onlineUsers[socketIdToUserId[socket.id]];
       delete socketIdToUserId[socket.id];
     });
+
     socket.on('meeting_ended', (roomName) => {
       socket.to(roomName).emit('meeting_ended');
     });
+
     socket.on('chat', (message, meetingId) => {
       addChatMessage(meetingId, message);
 

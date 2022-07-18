@@ -26,7 +26,7 @@ export const getPastMessages = createAsyncThunk(
 export const postStartMeeting = createAsyncThunk(
   'schedule/postStartMeeting',
   async ({ appointmentData, history }, thunkApi) => {
-    console.log("BOB MARLEY::::::", appointmentData);
+    console.log('BOB MARLEY::::::', appointmentData);
     // pass the appointmentData, userId
     const response = await api.postStartMeeting(appointmentData);
     if (response.error) {
@@ -91,7 +91,7 @@ const meetingSlice = createSlice({
       console.log('postStartMeeting rejected');
     },
     [postEndMeeting.fulfilled]: (state, action) => {
-      // console.log(action.payload);
+      console.log(action.payload);
       console.log('Meeting ended successfully.');
     },
     [postEndMeeting.rejected]: (state, action) => {

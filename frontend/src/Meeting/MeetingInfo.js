@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
-import { Box, Typography } from "@mui/material";
-import moment from "moment";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import TimelapseIcon from "@mui/icons-material/Timelapse";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppointmentByAppointmentId } from '../store/reducers/meetingReducer';
+import { Box, Typography } from '@mui/material';
+import moment from 'moment';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import TimelapseIcon from '@mui/icons-material/Timelapse';
 
 const MeetingInfo = ({ meetingId }) => {
   const dispatch = useDispatch();
@@ -21,11 +21,11 @@ const MeetingInfo = ({ meetingId }) => {
       meetingStartTime = moment(appointmentData.videoStartTime);
     }
     const now = moment(new Date());
-    setTime(now.diff(meetingStartTime, "seconds"));
+    setTime(now.diff(meetingStartTime, 'seconds'));
   }, [appointmentData?.videoStartTime]);
 
-  const timeNow = moment().hour(0).minute(0).second(time).format("HH:mm:ss");
-  console.log("timeNow::::::::::::", timeNow);
+  const timeNow = moment().hour(0).minute(0).second(time).format('HH:mm:ss');
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(time + 1);
@@ -34,20 +34,20 @@ const MeetingInfo = ({ meetingId }) => {
   });
 
   const meetingInfoStyles = {
-    fontSize: "0.9rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    color: "#36454F",
+    fontSize: '0.9rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    color: '#36454F',
   };
 
   return (
     <Box
       sx={{
-        backgroundColor: "#e1e8eb",
-        padding: "2px",
-        borderRadius: "10px",
-        marginBottom: "10px",
+        backgroundColor: '#e1e8eb',
+        padding: '2px',
+        borderRadius: '10px',
+        marginBottom: '10px',
       }}
     >
       <Typography sx={meetingInfoStyles}>
@@ -55,7 +55,7 @@ const MeetingInfo = ({ meetingId }) => {
         <b>Consultant:&nbsp; </b>
         {appointmentData &&
           appointmentData.consultant.firstName +
-            " " +
+            ' ' +
             appointmentData.consultant.lastName}
       </Typography>
       <Typography sx={meetingInfoStyles}>
@@ -63,7 +63,7 @@ const MeetingInfo = ({ meetingId }) => {
         <b>Client:&nbsp; </b>
         {appointmentData &&
           appointmentData.client.firstName +
-            " " +
+            ' ' +
             appointmentData.client.lastName}
       </Typography>
       <Typography sx={meetingInfoStyles}>

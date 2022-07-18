@@ -1,6 +1,6 @@
 import React from 'react';
 import TextFieldWithLabel from '../shared/components/TextFieldWithLabel';
-import Grid from '@mui/material/Grid';
+
 const SchedulerDetailsInputs = ({ description, setDescription }) => {
   return (
     <TextFieldWithLabel

@@ -125,6 +125,7 @@ export default function Availability() {
 
     let isOverlapDb = false;
 
+    //check if the appointment is overlapping with the existing appointments from db
     for (const ap of appointments) {
       if (ap.appointmentBooked || ap.appointmentCancel) {
         continue;
@@ -154,6 +155,8 @@ export default function Availability() {
         break;
       }
     }
+
+    //if overlap with db, show alert message
     if (isOverlapDb) {
       dispatch(showAlertMessage('Appointment overlaps with DB'));
       return;
@@ -163,7 +166,7 @@ export default function Availability() {
       const compareStart = moment(card.appointmentStartTime);
       const compareEnd = moment(card.appointmentEndTime);
 
-      if (compareEnd.isSameOrAfter(compareStart)) {
+      if (compareEnd.isAfter(compareStart)) {
         dispatch(showSuccessMessage('Appointment added successfully'));
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));
@@ -174,6 +177,7 @@ export default function Availability() {
       }
     }
 
+    //if no overlap with db, check  opened appointment from the store
     let isOverlap = false;
     if (openingAppointmentsList.length > 0 && !isOverlapDb) {
       for (const appointment of openingAppointmentsList) {
@@ -182,6 +186,12 @@ export default function Availability() {
         const cardStartTime = moment(card.appointmentStartTime);
         const cardEndTime = moment(card.appointmentEndTime);
 
+        //check if start time is same or after end time
+        if (cardStartTime.isSameOrAfter(cardEndTime)) {
+          dispatch(showAlertMessage('Start time must be before end time'));
+          return;
+        }
+
         if (
           cardStartTime.isBetween(startTime, endTime, 'minutes', '[]') ||
           cardEndTime.isBetween(startTime, endTime, 'minutes', '[]')
@@ -189,12 +199,13 @@ export default function Availability() {
           isOverlap = true;
           break;
         }
+
         if (startTime.isAfter(cardStartTime) && endTime.isBefore(cardEndTime)) {
           isOverlap = true;
           break;
         }
       }
-
+      //if overlap, show alert message
       if (isOverlap) {
         dispatch(
           showAlertMessage('Appointment overlaps with existing appointment')

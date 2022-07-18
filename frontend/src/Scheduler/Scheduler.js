@@ -12,6 +12,7 @@ import {
 } from '../store/reducers/scheduleReducer';
 import { handleAuth } from '../shared/utils/auth';
 import { filterAppointments } from '../shared/utils/filterAppointments';
+
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer

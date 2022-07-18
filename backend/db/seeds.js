@@ -23,7 +23,7 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
         faker.company.catchPhrase().toLowerCase() + " " +
         faker.company.catchPhrase().toLowerCase() + " " +
         faker.company.catchPhrase().toLowerCase() +".",
-      profilePicture: faker.image.people(640, 480, true),
+      profilePicture: "",
       phone: faker.phone.number(),
     },
   });

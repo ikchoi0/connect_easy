@@ -20,6 +20,7 @@ const socketHandler = (wsServer) => {
         .to([onlineUsers[appointment.peerId]])
         .emit("join_meeting", appointment);
       console.log(appointment);
+
     });
     socket.on("join_room", (roomName) => {
       rooms[socket.id] = roomName;

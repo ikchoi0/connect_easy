@@ -37,6 +37,12 @@ export default function Chat({ socket, meetingId }) {
     setValues("");
   };
 
+  const onKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }}
+
+
   const content =
     // messages.length &&
     messages &&
@@ -64,7 +70,6 @@ export default function Chat({ socket, meetingId }) {
       }}
     >
       <Box
-
         sx={{
           height: "420px",
           bgcolor: "white",
@@ -86,6 +91,7 @@ export default function Chat({ socket, meetingId }) {
           id="standard-name"
           label="Enter your message"
           value={values}
+          onKeyPress={onKeyPress}
           onChange={(event) => {
             setValues(event.target.value);
           }}

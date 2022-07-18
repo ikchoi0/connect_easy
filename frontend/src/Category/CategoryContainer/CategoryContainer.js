@@ -42,19 +42,19 @@ export default function CategoryContainer() {
 
   return (
     <Container maxWidth="lg" color="primary.main">
-      <Typography variant="h3" align="center" mt={5} color="#317773">
+      <Typography variant="h3" align="center" mt={5} color="#36454F">
         {category && category.selectedCategory}
       </Typography>
       <Box
         sx={{
-          marginTop: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textTransform: 'none',
-          position: 'relative',
-          borderRadius: '5px',
-          padding: '20px',
+          marginTop: "40px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          textTransform: "none",
+          position: "relative",
+          borderRadius: "5px",
+          padding: "20px",
         }}
       >
         <Grid container spacing={3} display="flex">

@@ -24,8 +24,7 @@ const MeetingInfo = ({ meetingId, startTimer }) => {
     setTime(now.diff(meetingStartTime, 'seconds'));
   }, [appointmentData]);
 
-  const timeNow = moment().hour(0).minute(0).second(time).format('HH:mm:ss');
-  // console.log("timeNow::::::::::::", timeNow);
+  const timeNow = moment().hour(0).minute(0).second(time).format("HH:mm:ss");
   useEffect(() => {
     if (startTimer) {
       const interval = setInterval(() => {

@@ -8,15 +8,15 @@ import {
   postStartMeeting,
   postEndMeeting,
   getPastMessages,
-} from '../store/reducers/meetingReducer';
-import Chat from '../Chat/Chat';
-import PersonOffIcon from '@mui/icons-material/PersonOff';
-import MeetingInfo from './MeetingInfo';
-import DialogPopUp from '../shared/components/DialogPopUp';
-
-import ConfirmModal from '../shared/components/ConfirmModal';
-import { getAppointmentByAppointmentId } from '../store/reducers/meetingReducer';
-import './Meeting.css';
+} from "../store/reducers/meetingReducer";
+import Chat from "../Chat/Chat";
+import PersonOffIcon from "@mui/icons-material/PersonOff";
+import MeetingInfo from "./MeetingInfo";
+import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
+import "./Meeting.css";
+import Draggable from "react-draggable";
+import DialogPopUp from "../shared/components/DialogPopUp";
+import ConfirmModal from "../shared/components/ConfirmModal";
 
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const Meeting = ({ meetingId, socket }) => {
 
     myStream.current = await navigator.mediaDevices.getUserMedia({
       // set user media constraints
-      video: false,
+      video: true,
       audio: true,
     });
 
@@ -233,7 +233,7 @@ const Meeting = ({ meetingId, socket }) => {
   return (
     <>
       {meetingEndConfirm && (
-        <DialogPopUp open={meetingEndConfirm}>
+        <DialogPopUp maxWidth="sm" open={meetingEndConfirm}>
           {/* <MeetingEnd onCancel={handleOnCancel} onConfirm={handleOnConfirm} /> */}
           <ConfirmModal
             onCancel={handleOnCancel}
@@ -312,20 +312,23 @@ const Meeting = ({ meetingId, socket }) => {
 
           {/* 🎃 VIDEO 2 */}
           <Grid item md={4}>
-            <CardMedia
-              component="video"
-              ref={videoRef}
-              autoPlay
-              playsInline
-              sx={{
-                position: 'absolute',
-                width: '300px',
-                top: '52.8%',
-                right: '35.5%',
-                border: '2px solid white',
-                borderRadius: '10px',
-              }}
-            ></CardMedia>
+            <Draggable bounds={{ left: -450, top: -400, right: 400, bottom: 350 }}>
+              <CardMedia
+                component="video"
+                ref={videoRef}
+                autoPlay
+                playsInline
+                sx={{
+                  position: "absolute",
+                  width: "300px",
+                  top: "52.8%",
+                  right: "35.5%",
+                  border: "2px solid white",
+                  borderRadius: "10px",
+                  zIndex: "999",
+                }}
+              ></CardMedia>
+            </Draggable>
           </Grid>
         </Grid>
       </Container>

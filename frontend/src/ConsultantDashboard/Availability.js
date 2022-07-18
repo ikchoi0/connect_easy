@@ -1,40 +1,40 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { v4 as uuid } from 'uuid';
-import { Container } from '@mui/material';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import Stack from '@mui/material/Stack';
-import moment from 'moment';
-import AppointmentCard from '../shared/components/AppointmentCard';
-import { useSelector, useDispatch } from 'react-redux';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { v4 as uuid } from "uuid";
+import { Container } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import Stack from "@mui/material/Stack";
+import moment from "moment";
+import AppointmentCard from "../shared/components/AppointmentCard";
+import { useSelector, useDispatch } from "react-redux";
 import {
   setOneAppointment,
   deleteOneOpeningAppointment,
   createOpenAppointments,
   clearOpeningAppointmentsList,
   getAllAppointments,
-} from '../store/reducers/scheduleReducer';
+} from "../store/reducers/scheduleReducer";
 
 import {
   showAlertMessage,
   showSuccessMessage,
-} from '../store/reducers/alertReducer';
+} from "../store/reducers/alertReducer";
 
 export default function Availability() {
   const { openingAppointmentsList } = useSelector((state) => state.scheduler);
   const { appointments } = useSelector((state) => state.scheduler);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [date, setDate] = useState(moment().toISOString());
-  const [startTime, setStartTime] = useState(moment().toISOString());
+  const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(null);
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
 
@@ -58,9 +58,9 @@ export default function Availability() {
   ]);
 
   const parseDate = (value, setValue) => {
-    const time = moment(value).format('HH:mm');
-    const newDate = moment(date).format('YYYY-MM-DD');
-    const result = moment(newDate + ' ' + time).format('YYYY-MM-DD HH:mm');
+    const time = moment(value).format("HH:mm");
+    const newDate = moment(date).format("YYYY-MM-DD");
+    const result = moment(newDate + " " + time).format("YYYY-MM-DD HH:mm");
 
     setValue(result);
   };
@@ -87,24 +87,24 @@ export default function Availability() {
         id={appointment.key}
         // description={appointment.description}
         date={moment.utc(appointment.date).local(true).format()}
-        startTime={moment(appointment.appointmentStartTime).format('h:mm a')}
-        endTime={moment(appointment.appointmentEndTime).format('h:mm a')}
+        startTime={moment(appointment.appointmentStartTime).format("h:mm a")}
+        endTime={moment(appointment.appointmentEndTime).format("h:mm a")}
         handleCardButton={handleDeleteAppointmentOnClick}
-        buttonLabel={'Delete'}
-        unbookedString={''}
+        buttonLabel={"Delete"}
+        unbookedString={""}
       />
     );
   });
 
   const handleCreateButton = () => {
-    const consultant = localStorage.getItem('user');
+    const consultant = localStorage.getItem("user");
     const consultantId = JSON.parse(consultant).userId;
 
     const key = uuid();
 
-    const newDate = moment(date).format('YYYY-MM-DD');
-    const newStartTime = moment(startTime).format('HH:mm');
-    const newEndTime = moment(endTime).format('HH:mm');
+    const newDate = moment(date).format("YYYY-MM-DD");
+    const newStartTime = moment(startTime).format("HH:mm");
+    const newEndTime = moment(endTime).format("HH:mm");
 
     let card = {
       key,
@@ -115,10 +115,10 @@ export default function Availability() {
         .seconds(0)
         .milliseconds(0)
         .toISOString(true),
-      appointmentStartTime: moment(newDate + ' ' + newStartTime).toISOString(
+      appointmentStartTime: moment(newDate + " " + newStartTime).toISOString(
         true
       ),
-      appointmentEndTime: moment(newDate + ' ' + newEndTime).toISOString(true),
+      appointmentEndTime: moment(newDate + " " + newEndTime).toISOString(true),
     };
 
     ///////////////////////////////
@@ -129,19 +129,19 @@ export default function Availability() {
       if (ap.appointmentBooked || ap.appointmentCancel) {
         continue;
       }
-      const dbDate = moment(ap.date).format('YYYY-MM-DD');
-      const dbStartTime = moment(ap.start).format('HH:mm');
-      const dbEndTime = moment(ap.end).format('HH:mm');
+      const dbDate = moment(ap.date).format("YYYY-MM-DD");
+      const dbStartTime = moment(ap.start).format("HH:mm");
+      const dbEndTime = moment(ap.end).format("HH:mm");
 
-      const newStartTime = moment(dbDate + ' ' + dbStartTime);
-      const newEndTime = moment(dbDate + ' ' + dbEndTime);
+      const newStartTime = moment(dbDate + " " + dbStartTime);
+      const newEndTime = moment(dbDate + " " + dbEndTime);
 
       const cardStartTime = moment(card.appointmentStartTime);
       const cardEndTime = moment(card.appointmentEndTime);
 
       if (
-        cardStartTime.isBetween(newStartTime, newEndTime, 'minutes', '[]') ||
-        cardEndTime.isBetween(newStartTime, newEndTime, 'minutes', '[]')
+        cardStartTime.isBetween(newStartTime, newEndTime, "minutes", "[]") ||
+        cardEndTime.isBetween(newStartTime, newEndTime, "minutes", "[]")
       ) {
         isOverlapDb = true;
         break;
@@ -155,7 +155,7 @@ export default function Availability() {
       }
     }
     if (isOverlapDb) {
-      dispatch(showAlertMessage('Appointment overlaps with DB'));
+      dispatch(showAlertMessage("Appointment overlaps with DB"));
       return;
     }
 
@@ -163,13 +163,13 @@ export default function Availability() {
       const compareStart = moment(card.appointmentStartTime);
       const compareEnd = moment(card.appointmentEndTime);
 
-      if (compareEnd.isSameOrAfter(compareStart)) {
-        dispatch(showSuccessMessage('Appointment added successfully'));
+      if (compareEnd.isAfter(compareStart)) {
+        dispatch(showSuccessMessage("Appointment added successfully"));
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));
         return;
       } else {
-        dispatch(showAlertMessage('Start time must be before end time'));
+        dispatch(showAlertMessage("Start time must be before end time"));
         return;
       }
     }
@@ -183,8 +183,8 @@ export default function Availability() {
         const cardEndTime = moment(card.appointmentEndTime);
 
         if (
-          cardStartTime.isBetween(startTime, endTime, 'minutes', '[]') ||
-          cardEndTime.isBetween(startTime, endTime, 'minutes', '[]')
+          cardStartTime.isBetween(startTime, endTime, "minutes", "[]") ||
+          cardEndTime.isBetween(startTime, endTime, "minutes", "[]")
         ) {
           isOverlap = true;
           break;
@@ -197,12 +197,11 @@ export default function Availability() {
 
       if (isOverlap) {
         dispatch(
-          showAlertMessage('Appointment overlaps with existing appointment')
+          showAlertMessage("Appointment overlaps with existing appointment")
         );
         return;
       } else {
-        console.log(card);
-        dispatch(showSuccessMessage('Appointment created'));
+        dispatch(showSuccessMessage("Appointment created"));
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));
         setStartTime(moment(endTime).toISOString());
@@ -233,8 +232,8 @@ export default function Availability() {
 
           <Grid
             sx={{
-              display: 'flex',
-              justifyContent: 'space-around',
+              display: "flex",
+              justifyContent: "space-around",
             }}
           >
             <DesktopDatePicker
@@ -251,11 +250,11 @@ export default function Availability() {
               onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
               shouldDisableTime={(timeValue, clockType) => {
-                if (clockType === 'minutes' && timeValue % 5) {
+                if (clockType === "minutes" && timeValue % 5) {
                   return true;
                 }
 
-                return false;
+                // return false;
               }}
             />
             <TimePicker
@@ -264,7 +263,7 @@ export default function Availability() {
               onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
               shouldDisableTime={(timeValue, clockType) => {
-                if (clockType === 'minutes' && timeValue % 5) {
+                if (clockType === "minutes" && timeValue % 5) {
                   return true;
                 }
 

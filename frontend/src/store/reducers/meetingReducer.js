@@ -1,18 +1,17 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '../../api';
-import { showAlertMessage, showSuccessMessage } from './alertReducer';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as api from "../../api";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 
 const meetingState = {
-  meetingId: '',
+  meetingId: "",
   appointmentData: null,
   conversations: [],
 };
 
 export const getPastMessages = createAsyncThunk(
-  'meeting/getPastMessages',
+  "meeting/getPastMessages",
   async (meetingId, thunkApi) => {
     const response = await api.getPastMessages(meetingId);
-    console.log(response.data);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
@@ -24,9 +23,8 @@ export const getPastMessages = createAsyncThunk(
 // updates video start time in appointment table
 // updates hasActiveMeeting, activeMeetingId in user table
 export const postStartMeeting = createAsyncThunk(
-  'schedule/postStartMeeting',
+  "schedule/postStartMeeting",
   async ({ appointmentData, history }, thunkApi) => {
-    console.log("BOB MARLEY::::::", appointmentData);
     // pass the appointmentData, userId
     const response = await api.postStartMeeting(appointmentData);
     if (response.error) {
@@ -34,7 +32,7 @@ export const postStartMeeting = createAsyncThunk(
       return thunkApi.rejectWithValue(response);
     } else {
       thunkApi.dispatch(
-        showSuccessMessage('Your are now connected to the meeting')
+        showSuccessMessage("Your are now connected to the meeting")
       );
       return response.data;
     }
@@ -43,27 +41,26 @@ export const postStartMeeting = createAsyncThunk(
 // updates video end time in appointment table
 // updates hasActiveMeeting, activeMeetingId in user table
 export const postEndMeeting = createAsyncThunk(
-  'schedule/postEndMeeting',
+  "schedule/postEndMeeting",
   async (appointmentData, thunkApi) => {
     // pass appointmentId to backend
-    console.log('postEndMeeting', appointmentData);
     const response = await api.postEndMeeting(appointmentData);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.data.message));
       return thunkApi.rejectWithValue(response);
     } else {
       console.log(response);
-      thunkApi.dispatch(showSuccessMessage('Thank you! Meeting ended'));
+      thunkApi.dispatch(showSuccessMessage("Thank you! Meeting ended"));
       return response.data;
     }
   }
 );
 
 export const getAppointmentByAppointmentId = createAsyncThunk(
-  'schedule/getAppointmentByAppointmentId',
+  "schedule/getAppointmentByAppointmentId",
   async (appointmentData, thunkApi) => {
     // pass appointmentId to backend
-    console.log('getAppointmentByAppointmentId', appointmentData);
+    console.log("getAppointmentByAppointmentId", appointmentData);
     const response = await api.getAppointmentByAppointmentId(appointmentData);
     if (response.error) {
       return thunkApi.rejectWithValue(response);
@@ -74,7 +71,7 @@ export const getAppointmentByAppointmentId = createAsyncThunk(
 );
 
 const meetingSlice = createSlice({
-  name: 'meeting',
+  name: "meeting",
   initialState: meetingState,
 
   reducers: {
@@ -85,29 +82,29 @@ const meetingSlice = createSlice({
   extraReducers: {
     [postStartMeeting.fulfilled]: (state, action) => {
       // console.log(action.payload);
-      console.log('Meeting started successfully.');
+      console.log("Meeting started successfully.");
     },
     [postStartMeeting.rejected]: (state, action) => {
-      console.log('postStartMeeting rejected');
+      console.log("postStartMeeting rejected");
     },
     [postEndMeeting.fulfilled]: (state, action) => {
       // console.log(action.payload);
-      console.log('Meeting ended successfully.');
+      console.log("Meeting ended successfully.");
     },
     [postEndMeeting.rejected]: (state, action) => {
-      console.log('postEndMeeting rejected');
+      console.log("postEndMeeting rejected");
     },
     [getAppointmentByAppointmentId.fulfilled]: (state, action) => {
       // console.log(action.payload);
       state.appointmentData = action.payload;
-      console.log('Single appointment retrieved.');
+      // console.log('Single appointment retrieved.');
     },
     [getAppointmentByAppointmentId.rejected]: (state, action) => {
-      console.log('Single appointment rejected');
+      console.log("Single appointment rejected");
     },
     [getPastMessages.fulfilled]: (state, action) => {
       state.conversations = action.payload;
-      console.log('Past messages retrieved.', action.payload);
+      // console.log('Past messages retrieved.', action.payload);
     },
   },
 });

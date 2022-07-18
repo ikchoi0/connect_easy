@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { useEffect, useRef } from 'react';
-import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import VideoCallButtons from './VideoCallButtons';
@@ -8,27 +7,28 @@ import { Container, CardMedia, Grid } from '@mui/material';
 import {
   postStartMeeting,
   postEndMeeting,
+  getPastMessages,
 } from '../store/reducers/meetingReducer';
 import Chat from '../Chat/Chat';
-import { showAlertMessage } from '../store/reducers/alertReducer';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import MeetingInfo from './MeetingInfo';
 import "./Meeting.css";
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
-  // const socket = io("http://localhost:5002");
-  // const socket = io("https://connect-easy-rid.herokuapp.com");
-  // const [videoRef, setVideoRef] = useState(null);
-  // const [peerVideoRef, setPeerVideoRef] = useState(null);
+
   const [display, setDisplay] = useState('none');
   const history = useHistory();
   const peerVideoRef = useRef(null);
   const videoRef = useRef(null);
   const myStream = useRef(null);
   const peerConnectionRef = useRef(null);
+
   let meetingEnded = false;
   let connectionMade = false;
   let peer_left;
+
+  const { conversations } = useSelector((state) => state.meeting);
+
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
@@ -207,6 +207,9 @@ const Meeting = ({ meetingId, socket }) => {
     //   }, 2000);
     // });
 
+    // get past meeting messages
+    dispatch(getPastMessages(meetingId));
+
     return () => {
       myStream.current?.getTracks().forEach((track) => track.stop());
       peerConnectionRef.current.close();
@@ -326,7 +329,11 @@ const Meeting = ({ meetingId, socket }) => {
             </Box> */}
 
             {/* 🎃 CHAT */}
-            <Chat socket={socket} meetingId={meetingId} />
+            <Chat
+              socket={socket}
+              meetingId={meetingId}
+              pastMessages={conversations ? conversations : []}
+            />
           </Grid>
 
           {/* 🎃 BUTTONS */}

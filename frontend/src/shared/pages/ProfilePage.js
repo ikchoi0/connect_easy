@@ -14,7 +14,7 @@ import {
 
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import CancelIcon from '@mui/icons-material/Cancel';
+
 import { Avatar } from '@mui/material';
 import TextFieldWithLabel from '../components/TextFieldWithLabel';
 
@@ -56,7 +56,6 @@ const ProfilePage = () => {
     setCountry(userProfile.country);
     setPostalCode(userProfile.postalCode);
     setPrice(userProfile.price);
-    setSelectedCategory('');
     setOriginalImage(userProfile.profilePicture);
     setSelectedCategory(userProfile.category);
   };
@@ -282,16 +281,16 @@ const ProfilePage = () => {
             <FormHelperText>Required</FormHelperText>
           </FormControl>
 
-          <Box sx={{ display: 'flex', width: '100%', gap: '2rem' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row-reverse',
+              width: '100%',
+              gap: '2rem',
+            }}
+          >
             <Button
-              variant="contained"
-              type="submit"
-              color="secondary"
-              startIcon={<CancelIcon />}
-            >
-              Cancel
-            </Button>
-            <Button
+              disabled={userProfile.isSaving}
               onClick={handleOnSaveButtonClick}
               variant="contained"
               type="submit"

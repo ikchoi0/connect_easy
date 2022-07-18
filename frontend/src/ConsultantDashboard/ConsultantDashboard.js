@@ -42,7 +42,7 @@ const menuItems = [
   },
   { id: "Availability", icon: <AddCircleOutlineIcon /> },
   { id: "Calendar", icon: <CalendarMonthIcon /> },
-  { id: "Payments", icon: <PaymentIcon /> },
+  { id: "Invoice", icon: <PaymentIcon /> },
   { id: "Settings", icon: <SettingsApplicationsIcon /> },
   // { id: "Meeting", icon: <VideoCameraFrontIcon /> },
 ];

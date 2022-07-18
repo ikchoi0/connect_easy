@@ -34,19 +34,7 @@ const postEndMeeting = async (req, res) => {
         activeMeetingId: "",
       };
       await appointment.consultant.save();
-      // await appointment.client.updateOne({
-      //   options: {
-      //     hasActiveMeeting: false,
-      //     activeMeetingId: "",
-      //   },
-      // });
 
-      // await appointment.consultant.updateOne({
-      //   options: {
-      //     hasActiveMeeting: false,
-      //     activeMeetingId: "",
-      //   },
-      // });
       return res.status(200).send({
         data: { appointment },
         message: "Meeting ended and appointment was updated successfully",

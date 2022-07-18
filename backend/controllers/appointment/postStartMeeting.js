@@ -4,6 +4,7 @@ const Types = require("mongoose").Types;
 
 const postStartMeeting = async (req, res) => {
   try {
+    console.log("postStartMeeting", req.body);
     const { appointmentId, userId } = req.body;
     const appointment = await Appointment.findById(
       Types.ObjectId(appointmentId)
@@ -15,7 +16,10 @@ const postStartMeeting = async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-    if (!appointment.hasOwnProperty("videoStartTime")) {
+    if (
+      !appointment.hasOwnProperty("videoStartTime") &&
+      !appointment.videoStartTime
+    ) {
       appointment.videoStartTime = new Date();
       await appointment.save();
     }

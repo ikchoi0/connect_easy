@@ -12,6 +12,7 @@ import {
 import Chat from "../Chat/Chat";
 import PersonOffIcon from "@mui/icons-material/PersonOff";
 import MeetingInfo from "./MeetingInfo";
+import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
 import "./Meeting.css";
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const Meeting = ({ meetingId, socket }) => {
   let peer_left;
   let alertFlag = false;
   const { conversations } = useSelector((state) => state.meeting);
-
+  const { appointmentData } = useSelector((state) => state.meeting);
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
@@ -75,10 +76,10 @@ const Meeting = ({ meetingId, socket }) => {
       } else {
         setDisplay("block");
       }
-      console.log(
-        "ICE state changed to ",
-        peerConnectionRef.current.iceConnectionState
-      );
+      // console.log(
+      //   "ICE state changed to ",
+      //   peerConnectionRef.current.iceConnectionState
+      // );
     };
 
     socket.emit("join_room", meetingId);
@@ -87,11 +88,22 @@ const Meeting = ({ meetingId, socket }) => {
   const handleEndMeeting = () => {
     // if (connectionMade) {
     // add router to show alert before redirecting to dashboard
-    meetingEnded = true;
-    localStorage.removeItem("activeMeeting");
+    const activeMeeting = JSON.parse(localStorage.getItem("activeMeeting"));
+    const user = JSON.parse(localStorage.getItem("user"));
+    // if (
+    //   user.role === "consultant"
+    //   // activeMeeting &&
+    //   // !appointmentData.videoEndTime
+    // ) {
+    //   console.log("end time:", appointmentData);
 
     //// remove comment
     dispatch(postEndMeeting(meetingId));
+    // }
+    meetingEnded = true;
+    localStorage.removeItem("activeMeeting");
+    //// remove comment
+    // dispatch(postEndMeeting(meetingId));
     socket.emit("meeting_ended", meetingId);
     setTimeout(() => {
       if (!alertFlag) {
@@ -106,6 +118,7 @@ const Meeting = ({ meetingId, socket }) => {
   };
 
   useEffect(() => {
+    dispatch(getAppointmentByAppointmentId(meetingId));
     socket.on("welcome", async () => {
       try {
         const offer = await peerConnectionRef.current.createOffer({
@@ -148,24 +161,29 @@ const Meeting = ({ meetingId, socket }) => {
           const activeMeeting = JSON.parse(
             localStorage.getItem("activeMeeting")
           );
-          console.log("Active Meeting:", activeMeeting);
+          // console.log("Active Meeting:", activeMeeting);
           connectionMade = true;
-          console.log("ICE::::::", ice);
+          // console.log("ICE::::::", ice);
           // update video start time here
           // if there is no active meeting, then update the start time
 
-          console.log("Don is the man:", activeMeeting);
-          if (user.role === "consultant" && !activeMeeting) {
-            dispatch(
-              postStartMeeting({
-                appointmentData: {
-                  appointmentId: meetingId,
-                  userId: user.userId,
-                },
-                history,
-              })
-            );
-          }
+          // if (
+          //   user.role === "consultant"
+          //   // !activeMeeting &&
+          //   // !appointmentData.videoStartTime
+          // ) {
+          //   console.log("start time:", appointmentData);
+          //   console.log("herererre");
+          dispatch(
+            postStartMeeting({
+              appointmentData: {
+                appointmentId: meetingId,
+                userId: user.userId,
+              },
+              history,
+            })
+          );
+          // }
         } else {
           peer_left = true;
         }

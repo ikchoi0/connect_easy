@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import Dialog from '@mui/material/Dialog';
+import Dialog from "@mui/material/Dialog";
 
-const DialogPopUp = ({ open, onClose, children }) => {
+const DialogPopUp = ({ open, onClose, children, maxWidth = "xl" }) => {
   return (
     <Dialog
       fullWidth={true}
-      maxWidth="xl"
+      maxWidth={maxWidth}
       open={open}
       onClose={onClose}
       aria-labelledby="responsive-dialog-title"

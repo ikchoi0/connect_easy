@@ -1,12 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const auth = require('../middleware/auth');
-const User = require('../models/user');
-const Category = require('../models/category');
-const { $where } = require('../models/message');
-const Types = require('mongoose').Types;
+const auth = require("../middleware/auth");
+const User = require("../models/user");
+const Category = require("../models/category");
+const Types = require("mongoose").Types;
 
-router.patch('/edit', auth(['consultant']), async (req, res) => {
+router.patch("/edit", auth(["consultant"]), async (req, res) => {
   const {
     firstName,
     lastName,
@@ -25,7 +24,7 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (!user) {
-    return res.status(404).send('User not found');
+    return res.status(404).send("User not found");
   }
 
   // remove current user from old category
@@ -44,10 +43,10 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   const category = await Category.findOne({
     _id: Types.ObjectId(selectedCategory),
     users: { _id: Types.ObjectId(user._id) },
-  }).populate('users');
+  }).populate("users");
 
   if (!category) {
-    console.log('user not found in category will do update category');
+    console.log("user not found in category will do update category");
     const newCategory = await Category.findOne({
       _id: Types.ObjectId(selectedCategory),
     });
@@ -76,8 +75,8 @@ router.patch('/edit', auth(['consultant']), async (req, res) => {
   return res.send({ user });
 });
 
-router.get('/profile', auth(['consultant']), async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password');
+router.get("/profile", auth(["consultant"]), async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
 
   // const category = await Category.findOne({
   //   users: { $elemMatch: { email: user.email } },
@@ -87,7 +86,7 @@ router.get('/profile', auth(['consultant']), async (req, res) => {
   });
 
   if (!user || !category) {
-    return res.status(404).send('User or category not found');
+    return res.status(404).send("User or category not found");
   }
 
   return res.send({ user, categoryId: category._id });

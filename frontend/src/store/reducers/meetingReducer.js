@@ -12,7 +12,6 @@ export const getPastMessages = createAsyncThunk(
   'meeting/getPastMessages',
   async (meetingId, thunkApi) => {
     const response = await api.getPastMessages(meetingId);
-    console.log(response.data);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
@@ -26,7 +25,6 @@ export const getPastMessages = createAsyncThunk(
 export const postStartMeeting = createAsyncThunk(
   'schedule/postStartMeeting',
   async ({ appointmentData, history }, thunkApi) => {
-    console.log('BOB MARLEY::::::', appointmentData);
     // pass the appointmentData, userId
     const response = await api.postStartMeeting(appointmentData);
     if (response.error) {
@@ -46,7 +44,6 @@ export const postEndMeeting = createAsyncThunk(
   'schedule/postEndMeeting',
   async (appointmentData, thunkApi) => {
     // pass appointmentId to backend
-    console.log('postEndMeeting', appointmentData);
     const response = await api.postEndMeeting(appointmentData);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.data.message));
@@ -91,7 +88,7 @@ const meetingSlice = createSlice({
       console.log('postStartMeeting rejected');
     },
     [postEndMeeting.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       console.log('Meeting ended successfully.');
     },
     [postEndMeeting.rejected]: (state, action) => {
@@ -100,14 +97,14 @@ const meetingSlice = createSlice({
     [getAppointmentByAppointmentId.fulfilled]: (state, action) => {
       // console.log(action.payload);
       state.appointmentData = action.payload;
-      console.log('Single appointment retrieved.');
+      // console.log('Single appointment retrieved.');
     },
     [getAppointmentByAppointmentId.rejected]: (state, action) => {
       console.log('Single appointment rejected');
     },
     [getPastMessages.fulfilled]: (state, action) => {
       state.conversations = action.payload;
-      console.log('Past messages retrieved.', action.payload);
+      // console.log('Past messages retrieved.', action.payload);
     },
   },
 });

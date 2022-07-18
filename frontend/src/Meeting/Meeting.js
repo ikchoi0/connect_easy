@@ -15,10 +15,12 @@ import MeetingInfo from './MeetingInfo';
 import DialogPopUp from '../shared/components/DialogPopUp';
 
 import ConfirmModal from '../shared/components/ConfirmModal';
+import { getAppointmentByAppointmentId } from '../store/reducers/meetingReducer';
 import './Meeting.css';
 
 const Meeting = ({ meetingId, socket }) => {
   const dispatch = useDispatch();
+  const [startTimer, setStartTimer] = useState(false);
 
   const [display, setDisplay] = useState('none');
   const [meetingEndConfirm, setMeetingEndConfirm] = useState(false);
@@ -30,9 +32,9 @@ const Meeting = ({ meetingId, socket }) => {
 
   let connectionMade = false;
   let peer_left;
-
+  let alertFlag = false;
   const { conversations } = useSelector((state) => state.meeting);
-
+  const { appointmentData } = useSelector((state) => state.meeting);
   const init = useCallback(async () => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
@@ -53,10 +55,6 @@ const Meeting = ({ meetingId, socket }) => {
       video: false,
       audio: true,
     });
-
-    // myStream.current.getTracks().forEach((track) => {
-    //   console.log(track);
-    // });
 
     if (videoRef.current) {
       videoRef.current.srcObject = myStream.current;
@@ -90,6 +88,7 @@ const Meeting = ({ meetingId, socket }) => {
   }, [history, meetingId]);
 
   useEffect(() => {
+    dispatch(getAppointmentByAppointmentId(meetingId));
     socket.on('welcome', async () => {
       try {
         const offer = await peerConnectionRef.current.createOffer({
@@ -107,10 +106,7 @@ const Meeting = ({ meetingId, socket }) => {
       try {
         await peerConnectionRef.current.setRemoteDescription(offer);
         const answer = await peerConnectionRef.current.createAnswer();
-        // console.log("Received offer");
         await peerConnectionRef.current?.setLocalDescription(answer);
-
-        // console.log("Sending answer");
         socket.emit('answer', answer, meetingId);
       } catch (error) {
         console.log(error);
@@ -132,23 +128,18 @@ const Meeting = ({ meetingId, socket }) => {
           const activeMeeting = JSON.parse(
             localStorage.getItem('activeMeeting')
           );
-          console.log('Active Meeting:', activeMeeting);
           connectionMade = true;
-
-          // update video start time here
-          // if there is no active meeting, then update the start time
-
-          if (user.role === 'consultant') {
-            dispatch(
-              postStartMeeting({
-                appointmentData: {
-                  appointmentId: meetingId,
-                  userId: user.userId,
-                },
-                history,
-              })
-            );
-          }
+          setStartTimer(true);
+          dispatch(
+            postStartMeeting({
+              appointmentData: {
+                appointmentId: meetingId,
+                userId: user.userId,
+              },
+              history,
+            })
+          );
+          // }
         } else {
           peer_left = true;
         }
@@ -158,6 +149,7 @@ const Meeting = ({ meetingId, socket }) => {
       }
     });
     socket.on('peer_left', async (ice) => {
+      console.log('Peer left, closing connection');
       setDisplay('none');
       peerConnectionRef?.current.close();
       peerConnectionRef.current = new RTCPeerConnection({
@@ -202,11 +194,6 @@ const Meeting = ({ meetingId, socket }) => {
       if (!connectionMade) {
         localStorage.removeItem('activeMeeting');
       }
-      /**
-       * on dismounting, remove localstorage activeMeeting only when:
-       * 1. the connection was never made
-       * 2. connection was made and peer left (no one is in the room)
-       */
     };
   }, [meetingId, init]);
 
@@ -265,7 +252,6 @@ const Meeting = ({ meetingId, socket }) => {
         sx={{
           position: 'absolute',
           left: '25%',
-          // right: "auto",
         }}
       >
         <Grid container spacing={2} sx={{}}>
@@ -309,40 +295,7 @@ const Meeting = ({ meetingId, socket }) => {
             }}
           >
             {/* 🎃 MEETING INFO */}
-            <MeetingInfo meetingId={meetingId} />
-            {/* <Box
-            <Box
-              sx={{
-                backgroundColor: "#e1e8eb",
-                padding: "2px",
-                borderRadius: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <Typography sx={meetingInfoStyles}>
-                <AccountBoxIcon />
-                {appointmentData &&
-                  appointmentData.client.firstName +
-                    " " +
-                    appointmentData.client.lastName}
-
-              </Typography>
-
-              <Typography sx={meetingInfoStyles}>
-                <AccountBoxIcon />
-                {appointmentData &&
-                  appointmentData.consultant.firstName +
-                    " " +
-                    appointmentData.consultant.lastName}
-
-              </Typography>
-
-              <Typography sx={meetingInfoStyles}>
-                <TimelapseIcon />
-                Time elapsed here...or remaining
-              </Typography>
-            </Box> */}
-
+            <MeetingInfo meetingId={meetingId} startTimer={startTimer} />
             {/* 🎃 CHAT */}
             <Chat
               socket={socket}

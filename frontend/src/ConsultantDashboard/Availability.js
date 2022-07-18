@@ -34,7 +34,7 @@ export default function Availability() {
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [date, setDate] = useState(moment().toISOString());
-  const [startTime, setStartTime] = useState(moment().toISOString());
+  const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(null);
   const [isNewAppointmentValid, setIsNewAppointmentValid] = useState(false);
 
@@ -212,7 +212,6 @@ export default function Availability() {
         );
         return;
       } else {
-        console.log(card);
         dispatch(showSuccessMessage('Appointment created'));
         dispatch(setOneAppointment(card));
         dispatch(getAllAppointments(user.userId));
@@ -266,7 +265,7 @@ export default function Availability() {
                   return true;
                 }
 
-                return false;
+                // return false;
               }}
             />
             <TimePicker

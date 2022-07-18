@@ -1,7 +1,7 @@
 const Types = require('mongoose').Types;
 const Appointment = require('../../models/appointment');
 const moment = require('moment');
-
+const COLORS = ['grey'];
 const getAllAppointments = async (req, res) => {
   try {
     const { consultantId } = req.params;
@@ -95,6 +95,7 @@ const getAllAppointments = async (req, res) => {
         // isMeetingLive: appointment.isMeetingLive,
         peerId: appointment.client?._id,
         consultantPrice: appointment.consultant.options.price,
+        chatCount: appointment.conversation.length,
       };
     });
 

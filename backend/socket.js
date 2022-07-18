@@ -19,7 +19,6 @@ const socketHandler = (wsServer) => {
       socket
         .to([onlineUsers[appointment.peerId]])
         .emit('join_meeting', appointment);
-      console.log(appointment);
     });
     socket.on('join_room', (roomName) => {
       rooms[socket.id] = roomName;
@@ -40,8 +39,6 @@ const socketHandler = (wsServer) => {
     });
 
     socket.on('disconnect', () => {
-      7;
-
       const roomName = rooms[socket.id];
 
       delete rooms[socket.id];

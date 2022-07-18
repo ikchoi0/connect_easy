@@ -7,29 +7,44 @@ export const filterAppointmentsByOptions = (
   minPrice,
   maxPrice
 ) => {
-  let filteredAppointmentsList;
-  switch (filterOptions) {
-    case "name":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        if (role === "consultant") {
-          return appointment.client === name;
-        } else {
-          return appointment.consultant === name;
-        }
-      });
-      break;
-    case "minPrice":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        return calculateTotalPrice(appointment) >= minPrice;
-      });
-      break;
-    case "maxPrice":
-      filteredAppointmentsList = appointments.filter((appointment) => {
-        return calculateTotalPrice(appointment) <= maxPrice;
-      });
-      break;
-    default:
-      return appointments;
+  let filteredAppointmentsList = appointments;
+  if (filterOptions) {
+    for (let option of filterOptions) {
+      switch (option) {
+        case "name":
+          if (name === "Show All") {
+            filteredAppointmentsList = appointments;
+          } else {
+            filteredAppointmentsList = filteredAppointmentsList.filter(
+              (appointment) => {
+                if (role === "consultant") {
+                  return appointment.client === name;
+                } else {
+                  return appointment.consultant === name;
+                }
+              }
+            );
+          }
+          break;
+        case "minPrice":
+          filteredAppointmentsList = filteredAppointmentsList.filter(
+            (appointment) => {
+              return calculateTotalPrice(appointment) >= minPrice;
+            }
+          );
+          break;
+        case "maxPrice":
+          filteredAppointmentsList = filteredAppointmentsList.filter(
+            (appointment) => {
+              return calculateTotalPrice(appointment) <= maxPrice;
+            }
+          );
+          break;
+        default:
+          return filteredAppointmentsList;
+      }
+    }
   }
+
   return filteredAppointmentsList;
 };

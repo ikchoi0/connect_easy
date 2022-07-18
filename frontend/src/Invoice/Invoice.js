@@ -13,6 +13,10 @@ import {
   getAllAppointments,
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
+import {
+  getPastMessages,
+  updateMeetingId,
+} from "../store/reducers/meetingReducer";
 import { filterAppointments } from "../shared/utils/filterAppointments";
 import { filterAppointmentsByOptions } from "../shared/utils/filterAppointmentsByOptions";
 import {
@@ -25,27 +29,37 @@ import {
   Button,
   TextField,
   Box,
+  DialogTitle,
 } from "@mui/material";
 import { sortHelper } from "../shared/utils/sortHelper";
 import { calculateTotalPrice } from "../shared/utils/calculator";
 import { showAlertMessage } from "../store/reducers/alertReducer";
+import DialogPopUp from "../shared/components/DialogPopUp";
+import Chat from "../Chat/Chat";
+
 let filteredAppointments = [];
-export default function ColumnGroupingTable() {
+export default function ColumnGroupingTable({ socket }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [listData, setListData] = useState([]);
   const [show, setShow] = useState("Show Invoice");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [open, setOpen] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const [options, setOptions] = useState({
     sortName: "",
     desc: true,
     selectNameChoice: "",
-    filterOption: "",
+    filterOption: new Set(),
     minPrice: "",
-    maxPrice: "",
+    maxPrice: "9999999999999",
   });
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
+  const { conversations } = useSelector((state) => state.meeting);
+  const { meetingId } = useSelector((state) => state.meeting);
   const { appointments } = useSelector((state) => state.scheduler);
   const columns = [
     {
@@ -71,6 +85,8 @@ export default function ColumnGroupingTable() {
       label: "Description",
       minWidth: 150,
       align: "left",
+      width: "300px",
+      wordWrap: "break-word",
     },
     {
       id: "hourlyRate",
@@ -89,27 +105,36 @@ export default function ColumnGroupingTable() {
   ];
   // console.log(user);
   useEffect(() => {
-    if (user.role === "consultant") {
-      dispatch(getAllAppointments(user.userId));
-    } else {
-      dispatch(getAppointmentsForClientId(user.userId));
-    }
+    // if (user.role === "consultant") {
+    //   dispatch(getAllAppointments(user.userId));
+    // } else {
+    //   dispatch(getAppointmentsForClientId(user.userId));
+    // }
     filteredAppointments = filterAppointments(appointments, "Past");
     setListData(filteredAppointments);
   }, []);
 
   useEffect(() => {
-    filteredAppointments = filterAppointmentsByOptions(
-      listData,
-      options.filterOption,
-      user.role,
-      options.selectNameChoice,
-      options.minPrice,
-      options.maxPrice
+    if (appointments.length > 0) {
+      setIsReady(true);
+    }
+  }, [appointments]);
+  useEffect(() => {
+    if (conversations.length > 0 && show !== "Show Invoice") {
+      setOpen(true);
+    }
+  }, [conversations]);
+  useEffect(() => {
+    setListData(
+      filterAppointmentsByOptions(
+        filteredAppointments,
+        options.filterOption,
+        user.role,
+        options.selectNameChoice,
+        options.minPrice,
+        options.maxPrice
+      )
     );
-    setListData(filteredAppointments);
-
-    console.log(listData);
   }, [options, setListData]);
 
   // const filteredAppointments = filterAppointments(appointments, "Past");
@@ -122,7 +147,8 @@ export default function ColumnGroupingTable() {
   );
 
   const nameList = new Set();
-  const data = sortedAppointments.map((appointment) => {
+  nameList.add("Show All");
+  const data = listData.map((appointment) => {
     // const data = appointments.map((appointment) => {
     const totalCost = calculateTotalPrice(appointment);
     const peerName =
@@ -141,6 +167,7 @@ export default function ColumnGroupingTable() {
       description: appointment.description,
       hourlyRate: appointment.consultantPrice,
       totalPrice: totalCost,
+      appointmentId: appointment.appointmentId,
     };
   });
   // console.log(data);
@@ -166,12 +193,10 @@ export default function ColumnGroupingTable() {
   };
   const handleSelectChange = (event) => {
     const nameChoice = event.target.value;
-    // setSelectNameChoice(nameChoice);
-    // setFilterOption("name");
     setOptions({
       ...options,
       selectNameChoice: nameChoice,
-      filterOption: "name",
+      filterOption: options.filterOption.add("name"),
     });
   };
   const handleReset = () => {
@@ -183,44 +208,66 @@ export default function ColumnGroupingTable() {
       desc: true,
       sortName: "",
       selectNameChoice: "",
-      filterOption: "",
+      filterOption: new Set(),
       minPrice: "",
-      maxPrice: "",
+      maxPrice: "999999999",
     });
     setListData(filterAppointments(appointments, "Past"));
   };
 
-  const handleMinPrice = (event) => {
-    const minPrice = parseInt(event.target.value);
-    if (isNaN(minPrice)) {
-      dispatch(showAlertMessage("Please enter a number"));
+  const handleMaxPrice = () => {
+    if (maxPrice === "") {
+      console.log("empty");
       setOptions({
         ...options,
-        minPrice: "",
-      });
-    } else {
-      setOptions({
-        ...options,
-        minPrice: minPrice,
-        filterOption: "minPrice",
-      });
-    }
-  };
-  const handleMaxPrice = (event) => {
-    const maxPrice = parseInt(event.target.value);
-    if (isNaN(maxPrice)) {
-      dispatch(showAlertMessage("Please enter a number"));
-      setOptions({
-        ...options,
-        maxPrice: "",
+        maxPrice: "999999999",
       });
     } else {
       setOptions({
         ...options,
         maxPrice: maxPrice,
-        filterOption: "maxPrice",
+        filterOption: options.filterOption.add("maxPrice"),
       });
     }
+  };
+  const handleMaxPriceOnChange = (event) => {
+    const maxPrice = parseInt(event.target.value);
+    if (isNaN(maxPrice)) {
+      dispatch(showAlertMessage("Please enter a number"));
+      setMaxPrice("");
+    } else {
+      setMaxPrice(maxPrice);
+    }
+  };
+  const handleMinPrice = () => {
+    if (minPrice === "") {
+      setOptions({
+        ...options,
+        minPrice: 0,
+      });
+    } else {
+      setOptions({
+        ...options,
+        minPrice: minPrice,
+        filterOption: options.filterOption.add("minPrice"),
+      });
+    }
+  };
+  const handleMinPriceOnChange = (event) => {
+    const minPrice = parseInt(event.target.value);
+    if (isNaN(minPrice)) {
+      dispatch(showAlertMessage("Please enter a number"));
+      setMinPrice("");
+    } else {
+      setMinPrice(minPrice);
+    }
+  };
+  const handleItemClick = async (event, appointmentId) => {
+    updateMeetingId(appointmentId);
+    await dispatch(getPastMessages(appointmentId));
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
   const nameListItems = [];
 
@@ -234,41 +281,46 @@ export default function ColumnGroupingTable() {
   const nameSelectField = (
     <Grid item xs={12}>
       <FormControl fullWidth>
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <InputLabel>Filter By Name</InputLabel>
-
-          <Select
-            required
-            value={options.selectNameChoice}
-            label="nameFilter"
-            onChange={handleSelectChange}
+        {show !== "Show Invoice" && (
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
           >
-            {nameList && nameListItems}
-          </Select>
-          <TextField
-            onChange={handleMinPrice}
-            id="filled-basic"
-            label="Min Total Price"
-            variant="filled"
-            value={options.minPrice}
-          />
-          <TextField
-            id="filled-basic"
-            label="Max Total Price"
-            variant="filled"
-            value={options.maxPrice}
-            onChange={handleMaxPrice}
-          />
-        </Box>
+            <InputLabel>Filter By Name</InputLabel>
+
+            <Select
+              required
+              value={options.selectNameChoice}
+              label="nameFilter"
+              onChange={handleSelectChange}
+            >
+              {nameList && nameListItems}
+            </Select>
+            <TextField
+              onChange={handleMinPriceOnChange}
+              onBlur={handleMinPrice}
+              id="filled-basic"
+              label="Min Total Price"
+              variant="filled"
+              value={minPrice}
+            />
+            <TextField
+              id="filled-basic"
+              label="Max Total Price"
+              variant="filled"
+              value={maxPrice}
+              onChange={handleMaxPriceOnChange}
+              onBlur={handleMaxPrice}
+            />
+          </Box>
+        )}
 
         <Button
+          disabled={!isReady}
           variant={show === "Show Invoice" ? "contained" : "outlined"}
           color={show === "Show Invoice" ? "error" : "success"}
           onClick={handleReset}
@@ -282,15 +334,17 @@ export default function ColumnGroupingTable() {
     <Paper sx={{ width: "100%" }}>
       {nameSelectField}
       <TableContainer sx={{ height: "100%" }}>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {show !== "Show Invoice" && (
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -338,31 +392,49 @@ export default function ColumnGroupingTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          <span>
-                            {typeof value === "number" ? "$" : ""}
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </span>
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+            {show !== "Show Invoice" &&
+              data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  return (
+                    <TableRow
+                      onClick={(e) => handleItemClick(e, row.appointmentId)}
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={index}
+                    >
+                      {columns.map((column) => {
+                        if (column !== "appointmentId") {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              <span>
+                                {typeof value === "number" ? "$" : ""}
+                                {column.format && typeof value === "number"
+                                  ? column.format(value)
+                                  : value}
+                              </span>
+                            </TableCell>
+                          );
+                        }
+                      })}
+                    </TableRow>
+                  );
+                })}
           </TableBody>
           {/* <TableRow sx={{ height: "100px" }}>Total</TableRow> */}
         </Table>
       </TableContainer>
+      <DialogPopUp maxWidth="sm" open={open} onClose={handleClose}>
+        <DialogTitle>Message History</DialogTitle>
+        <Chat
+          socket={socket}
+          meetingId={meetingId}
+          pastMessages={conversations ? conversations : []}
+          isParentInvoice={true}
+        />
+      </DialogPopUp>
     </Paper>
   );
 }

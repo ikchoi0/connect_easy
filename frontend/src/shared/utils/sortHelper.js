@@ -41,6 +41,11 @@ export const sortHelper = (array, sortName, role, order) => {
         const [arr1, arr2] = order ? swap(a, b) : [a, b];
         return calculateTotalPrice(arr1) - calculateTotalPrice(arr2);
       });
+    case "chatCount":
+      return array.sort((a, b) => {
+        const [arr1, arr2] = order ? swap(a, b) : [a, b];
+        return arr1.chatCount - arr2.chatCount;
+      });
     default:
       return array.sort((a, b) => {
         const [arr1, arr2] = order ? swap(a, b) : [a, b];

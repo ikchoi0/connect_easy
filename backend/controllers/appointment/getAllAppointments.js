@@ -95,6 +95,7 @@ const getAllAppointments = async (req, res) => {
         // isMeetingLive: appointment.isMeetingLive,
         peerId: appointment.client?._id,
         consultantPrice: appointment.consultant.options.price,
+        chatCount: appointment.conversation.length,
       };
     });
 

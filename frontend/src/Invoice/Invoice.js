@@ -31,6 +31,7 @@ import {
   Box,
   DialogTitle,
 } from "@mui/material";
+import ChatIcon from "@mui/icons-material/Chat";
 import { sortHelper } from "../shared/utils/sortHelper";
 import { calculateTotalPrice } from "../shared/utils/calculator";
 import { showAlertMessage } from "../store/reducers/alertReducer";
@@ -65,42 +66,48 @@ export default function ColumnGroupingTable({ socket }) {
     {
       id: "email",
       label: user.role === "consultant" ? "Client Email" : "Consultant Email",
-      minWidth: 150,
+      width: 150,
       align: "left",
     },
     {
       id: "peerName",
       label: user.role === "consultant" ? "Client Name" : "Consultant Name",
-      minWidth: 100,
+      width: 100,
       align: "left",
     },
     {
       id: "time",
       label: "Time",
-      minWidth: 150,
+      width: 150,
       align: "left",
     },
     {
       id: "description",
       label: "Description",
       minWidth: 150,
-      align: "left",
+      align: "left  ",
       width: "300px",
       wordWrap: "break-word",
     },
     {
       id: "hourlyRate",
       label: "Hourly Rate",
-      minWidth: 150,
+      width: 150,
       align: "right",
       format: (value) => value.toFixed(2),
     },
     {
       id: "totalPrice",
       label: "Total Price",
-      minWidth: 150,
+      width: 150,
       align: "right",
       format: (value) => value.toFixed(2),
+    },
+    {
+      id: "chatCount",
+      label: "Messages",
+      width: 150,
+      align: "right",
     },
   ];
   // console.log(user);
@@ -112,6 +119,7 @@ export default function ColumnGroupingTable({ socket }) {
     // }
     filteredAppointments = filterAppointments(appointments, "Past");
     setListData(filteredAppointments);
+    console.log(filteredAppointments);
   }, []);
 
   useEffect(() => {
@@ -168,6 +176,7 @@ export default function ColumnGroupingTable({ socket }) {
       hourlyRate: appointment.consultantPrice,
       totalPrice: totalCost,
       appointmentId: appointment.appointmentId,
+      chatCount: appointment.chatCount,
     };
   });
   // console.log(data);
@@ -410,10 +419,17 @@ export default function ColumnGroupingTable({ socket }) {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               <span>
-                                {typeof value === "number" ? "$" : ""}
-                                {column.format && typeof value === "number"
+                                {column.id !== "chatCount" &&
+                                typeof value === "number"
+                                  ? "$"
+                                  : ""}
+                                {column.id !== "chatCount" &&
+                                column.format &&
+                                typeof value === "number"
                                   ? column.format(value)
                                   : value}
+                                {column.id === "chatCount" &&
+                                  row.chatCount > 0 && <ChatIcon />}
                               </span>
                             </TableCell>
                           );

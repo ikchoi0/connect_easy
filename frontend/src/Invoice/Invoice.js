@@ -85,7 +85,7 @@ export default function ColumnGroupingTable({ socket }) {
       id: "description",
       label: "Description",
       minWidth: 150,
-      align: "left  ",
+      align: "left",
       wordWrap: "break-word",
     },
     {
@@ -118,7 +118,6 @@ export default function ColumnGroupingTable({ socket }) {
     // }
     filteredAppointments = filterAppointments(appointments, "Past");
     setListData(filteredAppointments);
-    console.log(filteredAppointments);
   }, []);
 
   useEffect(() => {

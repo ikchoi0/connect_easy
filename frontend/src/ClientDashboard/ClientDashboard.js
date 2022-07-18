@@ -45,7 +45,7 @@ const menuItems = [
     icon: <PeopleIcon />,
   },
   { id: "Calendar", icon: <CalendarMonthIcon /> },
-  { id: "Payments", icon: <PaymentIcon /> },
+  { id: "Invoice", icon: <PaymentIcon /> },
   // { id: "Meeting", icon: <VideoCameraFrontIcon /> },
 ];
 // const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];

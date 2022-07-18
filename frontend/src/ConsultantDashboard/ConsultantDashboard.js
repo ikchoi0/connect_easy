@@ -161,9 +161,7 @@ const ConsultantDashboard = () => {
             {selectedNavigatorItem === "Calendar" && (
               <Scheduler filterLists={filterLists} />
             )}
-            {selectedNavigatorItem === "Payments" && (
-              <Invoice socket={socket} />
-            )}
+            {selectedNavigatorItem === "Invoice" && <Invoice socket={socket} />}
             {selectedNavigatorItem === "Settings" && <ProfilePage />}
             {selectedNavigatorItem === "Meeting" && (
               <Meeting meetingId={meetingId} socket={socket} />

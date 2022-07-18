@@ -295,6 +295,7 @@ const ProfilePage = () => {
               Cancel
             </Button>
             <Button
+              disabled={userProfile.isSaving}
               onClick={handleOnSaveButtonClick}
               variant="contained"
               type="submit"

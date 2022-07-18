@@ -19,6 +19,7 @@ const userState = {
 
   previewImage: '',
   available: false,
+  isSaving: false,
 };
 
 export const getUserProfile = createAsyncThunk(
@@ -70,6 +71,17 @@ const userSlice = createSlice({
       state.category = action.payload.categoryId;
       state.profilePicture = action.payload.user.options?.profilePicture || '';
       state.available = action.payload.user.options?.available || '';
+    },
+    [updateUserProfile.pending]: (state, action) => {
+      state.isSaving = true;
+    },
+    [updateUserProfile.fulfilled]: (state, action) => {
+      console.log(action.payload);
+
+      state.isSaving = false;
+    },
+    [updateUserProfile.rejected]: (state, action) => {
+      state.isSaving = false;
     },
   },
 });

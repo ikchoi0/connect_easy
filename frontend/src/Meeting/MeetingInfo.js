@@ -1,24 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppointmentByAppointmentId } from "../store/reducers/meetingReducer";
-import { Box, Container, Typography, CardMedia, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import moment from "moment";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import TimelapseIcon from "@mui/icons-material/Timelapse";
 
 const MeetingInfo = ({ meetingId }) => {
   const dispatch = useDispatch();
+  const [time, setTime] = useState(0);
   const { appointmentData } = useSelector((state) => state.meeting);
+
   useEffect(() => {
     dispatch(getAppointmentByAppointmentId(meetingId));
   }, []);
+
+  useEffect(() => {
+    let meetingStartTime = moment(new Date());
+    if (appointmentData?.videoStartTime) {
+      meetingStartTime = moment(appointmentData.videoStartTime);
+    }
+    const now = moment(new Date());
+    setTime(now.diff(meetingStartTime, "seconds"));
+  }, [appointmentData?.videoStartTime]);
+
+  const timeNow = moment().hour(0).minute(0).second(time).format("HH:mm:ss");
+  console.log("timeNow::::::::::::", timeNow);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(time + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  });
 
   const meetingInfoStyles = {
     fontSize: "0.9rem",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
+    color: "#36454F",
   };
+
   return (
     <Box
       sx={{
@@ -30,7 +52,7 @@ const MeetingInfo = ({ meetingId }) => {
     >
       <Typography sx={meetingInfoStyles}>
         <AccountBoxIcon />
-        Consultant:{" "}
+        <b>Consultant:&nbsp; </b>
         {appointmentData &&
           appointmentData.consultant.firstName +
             " " +
@@ -38,7 +60,7 @@ const MeetingInfo = ({ meetingId }) => {
       </Typography>
       <Typography sx={meetingInfoStyles}>
         <AccountBoxIcon />
-        Client:{" "}
+        <b>Client:&nbsp; </b>
         {appointmentData &&
           appointmentData.client.firstName +
             " " +
@@ -46,7 +68,7 @@ const MeetingInfo = ({ meetingId }) => {
       </Typography>
       <Typography sx={meetingInfoStyles}>
         <TimelapseIcon />
-        Time elapsed here...or remaining
+        <b>Time elapsed:&nbsp; </b> {timeNow}
       </Typography>
     </Box>
   );

@@ -18,8 +18,12 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
       postalCode: faker.address.zipCode(),
       price: faker.commerce.price(100, 200),
       rating: Math.ceil(Math.random() * 5),
-      description: faker.company.catchPhrase(),
-      profilePicture: faker.image.people(640, 480, true),
+      description:
+        faker.company.catchPhrase() + " " +
+        faker.company.catchPhrase().toLowerCase() + " " +
+        faker.company.catchPhrase().toLowerCase() + " " +
+        faker.company.catchPhrase().toLowerCase() +".",
+      profilePicture: "",
       phone: faker.phone.number(),
     },
   });

@@ -1,5 +1,5 @@
-import React from 'react';
-import TextFieldWithLabel from '../shared/components/TextFieldWithLabel';
+import React from "react";
+import TextFieldWithLabel from "../shared/components/TextFieldWithLabel";
 
 const SchedulerDetailsInputs = ({ description, setDescription }) => {
   return (

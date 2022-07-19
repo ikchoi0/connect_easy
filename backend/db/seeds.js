@@ -1,6 +1,5 @@
 const { faker } = require("@faker-js/faker");
 
-
 const NUMBER_OF_USER = 60;
 const ConsultantSeedDB = [];
 for (let i = 0; i < NUMBER_OF_USER; i++) {
@@ -18,10 +17,14 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
       price: faker.commerce.price(100, 200),
       rating: Math.ceil(Math.random() * 5),
       description:
-        faker.company.catchPhrase() + " " +
-        faker.company.catchPhrase().toLowerCase() + " " +
-        faker.company.catchPhrase().toLowerCase() + " " +
-        faker.company.catchPhrase().toLowerCase() +".",
+        faker.company.catchPhrase() +
+        " " +
+        faker.company.catchPhrase().toLowerCase() +
+        " " +
+        faker.company.catchPhrase().toLowerCase() +
+        " " +
+        faker.company.catchPhrase().toLowerCase() +
+        ".",
       profilePicture: "",
       phone: faker.phone.number(),
     },
@@ -67,18 +70,6 @@ const ClientSeeds = [
 // //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/977/977597.png”,
 // //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/243/243224.png”,
 // //     pictureUrl: “https://cdn-icons-png.flaticon.com/128/809/809957.png”,
-
-// const CategorySeedDB = [];
-// category.forEach((item) => {
-//   const entries = Object.entries(item);
-//   CategorySeedDB.push({
-//         name: entries[0][0],
-//         description:entries[0][1],
-//         pictureUrl: "https://cdn-icons-png.flaticon.com/512/1389/1389079.png",
-//         users: [],
-//       }
-//   );
-// })
 
 const CategorySeedDB = (ConsultantSeedDB) => [
   {
@@ -189,8 +180,3 @@ module.exports = {
   CategorySeedDB,
   ClientSeeds,
 };
-/*
-  name: { type: String },
-  description: { type: String },
-  pictureUrl: { type: String },
-  users: [{ type: Schema.Types.ObjectId, ref: 'User' }],*/

@@ -15,28 +15,24 @@ import PeopleIcon from "@mui/icons-material/People";
 import PaymentIcon from "@mui/icons-material/Payment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useHistory } from "react-router-dom";
-import { handleAuth, handleUserRole } from "../shared/utils/auth";
+import { handleAuth } from "../shared/utils/auth";
 import { io } from "socket.io-client";
-import { showSuccessMessage } from "../store/reducers/alertReducer";
 import DialogPopUp from "../shared/components/DialogPopUp";
 import ConfirmModal from "../shared/components/ConfirmModal";
 import { updateSelectedNavigatorItem } from "../store/reducers/dashboardReducer";
 import {
   appointmentBookingCancel,
-  getAllAppointments,
-  deleteOneAppointment,
   getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
 import { updateMeetingId } from "../store/reducers/meetingReducer";
 
 // const socket = io("http://localhost:5002");
-const socket = io('https://connect-easy-rid.herokuapp.com');
+const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const filterLists = [
   { name: "Show All", color: "#191970" },
   { name: "Upcoming", color: "#4682B4" },
   { name: "Past", color: "#778899" },
-  // { name: "Canceled", color: "#FA8072" },
 ];
 const drawerWidth = 300;
 const menuItems = [
@@ -46,9 +42,7 @@ const menuItems = [
   },
   { id: "Calendar", icon: <CalendarMonthIcon /> },
   { id: "Invoice", icon: <PaymentIcon /> },
-  // { id: "Meeting", icon: <VideoCameraFrontIcon /> },
 ];
-// const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];
 
 const ClientDashboard = () => {
   handleAuth();
@@ -56,7 +50,6 @@ const ClientDashboard = () => {
   const dispatch = useDispatch();
   const [confirm, setConfirm] = useState(false);
   const [message, setMessage] = useState("");
-  // return user if not logged in
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
   const { meetingId } = useSelector((state) => state.meeting);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -74,7 +67,6 @@ const ClientDashboard = () => {
           : setMessage(appointment.client);
         setConfirm(true);
       }
-      // dispatch(showSuccessMessage("Please join the meeting!"));
     });
     socket.on("meeting_ended", () => {
       // add router to show alert before redirecting to dashboard
@@ -84,7 +76,6 @@ const ClientDashboard = () => {
         window.location.replace("/dashboard");
       }, 2000);
     });
-
   }, []);
   const handleDismissOnClick = () => {
     const activeMeeting = localStorage.getItem("activeMeeting");

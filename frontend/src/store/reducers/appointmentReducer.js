@@ -10,7 +10,6 @@ const appointmentSlice = createSlice({
   reducers: {
     updateSelectedStatusFilter: (state, action) => {
       state.selectedStatusFilter = action.payload;
-
     },
   },
 });

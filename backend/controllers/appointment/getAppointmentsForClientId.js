@@ -14,16 +14,6 @@ const getAppointmentsForClientId = async (req, res) => {
       .populate("consultant")
       .sort({ createdAt: -1 });
 
-    /**
-     * Event {
-        description: string,
-        start: Date,
-        end: Date,
-        allDay?: boolean
-        resource?: any,
-      }
-     */
-
     const parsedAppointments = appointments.map((appointment) => {
       const newDate = moment(appointment.date).format("YYYY-MM-DD");
       const startTime = moment(appointment.appointmentStartTime).format(
@@ -38,9 +28,8 @@ const getAppointmentsForClientId = async (req, res) => {
         "YYYY-MM-DD HH:mm"
       );
       let color = "#778899";
-      // color = appointment["videoEndTime"] && "#778899";
       if (!appointment.appointmentBooked) {
-        color = "#90EE90";
+        color = "#5FAD5F";
       } else {
         if (!appointment.appointmentCancel) {
           color = "#4682B4";

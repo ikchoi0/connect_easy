@@ -22,16 +22,6 @@ const getAppointmentByDate = async (req, res) => {
       appointmentBooked: false,
     });
 
-    /**
-     * Event {
-        description: string,
-        start: Date,
-        end: Date,
-        allDay?: boolean
-        resource?: any,
-      }
-     */
-
     const parsedAppointments = appointments.map((appointment) => {
       const newDate = moment(appointment.date).format('YYYY-MM-DD');
       const startTime = moment(appointment.appointmentStartTime).format(

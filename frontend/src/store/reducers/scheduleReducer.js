@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '../../api';
-import { showAlertMessage, showSuccessMessage } from './alertReducer';
-import { io } from 'socket.io-client';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as api from "../../api";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
+import { io } from "socket.io-client";
 
 // const socket = io('http://localhost:5002');
-const socket = io('https://connect-easy-rid.herokuapp.com');
+const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const schedulerState = {
   openingAppointmentsList: [],
@@ -14,7 +14,7 @@ const schedulerState = {
 };
 
 export const createOpenAppointments = createAsyncThunk(
-  'schedule/createOpenAppointments',
+  "schedule/createOpenAppointments",
   async (openAppointmentsList, thunkApi) => {
     const response = await api.setOpenAppointments(openAppointmentsList);
     if (response.error) {
@@ -22,14 +22,14 @@ export const createOpenAppointments = createAsyncThunk(
       return thunkApi.rejectWithValue(response.message);
     }
     thunkApi.dispatch(
-      showSuccessMessage('New appointments saved successfully')
+      showSuccessMessage("New appointments saved successfully")
     );
     return response.data;
   }
 );
 
 export const getAllAppointments = createAsyncThunk(
-  'schedule/getAppointments',
+  "schedule/getAppointments",
   async (consultantId, thunkApi) => {
     const response = await api.getAllAppointments(consultantId);
 
@@ -41,9 +41,8 @@ export const getAllAppointments = createAsyncThunk(
   }
 );
 
-// get appointments using client id
 export const getAppointmentsForClientId = createAsyncThunk(
-  'schedule/getAppointmentsForClientId',
+  "schedule/getAppointmentsForClientId",
   async (clientId, thunkApi) => {
     const response = await api.getAppointmentsForClientId(clientId);
 
@@ -57,7 +56,7 @@ export const getAppointmentsForClientId = createAsyncThunk(
 );
 
 export const getAppointmentsForTheDay = createAsyncThunk(
-  'schedule/getAppointmentsForTheDay',
+  "schedule/getAppointmentsForTheDay",
   async ({ consultantId, date }, thunkApi) => {
     const response = await api.getAppointmentsForConsultantsByDate(
       consultantId,
@@ -74,7 +73,7 @@ export const getAppointmentsForTheDay = createAsyncThunk(
 );
 
 export const deleteOneAppointment = createAsyncThunk(
-  'schedule/deleteOneAppointment',
+  "schedule/deleteOneAppointment",
   async (appointmentId, thunkApi) => {
     const response = await api.deleteOneAppointmentById(appointmentId);
 
@@ -87,7 +86,7 @@ export const deleteOneAppointment = createAsyncThunk(
 );
 
 export const bookAppointment = createAsyncThunk(
-  'schedule/bookAppointment',
+  "schedule/bookAppointment",
   async ({ appointmentData, history }, thunkApi) => {
     const response = await api.bookAppointment(appointmentData);
 
@@ -95,14 +94,14 @@ export const bookAppointment = createAsyncThunk(
       thunkApi.dispatch(showAlertMessage(response.message));
       return thunkApi.rejectWithValue(response.message);
     } else {
-      history.push('/clientDashboard');
+      history.push("/clientDashboard");
       return response.data;
     }
   }
 );
 
 export const appointmentBookingCancel = createAsyncThunk(
-  'schedule/appointmentBookingCancel',
+  "schedule/appointmentBookingCancel",
   async (appointmentId, thunkApi) => {
     const response = await api.cancelBookedAppointment({ appointmentId });
 
@@ -116,7 +115,7 @@ export const appointmentBookingCancel = createAsyncThunk(
 );
 
 const schedulerSlice = createSlice({
-  name: 'scheduler',
+  name: "scheduler",
   initialState: schedulerState,
 
   reducers: {
@@ -136,15 +135,12 @@ const schedulerSlice = createSlice({
     },
   },
   extraReducers: {
-    [createOpenAppointments.fulfilled]: (state, action) => {
-    },
-    [createOpenAppointments.rejected]: (state, action) => {
-    },
+    [createOpenAppointments.fulfilled]: (state, action) => {},
+    [createOpenAppointments.rejected]: (state, action) => {},
     [getAllAppointments.fulfilled]: (state, action) => {
       state.appointments = action.payload;
     },
-    [getAllAppointments.rejected]: (state, action) => {
-    },
+    [getAllAppointments.rejected]: (state, action) => {},
     [deleteOneAppointment.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
         return appointment.appointmentId !== action.payload._id;
@@ -159,18 +155,15 @@ const schedulerSlice = createSlice({
     [bookAppointment.fulfilled]: (state, action) => {
       state.booked = true;
       setTimeout(() => {
-        socket.emit('appointment_booked', action.payload);
+        socket.emit("appointment_booked", action.payload);
       }, 1000);
     },
-    [bookAppointment.rejected]: (state, action) => {
-    },
-    [getAppointmentsForClientId.pending]: (state, action) => {
-    },
+    [bookAppointment.rejected]: (state, action) => {},
+    [getAppointmentsForClientId.pending]: (state, action) => {},
     [getAppointmentsForClientId.fulfilled]: (state, action) => {
       state.appointments = action.payload;
     },
-    [getAppointmentsForClientId.rejected]: (state, action) => {
-    },
+    [getAppointmentsForClientId.rejected]: (state, action) => {},
     [appointmentBookingCancel.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
         return appointment.appointmentId !== action.payload._id;

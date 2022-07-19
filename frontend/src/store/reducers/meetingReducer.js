@@ -1,15 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '../../api';
-import { showAlertMessage, showSuccessMessage } from './alertReducer';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as api from "../../api";
+import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 
 const meetingState = {
-  meetingId: '',
+  meetingId: "",
   appointmentData: null,
   conversations: [],
 };
 
 export const getPastMessages = createAsyncThunk(
-  'meeting/getPastMessages',
+  "meeting/getPastMessages",
   async (meetingId, thunkApi) => {
     const response = await api.getPastMessages(meetingId);
     if (response.error) {
@@ -23,7 +23,7 @@ export const getPastMessages = createAsyncThunk(
 // updates video start time in appointment table
 // updates hasActiveMeeting, activeMeetingId in user table
 export const postStartMeeting = createAsyncThunk(
-  'schedule/postStartMeeting',
+  "schedule/postStartMeeting",
   async ({ appointmentData, history }, thunkApi) => {
     // pass the appointmentData, userId
     const response = await api.postStartMeeting(appointmentData);
@@ -32,7 +32,7 @@ export const postStartMeeting = createAsyncThunk(
       return thunkApi.rejectWithValue(response);
     } else {
       thunkApi.dispatch(
-        showSuccessMessage('Your are now connected to the meeting')
+        showSuccessMessage("Your are now connected to the meeting")
       );
       return response.data;
     }
@@ -41,21 +41,21 @@ export const postStartMeeting = createAsyncThunk(
 // updates video end time in appointment table
 // updates hasActiveMeeting, activeMeetingId in user table
 export const postEndMeeting = createAsyncThunk(
-  'schedule/postEndMeeting',
+  "schedule/postEndMeeting",
   async (appointmentData, thunkApi) => {
     const response = await api.postEndMeeting(appointmentData);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.data.message));
       return thunkApi.rejectWithValue(response);
     } else {
-      thunkApi.dispatch(showSuccessMessage('Thank you! Meeting ended'));
+      thunkApi.dispatch(showSuccessMessage("Thank you! Meeting ended"));
       return response.data;
     }
   }
 );
 
 export const getAppointmentByAppointmentId = createAsyncThunk(
-  'schedule/getAppointmentByAppointmentId',
+  "schedule/getAppointmentByAppointmentId",
   async (appointmentData, thunkApi) => {
     const response = await api.getAppointmentByAppointmentId(appointmentData);
     if (response.error) {
@@ -67,7 +67,7 @@ export const getAppointmentByAppointmentId = createAsyncThunk(
 );
 
 const meetingSlice = createSlice({
-  name: 'meeting',
+  name: "meeting",
   initialState: meetingState,
 
   reducers: {
@@ -76,19 +76,14 @@ const meetingSlice = createSlice({
     },
   },
   extraReducers: {
-    [postStartMeeting.fulfilled]: (state, action) => {
-    },
-    [postStartMeeting.rejected]: (state, action) => {
-    },
-    [postEndMeeting.fulfilled]: (state, action) => {
-    },
-    [postEndMeeting.rejected]: (state, action) => {
-    },
+    [postStartMeeting.fulfilled]: (state, action) => {},
+    [postStartMeeting.rejected]: (state, action) => {},
+    [postEndMeeting.fulfilled]: (state, action) => {},
+    [postEndMeeting.rejected]: (state, action) => {},
     [getAppointmentByAppointmentId.fulfilled]: (state, action) => {
       state.appointmentData = action.payload;
     },
-    [getAppointmentByAppointmentId.rejected]: (state, action) => {
-    },
+    [getAppointmentByAppointmentId.rejected]: (state, action) => {},
     [getPastMessages.fulfilled]: (state, action) => {
       state.conversations = action.payload;
     },

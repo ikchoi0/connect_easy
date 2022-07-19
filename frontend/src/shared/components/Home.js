@@ -18,7 +18,7 @@ import { filterAppointments } from "../utils/filterAppointments";
 import { io } from "socket.io-client";
 
 // const socket = io("http://localhost:5002");
-const socket = io('https://connect-easy-rid.herokuapp.com');
+const socket = io("https://connect-easy-rid.herokuapp.com");
 
 export default function Home({
   getAppointmentAction,
@@ -54,7 +54,6 @@ export default function Home({
   });
 
   const handleJoinMeetingButton = (appointment) => {
-    // we need to remove the line below? maybe not.
     dispatch(updateMeetingId(appointment.appointmentId));
     localStorage.setItem(
       "activeMeeting",
@@ -75,10 +74,6 @@ export default function Home({
       let disableMeeting = true;
       let cancelButtonStatus = false;
       const activeMeeting = JSON.parse(localStorage.getItem("activeMeeting"));
-
-      /**
-       * TODO: DO SOMETHING WITH THIS
-       */
 
       if (activeMeeting) {
         if (activeMeeting === appointment.appointmentId) {
@@ -106,7 +101,6 @@ export default function Home({
           role={JSON.parse(localStorage.getItem("user")).role}
           clientName={appointment.client}
           consultantName={appointment.consultant}
-          // email={userDetails.email}
           key={index}
           id={appointment.appointmentId}
           description={appointment.description}
@@ -129,8 +123,6 @@ export default function Home({
             color="primary"
             size="large"
             onClick={() => handleJoinMeetingButton(appointment)}
-            // 🚨 when appointment is not close, disable the button
-            // disabled={appointmentBooked}
           >
             Join meeting
           </Button>

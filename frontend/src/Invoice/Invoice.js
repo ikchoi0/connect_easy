@@ -145,7 +145,6 @@ export default function ColumnGroupingTable({ socket }) {
   const nameList = new Set();
   nameList.add("Show All");
   const data = listData.map((appointment) => {
-    // const data = appointments.map((appointment) => {
     const totalCost = calculateTotalPrice(appointment);
     sumOfTotalPrice += totalCost;
     const peerName =
@@ -424,7 +423,6 @@ export default function ColumnGroupingTable({ socket }) {
                   );
                 })}
           </TableBody>
-          {/* <TableRow sx={{ height: "100px" }}>Total</TableRow> */}
         </Table>
       </TableContainer>
       <DialogPopUp maxWidth="sm" open={open} onClose={handleClose}>

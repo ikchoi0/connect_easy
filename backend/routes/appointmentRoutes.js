@@ -5,21 +5,14 @@ const auth = require("../middleware/auth");
 const appointmentController = require("../controllers/appointment/appointmentController");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
-const validator = require("express-joi-validation").createValidator({});
-// const auth = require("../middleware/auth");
 
 const appointmentSchema = Joi.object({
-  // consultant: Joi.objectId().required(),
-  // client: Joi.objectId().required(),
   date: Joi.date().required(),
   appointmentStartTime: Joi.date().required(),
   appointmentEndTime: Joi.date().required(),
   appointmentCancellation_time: Joi.date(),
-  // appointmentCancel: Joi.boolean().required(),
   description: Joi.string().optional(),
 });
-
-const appointmentSchemas = Joi.array().items(appointmentSchema);
 
 /**
  * enum: ['admin', 'client', 'consultant']
@@ -29,7 +22,6 @@ const appointmentSchemas = Joi.array().items(appointmentSchema);
 router.post(
   "/",
   auth(["consultant"]),
-  // validator.body(appointmentSchemas),
   appointmentController.controllers.postAppointment
 );
 
@@ -45,7 +37,6 @@ router.delete(
   appointmentController.controllers.deleteAppointment
 );
 
-// GET A Appointment
 router.get(
   "/single/:appointmentId",
   auth(["consultant", "client"]),
@@ -65,7 +56,6 @@ router.patch(
   appointmentController.controllers.updateAppointment
 );
 
-// Client Appointments
 router.get(
   "/client/:clientId",
   auth(["client", "consultant"]),

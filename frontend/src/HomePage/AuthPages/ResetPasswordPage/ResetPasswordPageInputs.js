@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import TextFieldWithLabel from "../../../shared/components/TextFieldWithLabel";
-import { FormLabel, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 
 function PasswordResetPageInputs({
   password1,

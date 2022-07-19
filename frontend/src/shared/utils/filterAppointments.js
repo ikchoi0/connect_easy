@@ -1,9 +1,7 @@
-// import moment from 'moment';
-
 export const filterAppointments = (appointments, selectedStatusFilter) => {
   let filteredAppointmentsList;
   switch (selectedStatusFilter) {
-    case 'Upcoming':
+    case "Upcoming":
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (
           appointment.appointmentBooked &&
@@ -14,7 +12,7 @@ export const filterAppointments = (appointments, selectedStatusFilter) => {
         }
       });
       break;
-    case 'Unbooked':
+    case "Unbooked":
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (
           !appointment.appointmentBooked &&
@@ -25,14 +23,14 @@ export const filterAppointments = (appointments, selectedStatusFilter) => {
         }
       });
       break;
-    case 'Canceled':
+    case "Canceled":
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (appointment.appointmentCancel) {
           return appointment;
         }
       });
       break;
-    case 'Past':
+    case "Past":
       filteredAppointmentsList = appointments.filter((appointment) => {
         if (appointment.videoEndTime) {
           return appointment;

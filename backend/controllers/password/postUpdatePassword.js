@@ -1,6 +1,4 @@
 const User = require("../../models/user");
-const sendEmail = require("../../utils/mailHelper");
-const RESET_PAGE = "http://localhost:3000/resetPassword/";
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = process.env;

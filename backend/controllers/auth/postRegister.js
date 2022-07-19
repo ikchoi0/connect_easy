@@ -35,7 +35,7 @@ const postRegister = async (req, res) => {
     });
 
     // if your are signing up with consultant
-    if (user.role === 'consultant') {
+    if (user.role === "consultant") {
       // push new user to the category
       const category = await Category.findById(
         Types.ObjectId(consultantCategoryId)

@@ -50,11 +50,9 @@ const categorySlice = createSlice({
       state.isLoading = false;
     },
     [category.rejected]: (state, _) => {
-      // handle rejected
       state.isLoading = false;
     },
     [category.pending]: (state, _) => {
-      // handle rejected
       state.isLoading = true;
     },
     [getUsersWithinCategory.fulfilled]: (state, action) => {

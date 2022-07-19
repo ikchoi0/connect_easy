@@ -1,8 +1,6 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { Typography, Button, Stack, Grid, Paper, Link } from "@mui/material";
+import { Typography, Grid, Paper } from "@mui/material";
 
 function HomePageHeroLayout(props) {
   return (
@@ -19,7 +17,6 @@ function HomePageHeroLayout(props) {
         backgroundImage: `url(https://source.unsplash.com/random)`,
       }}
     >
-      {/* Increase the priority of the hero background image */}
       {
         <img
           style={{ display: "none" }}
@@ -69,9 +66,6 @@ function HomePageHeroLayout(props) {
               Schedule meetings, host video calls, and collect payments all in
               one place.
             </Typography>
-            {/* <Link variant="subtitle1" href="#">
-              hihi
-            </Link> */}
           </Box>
         </Grid>
       </Grid>

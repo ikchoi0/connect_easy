@@ -20,7 +20,6 @@ export default function Chat({
   const [values, setValues] = useState("");
   const scrollRef = useRef(null);
 
-  // const [list, setList] = useState([]);
   const [isInputValid, setIsInputValid] = useState(false);
   const [messages, setMessages] = useState([]);
 
@@ -55,7 +54,6 @@ export default function Chat({
   };
 
   const content =
-    // messages.length &&
     messages &&
     messages.map(({ sender, message }) => {
       return (

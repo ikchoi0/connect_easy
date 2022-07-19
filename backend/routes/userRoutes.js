@@ -77,9 +77,6 @@ router.patch("/edit", auth(["consultant"]), async (req, res) => {
 router.get("/profile", auth(["consultant"]), async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
 
-  // const category = await Category.findOne({
-  //   users: { $elemMatch: { email: user.email } },
-  // });
   const category = await Category.findOne({
     users: { _id: Types.ObjectId(user._id) },
   });

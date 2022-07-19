@@ -14,13 +14,13 @@ function HomePageHeroLayout(props) {
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        backgroundImage: `url(https://source.unsplash.com/random)`,
+        backgroundImage: `url(https://i.ibb.co/0DCjYB4/Banner-1.png)`,
       }}
     >
       {
         <img
           style={{ display: "none" }}
-          src={"https://source.unsplash.com/random"}
+          src={"https://i.ibb.co/0DCjYB4/Banner-1.png"}
           alt={"hi"}
         />
       }

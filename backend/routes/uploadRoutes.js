@@ -23,7 +23,7 @@ const s3 = new aws.S3({
 router.get('/', auth(['consultant']), (req, res) => {
   const key = `${req.user.id}/${uuid()}.jpeg`;
 
-  // get the signed url from S3 before sending the file
+  // get the signed url from S3 before sending the file:
   s3.getSignedUrl(
     'putObject',
     {
@@ -31,7 +31,7 @@ router.get('/', auth(['consultant']), (req, res) => {
       ContentType: 'image/*',
       Key: key,
     },
-    // send presigned url
+    // send presigned url:
     (err, url) => res.send({ key, url })
   );
 });

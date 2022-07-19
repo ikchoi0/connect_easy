@@ -1,7 +1,5 @@
 const { faker } = require("@faker-js/faker");
 
-// const randomName = faker.name.findName(); // Rowan Nikolaus
-// const randomName1 = faker.name.findName(); // Rowan Nikolaus
 const NUMBER_OF_USER = 60;
 const ConsultantSeedDB = [];
 for (let i = 0; i < NUMBER_OF_USER; i++) {
@@ -19,10 +17,14 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
       price: faker.commerce.price(100, 200),
       rating: Math.ceil(Math.random() * 5),
       description:
-        faker.company.catchPhrase() + " " +
-        faker.company.catchPhrase().toLowerCase() + " " +
-        faker.company.catchPhrase().toLowerCase() + " " +
-        faker.company.catchPhrase().toLowerCase() +".",
+        faker.company.catchPhrase() +
+        " " +
+        faker.company.catchPhrase().toLowerCase() +
+        " " +
+        faker.company.catchPhrase().toLowerCase() +
+        " " +
+        faker.company.catchPhrase().toLowerCase() +
+        ".",
       profilePicture: "",
       phone: faker.phone.number(),
     },
@@ -32,25 +34,12 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
 const ClientSeeds = [
   {
     role: "client",
-    firstName: "Rafael",
-    lastName: "Nóbrega",
-    email: "raf@client.com",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@client.com",
     password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
-  {
-    role: "client",
-    firstName: "Dongwan",
-    lastName: "Kim",
-    email: "don@client.com",
-    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
-  },
-  {
-    role: "client",
-    firstName: "Ik Sung",
-    lastName: "Choi",
-    email: "choi@client.com",
-    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
-  },
+
 ];
 
 // const category = [
@@ -68,18 +57,6 @@ const ClientSeeds = [
 // //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/977/977597.png”,
 // //     pictureUrl: “https://cdn-icons-png.flaticon.com/512/243/243224.png”,
 // //     pictureUrl: “https://cdn-icons-png.flaticon.com/128/809/809957.png”,
-
-// const CategorySeedDB = [];
-// category.forEach((item) => {
-//   const entries = Object.entries(item);
-//   CategorySeedDB.push({
-//         name: entries[0][0],
-//         description:entries[0][1],
-//         pictureUrl: "https://cdn-icons-png.flaticon.com/512/1389/1389079.png",
-//         users: [],
-//       }
-//   );
-// })
 
 const CategorySeedDB = (ConsultantSeedDB) => [
   {
@@ -139,15 +116,6 @@ const CategorySeedDB = (ConsultantSeedDB) => [
       "Meet local and international software developers that can help creating the app of your dreams.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/512/977/977597.png",
     users: [
-      ConsultantSeedDB[28]._id,
-      ConsultantSeedDB[29]._id,
-      ConsultantSeedDB[30]._id,
-      ConsultantSeedDB[31]._id,
-      ConsultantSeedDB[32]._id,
-      ConsultantSeedDB[33]._id,
-      ConsultantSeedDB[34]._id,
-      ConsultantSeedDB[35]._id,
-      ConsultantSeedDB[36]._id,
     ],
   },
   {
@@ -190,8 +158,3 @@ module.exports = {
   CategorySeedDB,
   ClientSeeds,
 };
-/*
-  name: { type: String },
-  description: { type: String },
-  pictureUrl: { type: String },
-  users: [{ type: Schema.Types.ObjectId, ref: 'User' }],*/

@@ -20,13 +20,11 @@ export default function Chat({
   const [values, setValues] = useState("");
   const scrollRef = useRef(null);
 
-  // const [list, setList] = useState([]);
   const [isInputValid, setIsInputValid] = useState(false);
   const [messages, setMessages] = useState([]);
 
   socket.on("chat", (data) => {
     setMessages([...messages, data]);
-    console.log("data: ", data);
   });
 
   useEffect(() => {
@@ -56,7 +54,6 @@ export default function Chat({
   };
 
   const content =
-    // messages.length &&
     messages &&
     messages.map(({ sender, message }) => {
       return (

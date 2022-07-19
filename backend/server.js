@@ -1,58 +1,53 @@
-const express = require('express');
-const http = require('http');
-const cors = require('cors');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const SocketIO = require('socket.io');
-const socketHandler = require('./socket');
-const socketServer = require('./socketServer');
-require('dotenv').config();
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const morgan = require("morgan");
+const mongoose = require("mongoose");
+const SocketIO = require("socket.io");
+const socketHandler = require("./socket");
+require("dotenv").config();
 
-const authRoutes = require('./routes/authRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const appointmentRoutes = require('./routes/appointmentRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
-const userRoutes = require('./routes/userRoutes');
-const passwordRoutes = require('./routes/passwordRoutes');
-const messageRoutes = require('./routes/socketRoutes');
-// const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
+const authRoutes = require("./routes/authRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
+const userRoutes = require("./routes/userRoutes");
+const passwordRoutes = require("./routes/passwordRoutes");
+const messageRoutes = require("./routes/socketRoutes");
 
 const PORT = process.env.PORT || process.env.API_PORT;
 
 const app = express();
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(cors());
 
 // seed the database
-app.use('/api/seed', require('./routes/seedRoutes'));
-
+app.use("/api/seed", require("./routes/seedRoutes"));
 // category routes
-app.use('/api/category', categoryRoutes);
+app.use("/api/category", categoryRoutes);
 // register routes
-app.use('/api/auth', authRoutes);
+app.use("/api/auth", authRoutes);
 // appointment routes
-app.use('/api/appointment', appointmentRoutes);
+app.use("/api/appointment", appointmentRoutes);
 // upload routes
-app.use('/api/upload', uploadRoutes);
+app.use("/api/upload", uploadRoutes);
 // user routes
-app.use('/api/user', userRoutes);
+app.use("/api/user", userRoutes);
 // password routes
-app.use('/api/password', passwordRoutes);
+app.use("/api/password", passwordRoutes);
 // socket msgs routes
-app.use('/api/socket', messageRoutes);
+app.use("/api/socket", messageRoutes);
 
-console.log('Starting the server...');
+console.log("Starting the server...");
 
-// socketServer.registerSocketServer(server);
 const server = http.createServer(app);
-// socketServer.registerSocketServer(server);
 
 // add socket.io to the server
 const wsServer = SocketIO(server, {
   cors: {
     origin: process.env.FRONTEND_URL,
-    methods: ['GET', 'POST'],
+    methods: ["GET", "POST"],
   },
 });
 

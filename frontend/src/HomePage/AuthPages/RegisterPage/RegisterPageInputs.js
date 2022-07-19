@@ -1,15 +1,15 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import Grid from '@mui/material/Grid';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import TextFieldWithLabel from '../../../shared/components/TextFieldWithLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import { useDispatch, useSelector } from 'react-redux';
-import { category } from '../../../store/reducers/categoryReducer';
+import React from "react";
+import { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import TextFieldWithLabel from "../../../shared/components/TextFieldWithLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import { useDispatch, useSelector } from "react-redux";
+import { category } from "../../../store/reducers/categoryReducer";
 
 const RegisterPageInputs = ({
   firstName,
@@ -29,11 +29,9 @@ const RegisterPageInputs = ({
     dispatch(category());
   }, []);
 
-  //appointment/client/:clientId
   const { categoryList } = useSelector((state) => state.category);
 
-  // const categoryList = ["sales", "therapists", "lawyers", "other"];
-  const [selectChoice, setSelectChoice] = useState('');
+  const [selectChoice, setSelectChoice] = useState("");
   const handleChange = (event) => {
     const categorySelected = event.target.value;
     setConsultantCategoryId(categorySelected);

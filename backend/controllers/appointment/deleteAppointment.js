@@ -1,5 +1,5 @@
-const Appointment = require('../../models/appointment');
-const Types = require('mongoose').Types;
+const Appointment = require("../../models/appointment");
+const Types = require("mongoose").Types;
 
 const deleteAppointment = async (req, res) => {
   try {

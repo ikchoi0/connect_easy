@@ -18,10 +18,8 @@ import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import { useHistory } from "react-router-dom";
 import { handleAuth, handleUserRole } from "../shared/utils/auth";
 import {
-  appointmentBookingCancel,
   getAllAppointments,
   deleteOneAppointment,
-  getAppointmentsForClientId,
 } from "../store/reducers/scheduleReducer";
 import ProfilePage from "../shared/pages/ProfilePage";
 import Meeting from "../Meeting/Meeting";
@@ -31,8 +29,8 @@ import DialogPopUp from "../shared/components/DialogPopUp";
 import ConfirmModal from "../shared/components/ConfirmModal";
 import { updateSelectedNavigatorItem } from "../store/reducers/dashboardReducer";
 import { updateMeetingId } from "../store/reducers/meetingReducer";
-const socket = io("http://localhost:5002");
-// const socket = io("https://connect-easy-rid.herokuapp.com");
+// const socket = io("http://localhost:5002");
+const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const drawerWidth = 300;
 const menuItems = [
@@ -44,9 +42,7 @@ const menuItems = [
   { id: "Calendar", icon: <CalendarMonthIcon /> },
   { id: "Invoice", icon: <PaymentIcon /> },
   { id: "Settings", icon: <SettingsApplicationsIcon /> },
-  // { id: "Meeting", icon: <VideoCameraFrontIcon /> },
 ];
-// const appointmentStatusFilterOptionList = ['Past', 'Canceled', 'Upcoming'];
 
 const ConsultantDashboard = () => {
   const history = useHistory();
@@ -56,7 +52,6 @@ const ConsultantDashboard = () => {
   const { selectedNavigatorItem } = useSelector((state) => state.dashboard);
   const { meetingId } = useSelector((state) => state.meeting);
   let appointmentId;
-  // return user if not logged in
   handleAuth();
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -70,14 +65,12 @@ const ConsultantDashboard = () => {
     socket.on("join_meeting", (appointment) => {
       if (!JSON.parse(localStorage.getItem("activeMeeting"))) {
         dispatch(updateMeetingId(appointment.appointmentId));
-        console.log(appointment);
         user && user.role === "consultant"
           ? setMessage(appointment.client)
           : setMessage(appointment.consultant);
 
         setConfirm(true);
       }
-      // dispatch(showSuccessMessage("Please join the meeting!"));
     });
     socket.on("appointment_booked", (data) => {
       dispatch(
@@ -128,7 +121,7 @@ const ConsultantDashboard = () => {
   const filterLists = [
     { name: "Show All", color: "#191970" },
     { name: "Upcoming", color: "#4682B4" },
-    { name: "Unbooked", color: "#90EE90" },
+    { name: "Unbooked", color: "#5FAD5F" },
     { name: "Past", color: "#778899" },
     { name: "Canceled", color: "#FA8072" },
   ];

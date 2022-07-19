@@ -20,9 +20,8 @@ const sendEmail = (toEmail, title, html) => {
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log("Email sender error: ", error);
     }
-    console.log("Finish sending email : " + info?.response);
+
     transporter.close();
   });
 };

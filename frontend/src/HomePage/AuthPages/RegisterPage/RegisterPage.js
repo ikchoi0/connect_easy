@@ -38,7 +38,6 @@ export default function RegisterPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: dispatch(register)
     const userDetails = {
       firstName,
       lastName,

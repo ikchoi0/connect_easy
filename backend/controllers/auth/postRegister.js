@@ -6,7 +6,6 @@ const Types = require("mongoose").Types;
 
 const postRegister = async (req, res) => {
   try {
-    console.log("register controller");
     // the user is sending their username, password, and mail
     const {
       firstName,
@@ -36,14 +35,13 @@ const postRegister = async (req, res) => {
     });
 
     // if your are signing up with consultant
-    if (user.role === 'consultant') {
+    if (user.role === "consultant") {
       // push new user to the category
       const category = await Category.findById(
         Types.ObjectId(consultantCategoryId)
       );
       category.users.push(user._id);
       await category.save();
-      console.log('Testing', category, consultantCategoryId);
     }
 
     // create JWT token

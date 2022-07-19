@@ -19,6 +19,7 @@ const HomePageCard = ({ name, description, pictureUrl }) => {
   return (
     <Grid item xs={12} sm={6}>
       <Card
+        elevation={4}
         sx={{ display: "flex", height: 150, cursor: "pointer" }}
         onClick={handleClick}
       >

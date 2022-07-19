@@ -9,10 +9,9 @@ router.get('/', async (req, res) => {
   try {
     await User.deleteMany({});
     const userList = await User.insertMany(ConsultantSeedDB);
-    await User.insertMany(ClientSeeds);
+    // await User.insertMany(ClientSeeds);
 
     await Category.deleteMany({});
-    // const categoryList = await Category.insertMany(CategorySeedDB);
     const categoryList = await Category.insertMany(CategorySeedDB(userList));
 
     await Appointment.deleteMany({});

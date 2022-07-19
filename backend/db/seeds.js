@@ -34,25 +34,12 @@ for (let i = 0; i < NUMBER_OF_USER; i++) {
 const ClientSeeds = [
   {
     role: "client",
-    firstName: "Rafael",
-    lastName: "Nóbrega",
-    email: "raf@client.com",
+    firstName: "John",
+    lastName: "Doe",
+    email: "john@client.com",
     password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
   },
-  {
-    role: "client",
-    firstName: "Dongwan",
-    lastName: "Kim",
-    email: "don@client.com",
-    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
-  },
-  {
-    role: "client",
-    firstName: "Ik Sung",
-    lastName: "Choi",
-    email: "choi@client.com",
-    password: "$2a$10$d7jdlhbFrLbAev1fTCb2BeA9WfRYwVZ3xo2T.7FDbrmYtkLWMB0sG",
-  },
+
 ];
 
 // const category = [
@@ -129,15 +116,6 @@ const CategorySeedDB = (ConsultantSeedDB) => [
       "Meet local and international software developers that can help creating the app of your dreams.",
     pictureUrl: "https://cdn-icons-png.flaticon.com/512/977/977597.png",
     users: [
-      ConsultantSeedDB[28]._id,
-      ConsultantSeedDB[29]._id,
-      ConsultantSeedDB[30]._id,
-      ConsultantSeedDB[31]._id,
-      ConsultantSeedDB[32]._id,
-      ConsultantSeedDB[33]._id,
-      ConsultantSeedDB[34]._id,
-      ConsultantSeedDB[35]._id,
-      ConsultantSeedDB[36]._id,
     ],
   },
   {

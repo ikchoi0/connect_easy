@@ -3,8 +3,6 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardMedia } from "@mui/material";
 import Scheduler from "../../Scheduler/Scheduler";
 import DialogPopUp from "../../shared/components/DialogPopUp";
 import { useDispatch } from "react-redux";
@@ -21,7 +19,6 @@ const CategoryCard = ({
   lastName,
   profilePicture,
   description,
-  rating,
   price,
 }) => {
   const dispatch = useDispatch();

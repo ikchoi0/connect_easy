@@ -43,13 +43,11 @@ export const postStartMeeting = createAsyncThunk(
 export const postEndMeeting = createAsyncThunk(
   'schedule/postEndMeeting',
   async (appointmentData, thunkApi) => {
-    // pass appointmentId to backend
     const response = await api.postEndMeeting(appointmentData);
     if (response.error) {
       thunkApi.dispatch(showAlertMessage(response.data.message));
       return thunkApi.rejectWithValue(response);
     } else {
-      console.log(response);
       thunkApi.dispatch(showSuccessMessage('Thank you! Meeting ended'));
       return response.data;
     }
@@ -59,8 +57,6 @@ export const postEndMeeting = createAsyncThunk(
 export const getAppointmentByAppointmentId = createAsyncThunk(
   'schedule/getAppointmentByAppointmentId',
   async (appointmentData, thunkApi) => {
-    // pass appointmentId to backend
-    console.log('getAppointmentByAppointmentId', appointmentData);
     const response = await api.getAppointmentByAppointmentId(appointmentData);
     if (response.error) {
       return thunkApi.rejectWithValue(response);
@@ -81,30 +77,20 @@ const meetingSlice = createSlice({
   },
   extraReducers: {
     [postStartMeeting.fulfilled]: (state, action) => {
-      // console.log(action.payload);
-      console.log('Meeting started successfully.');
     },
     [postStartMeeting.rejected]: (state, action) => {
-      console.log('postStartMeeting rejected');
     },
     [postEndMeeting.fulfilled]: (state, action) => {
-      // console.log(action.payload);
-      console.log('Meeting ended successfully.');
     },
     [postEndMeeting.rejected]: (state, action) => {
-      console.log('postEndMeeting rejected');
     },
     [getAppointmentByAppointmentId.fulfilled]: (state, action) => {
-      // console.log(action.payload);
       state.appointmentData = action.payload;
-      // console.log('Single appointment retrieved.');
     },
     [getAppointmentByAppointmentId.rejected]: (state, action) => {
-      console.log('Single appointment rejected');
     },
     [getPastMessages.fulfilled]: (state, action) => {
       state.conversations = action.payload;
-      // console.log('Past messages retrieved.', action.payload);
     },
   },
 });

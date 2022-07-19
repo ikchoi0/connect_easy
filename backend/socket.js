@@ -6,7 +6,6 @@ const socketHandler = (wsServer) => {
 
   wsServer.on('connection', (socket) => {
     socket.on('connected', (userId) => {
-      console.log('connected to server: ' + userId);
       onlineUsers[userId] = socket.id;
     });
     socket.on('appointment_booked', (data) => {

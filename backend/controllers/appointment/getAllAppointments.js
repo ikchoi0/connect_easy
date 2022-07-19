@@ -42,13 +42,6 @@ const getAllAppointments = async (req, res) => {
       );
       const endTime = moment(appointment.appointmentEndTime).format('HH:mm');
 
-      // const newStartTime = moment(newDate + ' ' + startTime).format(
-      //   'YYYY-MM-DD HH:mm'
-      // );
-      // const newEndTime = moment(newDate + ' ' + endTime).format(
-      //   'YYYY-MM-DD HH:mm'
-      // );
-
       const newStartTime = moment(newDate + ' ' + startTime);
       const newEndTime = moment(newDate + ' ' + endTime);
 
@@ -92,7 +85,6 @@ const getAllAppointments = async (req, res) => {
         clientEmail: appointment.client?.email || '',
         videoStartTime: appointment.videoStartTime || null,
         videoEndTime: appointment.videoEndTime || null,
-        // isMeetingLive: appointment.isMeetingLive,
         peerId: appointment.client?._id,
         consultantPrice: appointment.consultant.options.price,
         chatCount: appointment.conversation.length,

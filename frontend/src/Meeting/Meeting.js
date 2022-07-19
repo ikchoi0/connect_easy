@@ -149,7 +149,6 @@ const Meeting = ({ meetingId, socket }) => {
       }
     });
     socket.on('peer_left', async (ice) => {
-      console.log('Peer left, closing connection');
       setDisplay('none');
       peerConnectionRef?.current.close();
       peerConnectionRef.current = new RTCPeerConnection({

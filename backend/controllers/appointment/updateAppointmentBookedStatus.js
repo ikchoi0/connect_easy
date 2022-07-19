@@ -14,7 +14,6 @@ const updateAppointmentBookedStatus = async (req, res) => {
 
     //create a copy of the appointment
     const appointmentCopy = { ...appointment._doc };
-    console.log('OLD COPY', appointmentCopy);
 
     // attach the copy appointment to the consultant
     appointmentCopy.appointmentBooked = false;
@@ -23,14 +22,12 @@ const updateAppointmentBookedStatus = async (req, res) => {
     delete appointmentCopy._id;
 
     const newCopy = await Appointment.create(appointmentCopy);
-    console.log('NEW COPY', newCopy);
 
     await appointment.updateOne({
       appointmentCancel: true,
       appointmentCancellation_time: new Date(),
     });
 
-    console.log('BOOKED CANCELLED', appointment);
     return res.status(200).send(appointment);
   } catch (error) {
     return res.status(500).send(error.message); // 500 Internal Server Error

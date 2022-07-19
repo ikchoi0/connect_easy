@@ -212,7 +212,6 @@ export default function ColumnGroupingTable({ socket }) {
 
   const handleMaxPrice = () => {
     if (maxPrice === "") {
-      console.log("empty");
       setOptions({
         ...options,
         maxPrice: "999999999",

@@ -24,11 +24,6 @@ const getAppointment = async (req, res) => {
      */
 
     // Set videoStartTime if property is not set yet:
-    // if (!appointment.hasOwnProperty("videoStartTime")) {
-    //   await appointment.updateOne({
-    //     videoStartTime: new Date(),
-    //   });
-    // }
 
     const parsedAppointment = {
       client: appointment.client,

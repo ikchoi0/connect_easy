@@ -29,8 +29,8 @@ import {
 } from "../store/reducers/scheduleReducer";
 import { updateMeetingId } from "../store/reducers/meetingReducer";
 
-const socket = io("http://localhost:5002");
-// const socket = io('https://connect-easy-rid.herokuapp.com');
+// const socket = io("http://localhost:5002");
+const socket = io('https://connect-easy-rid.herokuapp.com');
 
 const filterLists = [
   { name: "Show All", color: "#191970" },
@@ -69,7 +69,6 @@ const ClientDashboard = () => {
     socket.on("join_meeting", (appointment) => {
       if (!JSON.parse(localStorage.getItem("activeMeeting"))) {
         dispatch(updateMeetingId(appointment.appointmentId));
-        console.log(appointment);
         user && user.role === "client"
           ? setMessage(appointment.consultant)
           : setMessage(appointment.client);
@@ -85,7 +84,7 @@ const ClientDashboard = () => {
         window.location.replace("/dashboard");
       }, 2000);
     });
-    console.log("CLIENT DASHBOARD USER", meetingId);
+
   }, []);
   const handleDismissOnClick = () => {
     const activeMeeting = localStorage.getItem("activeMeeting");

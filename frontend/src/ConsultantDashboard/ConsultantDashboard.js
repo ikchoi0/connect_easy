@@ -31,8 +31,8 @@ import DialogPopUp from "../shared/components/DialogPopUp";
 import ConfirmModal from "../shared/components/ConfirmModal";
 import { updateSelectedNavigatorItem } from "../store/reducers/dashboardReducer";
 import { updateMeetingId } from "../store/reducers/meetingReducer";
-const socket = io("http://localhost:5002");
-// const socket = io("https://connect-easy-rid.herokuapp.com");
+// const socket = io("http://localhost:5002");
+const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const drawerWidth = 300;
 const menuItems = [
@@ -70,7 +70,6 @@ const ConsultantDashboard = () => {
     socket.on("join_meeting", (appointment) => {
       if (!JSON.parse(localStorage.getItem("activeMeeting"))) {
         dispatch(updateMeetingId(appointment.appointmentId));
-        console.log(appointment);
         user && user.role === "consultant"
           ? setMessage(appointment.client)
           : setMessage(appointment.consultant);

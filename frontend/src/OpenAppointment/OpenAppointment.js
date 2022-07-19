@@ -23,7 +23,6 @@ function OpenAppointment() {
       <DatePicker
         selected={endDate}
         onChange={(date) => {
-          console.log(date);
           setEndDate(date);
         }}
         showTimeSelect

@@ -3,8 +3,8 @@ import * as api from '../../api';
 import { showAlertMessage, showSuccessMessage } from './alertReducer';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:5002');
-// const socket = io('https://connect-easy-rid.herokuapp.com');
+// const socket = io('http://localhost:5002');
+const socket = io('https://connect-easy-rid.herokuapp.com');
 
 const schedulerState = {
   openingAppointmentsList: [],
@@ -137,18 +137,13 @@ const schedulerSlice = createSlice({
   },
   extraReducers: {
     [createOpenAppointments.fulfilled]: (state, action) => {
-      // state.appointments = action.payload;
-      // console.log('create fulfilled', action.payload);
     },
     [createOpenAppointments.rejected]: (state, action) => {
-      console.log('create rejected', action.payload);
     },
     [getAllAppointments.fulfilled]: (state, action) => {
-      // console.log('get appointments fulfilled', action.payload);
       state.appointments = action.payload;
     },
     [getAllAppointments.rejected]: (state, action) => {
-      console.log('get rejected', action.payload);
     },
     [deleteOneAppointment.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
@@ -157,32 +152,24 @@ const schedulerSlice = createSlice({
     },
     [getAppointmentsForTheDay.fulfilled]: (state, action) => {
       state.appointmentsForSelectedDate = action.payload;
-      // console.log('get appointments for the day', action.payload);
     },
     [bookAppointment.pending]: (state, action) => {
       state.booked = false;
-      console.log('appointment booked PENDING', action.payload);
     },
     [bookAppointment.fulfilled]: (state, action) => {
       state.booked = true;
-      // console.log(action.payload);
       setTimeout(() => {
         socket.emit('appointment_booked', action.payload);
       }, 1000);
-      // console.log('appointment booked FULFILLED', action.payload);
     },
     [bookAppointment.rejected]: (state, action) => {
-      console.log('BOOKget rejected', action.payload);
     },
     [getAppointmentsForClientId.pending]: (state, action) => {
-      console.log('get appointments for client pending', action.payload);
     },
     [getAppointmentsForClientId.fulfilled]: (state, action) => {
-      // console.log('get appointments for client fulfilled', action.payload);
       state.appointments = action.payload;
     },
     [getAppointmentsForClientId.rejected]: (state, action) => {
-      console.log('get appointments for client rejected', action.payload);
     },
     [appointmentBookingCancel.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {

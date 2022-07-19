@@ -46,7 +46,6 @@ router.patch("/edit", auth(["consultant"]), async (req, res) => {
   }).populate("users");
 
   if (!category) {
-    console.log("user not found in category will do update category");
     const newCategory = await Category.findOne({
       _id: Types.ObjectId(selectedCategory),
     });

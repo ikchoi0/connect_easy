@@ -26,7 +26,6 @@ export default function Chat({
 
   socket.on("chat", (data) => {
     setMessages([...messages, data]);
-    console.log("data: ", data);
   });
 
   useEffect(() => {

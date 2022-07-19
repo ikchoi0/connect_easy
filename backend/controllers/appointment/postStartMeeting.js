@@ -4,7 +4,6 @@ const Types = require("mongoose").Types;
 
 const postStartMeeting = async (req, res) => {
   try {
-    console.log("postStartMeeting", req.body);
     const { appointmentId, userId } = req.body;
     const appointment = await Appointment.findById(
       Types.ObjectId(appointmentId)

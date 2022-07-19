@@ -1,7 +1,6 @@
 const { faker } = require("@faker-js/faker");
 
-// const randomName = faker.name.findName(); // Rowan Nikolaus
-// const randomName1 = faker.name.findName(); // Rowan Nikolaus
+
 const NUMBER_OF_USER = 60;
 const ConsultantSeedDB = [];
 for (let i = 0; i < NUMBER_OF_USER; i++) {

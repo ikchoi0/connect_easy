@@ -21,8 +21,6 @@ const getAppointmentByDate = async (req, res) => {
       consultant: Types.ObjectId(consultantId),
       appointmentBooked: false,
     });
-    // .where("consultant")
-    // .equals(consultantId);
 
     /**
      * Event {

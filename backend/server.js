@@ -15,7 +15,7 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const userRoutes = require('./routes/userRoutes');
 const passwordRoutes = require('./routes/passwordRoutes');
 const messageRoutes = require('./routes/socketRoutes');
-// const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
+
 
 const PORT = process.env.PORT || process.env.API_PORT;
 
@@ -44,9 +44,9 @@ app.use('/api/socket', messageRoutes);
 
 console.log('Starting the server...');
 
-// socketServer.registerSocketServer(server);
+
 const server = http.createServer(app);
-// socketServer.registerSocketServer(server);
+
 
 // add socket.io to the server
 const wsServer = SocketIO(server, {

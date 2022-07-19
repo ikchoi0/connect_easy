@@ -6,7 +6,6 @@ const postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log(req.body);
 
     const user = await User.findOne({ email: email.toLowerCase() }).select(
       '+password'
@@ -39,7 +38,6 @@ const postLogin = async (req, res) => {
 
     return res.status(400).send('Invalid credentials. Please try again.');
   } catch (err) {
-    console.log(err);
     return res.status(500).send('Something went wrong. Please try again.');
   }
 };

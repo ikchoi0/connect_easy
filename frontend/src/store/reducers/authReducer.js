@@ -51,17 +51,15 @@ export const checkTokenForPasswordReset = createAsyncThunk(
     const response = await api.checkTokenForPasswordReset(userDetails);
     if (response.error) {
       // token is invalid or has expired, redirect to login page
-      // history.push("/login");
       return thunkApi.rejectWithValue(response);
     }
-    // thunkApi.dispatch(showSuccessMessage(response.data));
     return response.data;
   }
 );
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ userDetails, history }, thunkApi) => {
+  async ({ userDetails }, thunkApi) => {
     const response = await api.login(userDetails, thunkApi.dispatch);
 
     if (response.error) {
@@ -103,9 +101,6 @@ const authSlice = createSlice({
         localStorage.setItem("activeMeeting", JSON.stringify(activeMeetingId));
         state.activeMeetingId = activeMeetingId;
       }
-
-      // state.userDetails = action.payload.userDetails;
-      // state.isLoggedIn = true;
     },
 
     [register.fulfilled]: (state, action) => {
@@ -113,7 +108,6 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     [register.rejected]: (state, _) => {
-      // handle rejected
       state.isLoggedIn = false;
     },
     [login.fulfilled]: (state, action) => {
@@ -121,20 +115,15 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     [login.rejected]: (state, action) => {
-      // handle rejected
       state.isLoggedIn = false;
     },
     [resetPasswordLink.fulfilled]: (state, action) => {},
-    [resetPasswordLink.rejected]: (state, action) => {
-      // handle rejected
-    },
+    [resetPasswordLink.rejected]: (state, action) => {},
     [resetPassword.fulfilled]: (state, action) => {
       alert("Password has been reset. Please log in with your new password.");
       window.location.href = "/login";
     },
-    [resetPassword.rejected]: (state, action) => {
-      // handle rejected
-    },
+    [resetPassword.rejected]: (state, action) => {},
     [checkTokenForPasswordReset.fulfilled]: (state, action) => {
       state.isTokenValid = true;
     },

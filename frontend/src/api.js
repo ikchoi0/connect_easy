@@ -1,6 +1,5 @@
 import axios from "axios";
 import { logout } from "./shared/utils/auth";
-import { showAlertMessage } from "./store/reducers/alertReducer";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:5002/api",
@@ -249,14 +248,6 @@ export const updateUserProfile = async (userData) => {
       // issue GET request to get the presigned image url
       const uploadConfig = await apiClient.get("/upload");
 
-      /**
-       * uploadConfig.data.url is the presigned image url
-       * data:
-            key: "62c9b78173c3d270c8046ccc/b11f7144-fc10-457b-a49a-2d55ada2bd74.jpeg"
-            url: "https://connect-easy-images.s3.amazonaws.com/62c9b78173c3d270c8046ccc/b11f7144-fc10-457b-a49a-2d55ada2bd74.jpeg?AWSAccessKeyId=AKIATQQMCFC4KW5T66WC&Content-Type=jpeg&Expires=1657444177&Signature=D%2FbILCtNDjOHvTyCP092fzawplk%3D"
-            [[Prototype]]: Object
-      */
-
       // upload image to the presigned url
       await axios.put(uploadConfig.data.url, userData.imageFile, {
         headers: {
@@ -284,14 +275,6 @@ export const submitImage = async (imageFile) => {
     const uploadConfig = await apiClient.get(
       "http://localhost:5002/api/upload"
     );
-
-    /**
-     * uploadConfig.data.url is the presigned image url
-     * data:
-          key: "62c9b78173c3d270c8046ccc/b11f7144-fc10-457b-a49a-2d55ada2bd74.jpeg"
-          url: "https://connect-easy-images.s3.amazonaws.com/62c9b78173c3d270c8046ccc/b11f7144-fc10-457b-a49a-2d55ada2bd74.jpeg?AWSAccessKeyId=AKIATQQMCFC4KW5T66WC&Content-Type=jpeg&Expires=1657444177&Signature=D%2FbILCtNDjOHvTyCP092fzawplk%3D"
-          [[Prototype]]: Object
-     */
 
     // upload image to the presigned url
     await axios.put(uploadConfig.data.url, imageFile, {

@@ -1,5 +1,4 @@
 import React from "react";
-
 import Dialog from "@mui/material/Dialog";
 
 const DialogPopUp = ({ open, onClose, children, maxWidth = "xl" }) => {

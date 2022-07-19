@@ -7,18 +7,14 @@ import {
 import HomePage from "./HomePage/HomePage";
 import RegisterPage from "./HomePage/AuthPages/RegisterPage/RegisterPage";
 import LoginPage from "./HomePage/AuthPages/LoginPage/LoginPage";
-import "./App.css";
-import Scheduler from "./Scheduler/Scheduler";
 import Category from "./Category/Category";
 import Dashboard from "./Dashboard/Dashboard";
 import ClientDashboard from "./ClientDashboard/ClientDashboard";
 import ConsultantDashboard from "./ConsultantDashboard/ConsultantDashboard";
-import Meeting from "./Meeting/Meeting";
 import { AlertNotification } from "./shared/components/AlertNotification";
 import ResetPasswordPage from "./HomePage/AuthPages/ResetPasswordPage/ResetPasswordPage";
 import GetEmailPage from "./HomePage/AuthPages/GetEmailPage/GetEmailPage";
-import Chat from "./Chat/Chat";
-import Invoice from "./Invoice/Invoice";
+
 /**
  *
  * https://reacttraining.com/blog/react-router-v5-1/
@@ -30,9 +26,6 @@ function App() {
     <>
       <Router>
         <Switch>
-          <Route exact path="/Invoice">
-            <Invoice />
-          </Route>
           <Route exact path="/">
             <HomePage />
           </Route>
@@ -48,9 +41,6 @@ function App() {
           <Route exact path="/password/:email/:token">
             <ResetPasswordPage />
           </Route>
-          <Route exact path="/calendar">
-            <Scheduler />
-          </Route>
           <Route exact path="/category">
             <Category />
           </Route>
@@ -62,12 +52,6 @@ function App() {
           </Route>
           <Route path="/clientDashboard">
             <ClientDashboard />
-          </Route>
-          <Route path="/meeting">
-            <Meeting />
-          </Route>
-          <Route path="/chat">
-            <Chat />
           </Route>
           <Route path="/">
             <Redirect to="/" />

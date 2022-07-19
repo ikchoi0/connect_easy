@@ -17,8 +17,6 @@ const appointmentSchema = new Schema(
     videoStartTime: { type: Date },
     videoEndTime: { type: Date },
     conversation: [{ type: Schema.Types.ObjectId, ref: "Message" }],
-
-    // isMeetingLive: { type: Boolean, select: false, default: true },
   },
   { timestamps: true }
 );

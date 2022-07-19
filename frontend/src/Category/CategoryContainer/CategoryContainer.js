@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { Box, Container, Typography } from '@mui/material';
-import ConsultantCard from '../ConsultantCard/ConsultantCard';
-import Grid from '@mui/material/Grid';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsersWithinCategory } from '../../store/reducers/categoryReducer';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import ConsultantCard from "../ConsultantCard/ConsultantCard";
+import Grid from "@mui/material/Grid";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsersWithinCategory } from "../../store/reducers/categoryReducer";
+import { useHistory } from "react-router-dom";
 
 export default function CategoryContainer() {
   const history = useHistory();
@@ -13,7 +13,7 @@ export default function CategoryContainer() {
 
   useEffect(() => {
     if (category.selectedCategory === null) {
-      history.push('/');
+      history.push("/");
     } else {
       dispatch(getUsersWithinCategory(category.selectedCategory));
     }

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Container, Box } from '@mui/material';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useState } from "react";
+import { Box } from "@mui/material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 /**
  * https://reactdatepicker.com/
  */
@@ -23,7 +23,6 @@ function OpenAppointment() {
       <DatePicker
         selected={endDate}
         onChange={(date) => {
-          console.log(date);
           setEndDate(date);
         }}
         showTimeSelect

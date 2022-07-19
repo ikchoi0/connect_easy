@@ -2,8 +2,7 @@ const Appointment = require('../../models/appointment');
 
 const postAppointment = async (req, res) => {
   try {
-    // TODO: EDGE CASES
-    console.log(req.body);
+
 
     const appointments = await Appointment.insertMany(req.body);
 

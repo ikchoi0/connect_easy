@@ -21,18 +21,6 @@ const getAppointmentByDate = async (req, res) => {
       consultant: Types.ObjectId(consultantId),
       appointmentBooked: false,
     });
-    // .where("consultant")
-    // .equals(consultantId);
-
-    /**
-     * Event {
-        description: string,
-        start: Date,
-        end: Date,
-        allDay?: boolean
-        resource?: any,
-      }
-     */
 
     const parsedAppointments = appointments.map((appointment) => {
       const newDate = moment(appointment.date).format('YYYY-MM-DD');

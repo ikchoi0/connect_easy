@@ -21,7 +21,6 @@ export const AlertNotification = () => {
       >
         <Alert severity={severityWarning}>
           <Typography fontSize={"1.2rem"}>{alertMessageContent}</Typography>
-          {/* {alertMessageContent} */}
         </Alert>
       </Snackbar>
     </div>

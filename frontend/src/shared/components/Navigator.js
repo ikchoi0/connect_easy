@@ -12,7 +12,6 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logout } from "../../shared/utils/auth";
 import { updateSelectedNavigatorItem } from "../../store/reducers/dashboardReducer";
-import { getMe } from "../../store/reducers/authReducer";
 const companyName = "Connect Easy";
 
 const lgLogoStyle = {
@@ -83,10 +82,6 @@ export default function Navigator(props) {
         {menuItems.map(({ id: childId, icon, active }) => (
           <ListItem disablePadding key={childId}>
             <ListItemButton
-              // disabled={
-              //   childId === "Meeting" &&
-              //   !JSON.parse(localStorage.getItem("activeMeeting"))
-              // }
               selected={active}
               sx={item}
               onClick={() => {

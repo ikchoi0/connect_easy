@@ -3,7 +3,7 @@ import * as api from "../../api";
 import { showAlertMessage, showSuccessMessage } from "./alertReducer";
 import { io } from "socket.io-client";
 
-// const socket = io("http://localhost:5002");
+// const socket = io('http://localhost:5002');
 const socket = io("https://connect-easy-rid.herokuapp.com");
 
 const schedulerState = {
@@ -41,7 +41,6 @@ export const getAllAppointments = createAsyncThunk(
   }
 );
 
-// get appointments using client id
 export const getAppointmentsForClientId = createAsyncThunk(
   "schedule/getAppointmentsForClientId",
   async (clientId, thunkApi) => {
@@ -136,20 +135,12 @@ const schedulerSlice = createSlice({
     },
   },
   extraReducers: {
-    [createOpenAppointments.fulfilled]: (state, action) => {
-      // state.appointments = action.payload;
-      // console.log('create fulfilled', action.payload);
-    },
-    [createOpenAppointments.rejected]: (state, action) => {
-      console.log("create rejected", action.payload);
-    },
+    [createOpenAppointments.fulfilled]: (state, action) => {},
+    [createOpenAppointments.rejected]: (state, action) => {},
     [getAllAppointments.fulfilled]: (state, action) => {
-      // console.log('get appointments fulfilled', action.payload);
       state.appointments = action.payload;
     },
-    [getAllAppointments.rejected]: (state, action) => {
-      console.log("get rejected", action.payload);
-    },
+    [getAllAppointments.rejected]: (state, action) => {},
     [deleteOneAppointment.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
         return appointment.appointmentId !== action.payload._id;
@@ -157,33 +148,22 @@ const schedulerSlice = createSlice({
     },
     [getAppointmentsForTheDay.fulfilled]: (state, action) => {
       state.appointmentsForSelectedDate = action.payload;
-      // console.log('get appointments for the day', action.payload);
     },
     [bookAppointment.pending]: (state, action) => {
       state.booked = false;
-      console.log("appointment booked PENDING", action.payload);
     },
     [bookAppointment.fulfilled]: (state, action) => {
       state.booked = true;
-      // console.log(action.payload);
       setTimeout(() => {
         socket.emit("appointment_booked", action.payload);
       }, 1000);
-      // console.log('appointment booked FULFILLED', action.payload);
     },
-    [bookAppointment.rejected]: (state, action) => {
-      console.log("BOOKget rejected", action.payload);
-    },
-    [getAppointmentsForClientId.pending]: (state, action) => {
-      console.log("get appointments for client pending", action.payload);
-    },
+    [bookAppointment.rejected]: (state, action) => {},
+    [getAppointmentsForClientId.pending]: (state, action) => {},
     [getAppointmentsForClientId.fulfilled]: (state, action) => {
-      // console.log('get appointments for client fulfilled', action.payload);
       state.appointments = action.payload;
     },
-    [getAppointmentsForClientId.rejected]: (state, action) => {
-      console.log("get appointments for client rejected", action.payload);
-    },
+    [getAppointmentsForClientId.rejected]: (state, action) => {},
     [appointmentBookingCancel.fulfilled]: (state, action) => {
       state.appointments = state.appointments.filter((appointment) => {
         return appointment.appointmentId !== action.payload._id;

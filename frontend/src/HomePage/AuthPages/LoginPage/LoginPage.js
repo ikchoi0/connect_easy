@@ -82,10 +82,10 @@ export default function Login() {
               password={password}
               setPassword={setPassword}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               onClick={(e) => handleSubmit(e)}

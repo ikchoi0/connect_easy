@@ -1,6 +1,5 @@
 const Appointment = require('../../models/appointment');
 const Types = require('mongoose').Types;
-
 const updateAppointment = async (req, res) => {
   try {
     const { description, selectedAppointmentId } = req.body;

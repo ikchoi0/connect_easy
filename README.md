@@ -15,16 +15,6 @@ Dongwan Kim - https://github.com/dongwandonkim <br/>
 Iksung Choi - https://github.com/ikchoi0 <br/>
 Rafael Nóbrega - https://github.com/rafnobrega <br/>
 
-<a href="https://github.com/dongwandonkim">
-  <img src="https://avatars.githubusercontent.com/u/34529297?size=50">
-</a>
-<a href="https://github.com/ikchoi0">
-  <img src="https://avatars.githubusercontent.com/u/29355949?size=50">
-</a>
-<a href="https://github.com/rafnobrega">
-  <img src="https://avatars.githubusercontent.com/u/78815381?size=50">
-</a>
-
 
 
 <br/>
